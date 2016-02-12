@@ -2,5 +2,7 @@
 
 ## Installation
 Require node.js & xcode
-1. npm install
-2. run DNA.xcodeproj
+
+1. `npm install`
+
+2. `run DNA.xcodeproj`
