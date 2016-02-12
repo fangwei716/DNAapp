@@ -1,15 +1,10 @@
 var Util = require('./utils')
 var Icon = require('react-native-vector-icons/FontAwesome');
-var Video = require('react-native-video');
+
 import React, {
-  AppRegistry,
-  Component,
-  TabBarIOS,
-  NavigatorIOS,
   TouchableHighlight,
   StyleSheet,
   TextInput,
-  StatusBarIOS,
   Text,
   Image,
   AlertIOS,
@@ -23,10 +18,10 @@ var Login = React.createClass({
     return (
       <View style={styles.container}>
         <View style={styles.bgImageWrapper}>
-          <Image style={styles.backgroundImage} source={require('./DNA1.png')}></Image>
+          <Image style={styles.backgroundImage} source={require('./img/DNA1.png')}></Image>
         </View>
         <View>
-          <Image style={styles.logo} source={require('./dna15.png')}></Image>
+          <Image style={styles.logo} source={require('./img/dna15.png')}></Image>
           <Text style={styles.logoText}>华大DNA</Text>
         </View>
 
