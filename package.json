@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "author": "Wei Fang",
-  "description": "app for www.dnafw.com",
+  "description": "app for DNAfw",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
