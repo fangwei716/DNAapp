@@ -4,11 +4,13 @@ const { BlurView, VibrancyView } = require('react-native-blur');
 
 import React, {
   NavigatorIOS,
+  ProgressViewIOS,
   TouchableHighlight,
   TouchableOpacity,
   StyleSheet,
   TextInput,
   StatusBarIOS,
+  PickerIOS,
   SegmentedControlIOS,
   Text,
   Image,
@@ -16,6 +18,143 @@ import React, {
   View
 } from 'react-native';
 
+let PickerItemIOS = PickerIOS.Item;
+/**
+ * ItemOrder 
+ */
+
+var ItemOrder = React.createClass({
+  getInitialState: function () {
+    return {
+      progress: 0,
+      step:0,
+      data: this.props.data,
+      relSelected: 0,
+      samSelected: 0,
+      stepTitle: "第一步: 委托人／受检人信息"
+    };
+  },
+  _getProgress: function (progress) {
+    return Math.sin(progress % Math.PI) % 1;
+  },
+  _updateStep: function (step) {
+    var title = '';
+    switch(step){
+      case 0:
+        title = "第一步: 委托人／受检人信息";
+        break;
+      case 1: 
+        title = "第二步：被鉴定人信息";
+        break;
+      case 2: 
+        title = "第三步：创建订单"
+    }
+    this.setState({
+      step: step,
+      stepTitle: title
+    });
+  },
+  _renderNextStep: function () {
+    relArray = this.state.data.relation;
+    samArray = this.state.data.sample;
+    switch(this.state.step){
+      case 0:
+        return(
+          <View>
+            <ProgressViewIOS progressTintColor="#1E868C" style={styles.progressView} progress={this._getProgress(0.333)}/>
+            <View style={styles.orderInputContainer}>
+            <Text style={styles.orderInputText}>姓名：</Text>
+            <TextInput autoFocus={true} style={styles.orderInput}/>
+            </View>
+            <View style={styles.orderInputContainer}>
+              <Text style={styles.orderInputText}>手机号：</Text>
+              <TextInput keyboardType="phone-pad" style={styles.orderInput}/>
+            </View>
+            <View style={styles.orderInputContainer}>
+              <Text style={styles.orderInputText}>电子邮箱（选填）：</Text>
+              <TextInput keyboardType="email-address" style={styles.orderInput}/>
+            </View>
+            <View style={styles.orderInputContainer}>
+              <Text style={styles.orderInputText}>邮编（选填）：</Text>
+              <TextInput keyboardType="number-pad" style={styles.orderInput}/>
+            </View>
+            <View style={styles.orderInputContainer}>
+              <Text style={styles.orderInputText}>地址：</Text>
+              <TextInput style={styles.orderInput}/>
+            </View>
+            <View style={styles.orderInputContainer}>
+              <TouchableHighlight underlayColor="#fff" style={styles.btn_pm} onPress={()=>this._updateStep(1)}>
+                <Text style={{color:'#fff'}}>下一步</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        )
+      case 1:
+        return(
+          <View>
+            <ProgressViewIOS progressTintColor="#1E868C" style={styles.progressView} progress={this._getProgress(0.666)}/>
+              <View style={styles.orderInputContainer}>
+                <Text style={styles.orderInputText}>姓名：</Text>
+                <TextInput autoFocus={true} style={styles.orderInput}/>
+                </View>
+                <View style={styles.orderInputContainer}>
+                  <Text style={styles.orderInputText}>关系：</Text>
+                  <TextInput style={styles.orderInput}/>
+                </View>
+                <View style={styles.orderInputContainer}>
+                  <Text style={styles.orderInputText}>样本类型：</Text>
+                  <TextInput style={styles.orderInput}/>
+                </View>
+                <View style={styles.orderInputContainer}>
+                  <Text style={styles.orderInputText}>附加信息：</Text>
+                  <TextInput style={styles.orderInput}/>
+                </View>
+                <View style={{flexDirection:"row", marginLeft:20, marginTop:20}}>
+                  <TouchableHighlight underlayColor="#fff" style={[styles.btn_pm_half,{backgroundColor:"#ddd"}]} onPress={()=>this._updateStep(0)}>
+                    <Text style={{color:'#fff'}}>上一步</Text>
+                  </TouchableHighlight>
+                  <TouchableHighlight underlayColor="#fff" style={[styles.btn_pm_half,{backgroundColor:"#1E868C"}]} onPress={()=>this._updateStep(2)}>
+                    <Text style={{color:'#fff'}}>下一步</Text>
+                  </TouchableHighlight>
+                </View>
+          </View>
+        )
+      case 2:
+        return(
+          <View>
+            <Text>订单详情。。。</Text>
+            <ProgressViewIOS progressTintColor="#1E868C" style={styles.progressView} progress={this._getProgress(1)}/>
+            <View style={{flexDirection:"row", marginLeft:20, marginTop:20}}>
+                <TouchableHighlight underlayColor="#fff" style={[styles.btn_pm_half,{backgroundColor:"#ddd"}]} onPress={()=>this._updateStep(1)}>
+                  <Text style={{color:'#fff'}}>上一步</Text>
+                </TouchableHighlight>
+                <TouchableHighlight underlayColor="#fff" style={[styles.btn_pm_half,{backgroundColor:"#1E868C"}]} onPress={()=>this._updateStep(2)}>
+                  <Text style={{color:'#fff'}}>前往支付</Text>
+                </TouchableHighlight>
+              </View>
+          </View>
+        )
+    }
+  },
+    // <PickerIOS
+    //   selectedValue={this.state.samSelected}
+    //   onValueChange={(value) => this.setState({samSelected: value})}>
+    //   {samArray.map((obj) => (
+    //     <PickerItemIOS
+    //       key={obj.value+obj.label}
+    //       value={obj.value}
+    //       label={obj.label}/>
+    //   ))}
+    // </PickerIOS>
+  render: function () {
+    return(
+      <View style={{marginTop: 70, paddingLeft:20, paddingRight:20}}>
+        <Text style={{marginTop: 10}}>{this.state.stepTitle}</Text>
+        {this._renderNextStep()}
+      </View>
+    )
+  }
+})
 /**
  * ItemDetail
  */
@@ -24,6 +163,14 @@ var ItemDetail = React.createClass({
      return {
       selectedIndex: 0
     };
+  },
+  _onPress: function (data) {
+    this.props.navigator.push({
+      title: "填写订单",
+      component:ItemOrder,
+      navigationBarHidden: false,
+      passProps: { data: data },
+    })
   },
    _onChange:function (event) {
     this.setState({
@@ -77,7 +224,7 @@ var ItemDetail = React.createClass({
               <Text numberOfLines={data.lines} style={{fontSize:13,color:"rgba(0,0,0,0.5)"}}>{data.fullIntro}</Text>
             </View>
             <View style={styles.placeorderContainer}>
-              <TouchableOpacity style={styles.placeorder}><Text style={{color:"rgba(0,0,0,0.4)"}}>填写订单</Text></TouchableOpacity>
+              <TouchableOpacity onPress={()=>this._onPress(data)} style={styles.placeorder}><Text style={{color:"rgba(0,0,0,0.4)"}}>填写订单</Text></TouchableOpacity>
             </View>
           </View>
         </View>
@@ -113,6 +260,8 @@ var storeItemData=[{
   deliver:"免运费",
   tag:"特价优惠",
   lines: 3,
+  relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"},{label: "爷爷",value:"ff"},{label:"奶奶",value:"mm"},{label: "外公",value:"f"},{label:"外婆",value:"m"}],
+  sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
   fullIntro:"华大DNA服务提供的DNA档案是用DNA技术建立一个人的\n基因组图谱，主要用于银行、保险、交通行业、人身安全、\n人身担保、遗产继承、失踪、急救医学等目的。",
   intro:"华大DNA服务提供的DNA档案是用DNA技术建立一个人的基因组图谱，\n主要用于银行、保险、交通行业、人身安全、人身担保..."
 },{
@@ -125,6 +274,8 @@ var storeItemData=[{
   deliver:"免运费",
   tag:"特价优惠",
   lines:4,
+  relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"}],
+  sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
   fullIntro: "亲子鉴定服务可以判定谁是孩子的亲生父亲或者生物学父亲，\n即鉴定父与子的血缘关系。华大DNA提供法医亲子鉴定、\n家庭亲子鉴定以及妊娠亲子鉴定三大服务，以满足\n客户的不同需求。",
   intro:"亲子鉴定服务可以判定谁是孩子的亲生父亲或者生物学父亲，\n即鉴定父与子的血缘关系..."
 },{
@@ -137,6 +288,8 @@ var storeItemData=[{
   deliver:"免运费",
   tag:"特价优惠",
   lines: 4,
+  relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"}],
+  sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
   fullIntro:"华大DNA服务提供源自同一父系或母系的成员之间的亲缘\n关系鉴定，例如曾祖父、祖父、与孙子、曾孙子之间，同\n胞兄弟之间，叔侄之间，外曾祖母，外祖母，与外孙女，\n之间的关系鉴定，绘制父系或母系家谱和遗传关系。",
   intro:"华大DNA服务提供源自同一父系或母系的成员之间的亲缘关系鉴定，\n例如曾祖父、祖父、与孙子、曾孙子之间，同胞兄弟之间，叔侄之间..."
 }]
@@ -330,7 +483,50 @@ const styles = StyleSheet.create({
     borderRadius:4,
     flex:1,
     alignItems:'center' 
-  }
+  },
+  progressView: {
+    marginTop: 10,
+  },
+  orderInputContainer:{
+    marginTop: 20, 
+    paddingLeft: 20,
+  },
+  orderInputText:{
+    fontSize:12
+  },
+  orderInput:{
+    marginTop: 10,
+    paddingLeft:10,
+    paddingRight: 10,
+    paddingTop:5,
+    paddingBottom:5,
+    width:280,
+    borderWidth:Util.pixel,
+    height:40,
+    borderColor:'#777',
+    borderRadius:2,
+    color:"#333",
+  },
+  btn_pm:{
+    marginTop:13,
+    width:280,
+    height:40,
+    borderRadius:2,
+    backgroundColor:'#1E868C',
+    justifyContent:'center',
+    alignItems:'center',
+  },
+  btn_pm_half:{
+    marginTop:13,
+    width:135,
+    marginRight:10,
+    height:40,
+    borderRadius:2,
+    justifyContent:'center',
+    alignItems:'center',
+    flexDirection:"row",
+    flexWrap: 'wrap'
+  },
 });
 
 
