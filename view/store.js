@@ -18,7 +18,16 @@ import React, {
   View
 } from 'react-native';
 
+/**
+ * extra settings
+ */
+
 let PickerItemIOS = PickerIOS.Item;
+
+// if (Util.pixel > 0.5) {
+//   FONT_BACK_LABEL = 14;
+// }
+
 /**
  * ItemOrder 
  */
@@ -60,7 +69,7 @@ var ItemOrder = React.createClass({
     switch(this.state.step){
       case 0:
         return(
-          <View>
+          <View style={styles.orderContainer}>
             <ProgressViewIOS progressTintColor="#1E868C" style={styles.progressView} progress={this._getProgress(0.333)}/>
             <View style={styles.orderInputContainer}>
             <Text style={styles.orderInputText}>姓名：</Text>
@@ -83,7 +92,7 @@ var ItemOrder = React.createClass({
               <TextInput style={styles.orderInput}/>
             </View>
             <View style={styles.orderInputContainer}>
-              <TouchableHighlight underlayColor="#fff" style={styles.btn_pm} onPress={()=>this._updateStep(1)}>
+              <TouchableHighlight underlayColor="#48aeb4" style={styles.btn_pm} onPress={()=>this._updateStep(1)}>
                 <Text style={{color:'#fff'}}>下一步</Text>
               </TouchableHighlight>
             </View>
@@ -91,7 +100,7 @@ var ItemOrder = React.createClass({
         )
       case 1:
         return(
-          <View>
+          <View style={styles.orderContainer}>
             <ProgressViewIOS progressTintColor="#1E868C" style={styles.progressView} progress={this._getProgress(0.666)}/>
               <View style={styles.orderInputContainer}>
                 <Text style={styles.orderInputText}>姓名：</Text>
@@ -110,10 +119,10 @@ var ItemOrder = React.createClass({
                   <TextInput style={styles.orderInput}/>
                 </View>
                 <View style={{flexDirection:"row", marginLeft:20, marginTop:20}}>
-                  <TouchableHighlight underlayColor="#fff" style={[styles.btn_pm_half,{backgroundColor:"#ddd"}]} onPress={()=>this._updateStep(0)}>
+                  <TouchableHighlight underlayColor="#eee" style={[styles.btn_pm_half,{backgroundColor:"#ddd"}]} onPress={()=>this._updateStep(0)}>
                     <Text style={{color:'#fff'}}>上一步</Text>
                   </TouchableHighlight>
-                  <TouchableHighlight underlayColor="#fff" style={[styles.btn_pm_half,{backgroundColor:"#1E868C"}]} onPress={()=>this._updateStep(2)}>
+                  <TouchableHighlight underlayColor="#48aeb4" style={[styles.btn_pm_half,{backgroundColor:"#1E868C"}]} onPress={()=>this._updateStep(2)}>
                     <Text style={{color:'#fff'}}>下一步</Text>
                   </TouchableHighlight>
                 </View>
@@ -121,14 +130,14 @@ var ItemOrder = React.createClass({
         )
       case 2:
         return(
-          <View>
-            <Text>订单详情。。。</Text>
+          <View style={styles.orderContainer}>
             <ProgressViewIOS progressTintColor="#1E868C" style={styles.progressView} progress={this._getProgress(1)}/>
+            <Text style={{marginTop:20}}>订单详情。。。from Ajax</Text>
             <View style={{flexDirection:"row", marginLeft:20, marginTop:20}}>
-                <TouchableHighlight underlayColor="#fff" style={[styles.btn_pm_half,{backgroundColor:"#ddd"}]} onPress={()=>this._updateStep(1)}>
+                <TouchableHighlight underlayColor="#eee" style={[styles.btn_pm_half,{backgroundColor:"#ddd"}]} onPress={()=>this._updateStep(1)}>
                   <Text style={{color:'#fff'}}>上一步</Text>
                 </TouchableHighlight>
-                <TouchableHighlight underlayColor="#fff" style={[styles.btn_pm_half,{backgroundColor:"#1E868C"}]} onPress={()=>this._updateStep(2)}>
+                <TouchableHighlight underlayColor="#48aeb4" style={[styles.btn_pm_half,{backgroundColor:"#1E868C"}]} onPress={()=>this._updateStep(2)}>
                   <Text style={{color:'#fff'}}>前往支付</Text>
                 </TouchableHighlight>
               </View>
@@ -181,7 +190,7 @@ var ItemDetail = React.createClass({
     if (this.state.selectedIndex==0) {
       // to be done
       return(
-        <View style={{height:1300,paddingTop:10,flex : 1,alignItems: 'center'}}>
+        <View style={{height:1300,paddingTop:10,flex : 1, alignItems: 'center'}}>
           <Image source={require('./img/detail1.jpg')} style={{height: 1300, resizeMode: Image.resizeMode.contain}}>
           </Image>
         </View>
@@ -470,10 +479,14 @@ const styles = StyleSheet.create({
     right: 30,
     backgroundColor:"transparent"
   },
-  placeorder:{
+  placeorderContainer:{
+    alignItems:'center',
     position:"absolute",
     bottom:15,
-    left: 90,
+    width:Util.size.width,
+    flex:1
+  },
+  placeorder:{
     width:200,
     height:30,
     backgroundColor:"rgba(255,255,255,0.3)",
@@ -482,14 +495,19 @@ const styles = StyleSheet.create({
     borderWidth:0.3,
     borderRadius:4,
     flex:1,
-    alignItems:'center' 
+    alignItems:'center'
   },
   progressView: {
     marginTop: 10,
+    width: Util.size.width-40
+  },
+  orderContainer:{
+    alignItems:'center',
+    flex:1,
+    width: Util.size.width-40
   },
   orderInputContainer:{
     marginTop: 20, 
-    paddingLeft: 20,
   },
   orderInputText:{
     fontSize:12
@@ -500,7 +518,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     paddingTop:5,
     paddingBottom:5,
-    width:280,
+    width:Util.size.width-80,
     borderWidth:Util.pixel,
     height:40,
     borderColor:'#777',
