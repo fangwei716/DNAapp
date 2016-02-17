@@ -12,8 +12,10 @@ import React, {
   StatusBarIOS,
   PickerIOS,
   SegmentedControlIOS,
+  RefreshControl,
   Text,
   Image,
+  ScrollView,
   AlertIOS,
   View
 } from 'react-native';
@@ -350,11 +352,47 @@ var StoreItemList = React.createClass({
 })
 
 var StoreView = React.createClass({
+  getInitialState: function (){
+    return {
+      isRefreshing: false,
+      loaded: 0,
+      rowData: storeItemData,
+      refreshTitle: "下拉更新"
+    };
+  },
+  _onRefresh:function () {
+    this.setState({
+      isRefreshing: true,
+      refreshTitle: "正在更新"
+    });
+    setTimeout(() => {
+      // get new data via Ajax
+      this.setState({
+        // loaded: this.state.loaded,
+        isRefreshing: false,
+        rowData: storeItemData,
+        refreshTitle: "更新完毕"
+      });
+      // 1s after refresh
+      setTimeout(() => {
+        this.setState({
+          refreshTitle: "下拉更新"
+        });
+      }, 1000);
+
+    }, 1000);
+  },
   render: function () {
     return(
-      <View style={styles.storeContainer}>
-         <StoreItemList navigator={this.props.navigator} data={storeItemData}></StoreItemList>
-      </View>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.storeContainer}
+      refreshControl={
+          <RefreshControl
+            refreshing={this.state.isRefreshing}
+            title={this.state.refreshTitle}
+            onRefresh={this._onRefresh}
+            tintColor="#ddd"/>}>
+        <StoreItemList navigator={this.props.navigator} data={this.state.rowData}></StoreItemList>
+      </ScrollView>
     )
   }
 
@@ -390,19 +428,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#eaeaea'
   },
   storeContainer:{
-    marginTop:75,
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent: 'center',
-    marginBottom:50,
+
   },
   storeItemContainer:{
     height: 100,
     flex: 1
   },
   bgImageWrapper: {
-      position: 'absolute',
-      top: 0, bottom: 0, left: 0, right: 0
+    position: 'absolute',
+    top: 0, bottom: 0, left: 0, right: 0
   },
   backgroundImage: {
     flex: 1,
@@ -412,7 +446,7 @@ const styles = StyleSheet.create({
   itemDrop:{
     flex: 1,
     height: 100,
-    backgroundColor:"rgba(0,0,0,0.35)"
+    backgroundColor:"rgba(0,0,0,0.15)"
   },
   itemText1:{
     position: "absolute",
@@ -465,7 +499,7 @@ const styles = StyleSheet.create({
     top: 0, bottom: 0, left: 0, right: 0,
     paddingTop: 90,
     paddingLeft: 30,
-    backgroundColor:"rgba(0,0,0,0.15)"
+    backgroundColor:"rgba(0,0,0,0.25)"
   },
   noblur:{
     position:"absolute",

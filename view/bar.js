@@ -2,6 +2,7 @@ var Util = require('./utils')
 var Icon = require('react-native-vector-icons/Ionicons');
 var Store = require('./store')
 var User = require('./user')
+var Order = require('./order')
 
 import React, {
   TabBarIOS,
@@ -15,7 +16,7 @@ var Bar = React.createClass({
   getInitialState: function () {
     StatusBarIOS.setStyle(0);
     return {
-      selectedTab: '我的帐户'
+      selectedTab: '全部订单'
     }
   },
   changeTab(tabName) {
@@ -49,7 +50,7 @@ var Bar = React.createClass({
         selectedIconName="ios-list"
         onPress={ () => this.changeTab('全部订单') }
         selected={ this.state.selectedTab === '全部订单'}>
-          <View><Text></Text></View>
+          <Order></Order>
         </Icon.TabBarItem>
         <Icon.TabBarItem
         title="我的帐户"
