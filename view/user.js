@@ -8,6 +8,7 @@ import React, {
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  WebView,
   StatusBarIOS,
   Text,
   Image,
@@ -34,6 +35,64 @@ var UserInfo = React.createClass({
   }
 })
 
+var UserLink = React.createClass({
+  render: function () {
+    return(
+           <WebView
+          automaticallyAdjustContentInsets={false}
+          source={{uri: "http://www.alipay.com"}}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          decelerationRate="normal"
+          startInLoadingState={true}/>
+    )
+  }
+})
+
+var UserHelp = React.createClass({
+  render: function () {
+    return(
+           <WebView
+          automaticallyAdjustContentInsets={false}
+          source={{uri: "http://m.dnafw.com/help"}}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          decelerationRate="normal"
+          startInLoadingState={true}/>
+    )
+  }
+})
+
+var UserSetting = React.createClass({
+  render: function () {
+    return(
+      <View>
+        <Text style={{marginTop: 100, marginLeft:30}}>List of settings...</Text>
+      </View>
+    )
+  }
+})
+
+var UserAbout = React.createClass({
+  render: function () {
+    return(
+      <View>
+        <Text style={{marginTop: 100, marginLeft:30}}>All rights reserved...</Text>
+      </View>
+    )
+  }
+})
+
+var UserShare = React.createClass({
+  render: function () {
+    return(
+      <View>
+        <Text style={{marginTop: 100, marginLeft:30}}>分享到...</Text>
+      </View>
+    )
+  }
+})
+
 var UserView = React.createClass({
   getInitialState: function () {
     return null
@@ -44,6 +103,41 @@ var UserView = React.createClass({
       component:UserInfo,
       navigationBarHidden: false,
       passProps: { data: data },
+    })
+  },
+  _onLinkPress: function () {
+    this.props.navigator.push({
+      title: "绑定支付宝",
+      component:UserLink,
+      navigationBarHidden: false,
+    })
+  },
+  _onHelpPress: function () {
+    this.props.navigator.push({
+      title: "帮助中心",
+      component:UserHelp,
+      navigationBarHidden: false,
+    })
+  },
+  _onSettingPress: function () {
+    this.props.navigator.push({
+      title: "设置",
+      component:UserSetting,
+      navigationBarHidden: false,
+    })
+  },
+  _onAboutPress: function () {
+    this.props.navigator.push({
+      title: "关于微代理",
+      component:UserAbout,
+      navigationBarHidden: false,
+    })
+  },
+  _onSharePress: function () {
+    this.props.navigator.push({
+      title: "分享到",
+      component:UserShare,
+      navigationBarHidden: false,
     })
   },
   _logout:function () {
@@ -68,35 +162,35 @@ var UserView = React.createClass({
             </View>
           </View>
         </TouchableHighlight>
-        <TouchableHighlight  underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={()=>this._onInfoPress(data)}>
+        <TouchableHighlight  underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={this._onLinkPress}>
           <View style={styles.userMenu}>
             <Icon style={styles.itemNavIcon} name="link" size={18}></Icon>
             <Text>支付宝帐户：已绑定</Text>
             <Icon style={styles.itemNavMenu} name="angle-right" size={20}></Icon>
           </View>
         </TouchableHighlight>
-        <TouchableHighlight underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={()=>this._onInfoPress(data)}>
+        <TouchableHighlight underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={this._onHelpPress}>
           <View style={styles.userMenu}>
             <Icon style={styles.itemNavIcon} name="question-circle" size={18}></Icon>
             <Text>帮助中心</Text>
             <Icon style={styles.itemNavMenu} name="angle-right" size={20}></Icon>
           </View>
         </TouchableHighlight>
-        <TouchableHighlight underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={()=>this._onInfoPress(data)}>
+        <TouchableHighlight underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={this._onSettingPress}>
           <View style={styles.userMenu}>
             <Icon style={styles.itemNavIcon} name="cog" size={18}></Icon>
             <Text>设置</Text>
             <Icon style={styles.itemNavMenu} name="angle-right" size={20}></Icon>
           </View>
         </TouchableHighlight>
-        <TouchableHighlight underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={()=>this._onInfoPress(data)}>
+        <TouchableHighlight underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={this._onAboutPress}>
           <View style={styles.userMenu}>
             <Icon style={styles.itemNavIcon} name="info-circle" size={18}></Icon>
             <Text>关于微代理</Text>
             <Icon style={styles.itemNavMenu} name="angle-right" size={20}></Icon>
           </View>
         </TouchableHighlight>
-        <TouchableHighlight underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={()=>this._onInfoPress(data)}>
+        <TouchableHighlight underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={this._onSharePress}>
           <View style={styles.userMenu}>
             <Icon style={styles.itemNavIcon} name="share-alt-square" size={18}></Icon>
             <Text>推荐给朋友</Text>
