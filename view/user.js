@@ -12,20 +12,26 @@ import React, {
   StatusBarIOS,
   Text,
   Image,
-  AlertIOS,
   View
 } from 'react-native';
-
-/**
- * userData
- *
- * @object from Ajax 
- */
 
 var userData = {
   name:"Wei Fang",
   ac:"fanwei716@gmail.com"
 }
+
+/**
+ * - User
+ *  - UserView
+ *    - UserInfo
+ *    - UserLink
+ *    - UserHelp
+ *    - UserSetting
+ *    - UserAbout
+ *    - UserShare
+ *  
+ * @data userData from Ajax 
+ */
 
 var UserInfo = React.createClass({
   render: function () {
@@ -225,7 +231,7 @@ var User = React.createClass({
         shadowHidden: true
       }}
       itemWrapperStyle={styles.itemWrapper}
-      tintColor="#1E868C"/>
+      tintColor="#555"/>
     );
   }
 
