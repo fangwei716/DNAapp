@@ -1,6 +1,8 @@
 var Util = require('./utils')
 var Icon = require('react-native-vector-icons/FontAwesome');
 
+import Form from 'react-native-form'
+
 import React, {
   TouchableHighlight,
   StyleSheet,
@@ -13,7 +15,43 @@ import React, {
 
 
 var Login = React.createClass({
-
+  getInitialState: function () {
+    return({
+      isLogin: this.props.isLogin,
+      onSignup: this.props.onSignup
+    })
+  },
+  _login: function(){
+    this._loginSuccess()
+    // var onThis =this;
+    // Util.post("url",this.refs.form.getValues(),function(resData) {
+    //     if (resData) {
+    //       if (resData.error) {
+    //         AlertIOS.alert('登陆失败', '用户名或密码不正确');
+    //       }else{
+    //         onThis._loginSuccess()
+    //       }
+    //     }else{
+    //       AlertIOS.alert('登陆失败', '服务器无响应');
+    //     }
+    // })
+  },
+  _loginSuccess: function () {
+    var newState = {
+      isLogin: true,
+      onSignup: false
+    }
+    this.setState(newState);
+    this.props.callbackLogin(newState);
+  },
+  _launchSignup: function () {
+    var newState = {
+      isLogin: false,
+      onSignup: true
+    }
+    this.setState(newState);
+    this.props.callbackLogin(newState);
+  },
   render: function(){
     return (
       <View style={styles.container}>
@@ -24,18 +62,18 @@ var Login = React.createClass({
           <Image style={styles.logo} source={require('./img/dna15.png')}></Image>
           <Text style={styles.logoText}>华大DNA</Text>
         </View>
-
+        <Form ref="form">
+          <View style={styles.inputRow}>
+            <TextInput type="TextInput" name="userName" placeholderTextColor="#777" style={styles.input} placeholder="用户名"/>
+            <Icon name="user" style={styles.icon} size={20} />
+          </View>
+          <View style={styles.inputRow}>
+            <TextInput type="TextInput" name="password" placeholderTextColor="#777" style={styles.input} placeholder="密码" password={true}/>
+            <Icon name="lock" style={styles.icon} size={20} />
+          </View>
+        </Form>
         <View style={styles.inputRow}>
-          <TextInput placeholderTextColor="#777" style={styles.input} placeholder="用户名"/>
-          <Icon name="user" style={styles.icon} size={20} />
-        </View>
-        <View style={styles.inputRow}>
-          <TextInput placeholderTextColor="#777" style={styles.input} placeholder="密码" password={true}/>
-          <Icon name="lock" style={styles.icon} size={20} />
-        </View>
-
-        <View style={styles.inputRow}>
-          <TouchableHighlight underlayColor="#fff" style={styles.btn_pm} onPress={this._login}>
+          <TouchableHighlight underlayColor="#48aeb4" style={styles.btn_pm} onPress={this._login}>
             <Text style={{color:'#fff'}}>登录</Text>
           </TouchableHighlight>
         </View>
@@ -52,14 +90,6 @@ var Login = React.createClass({
       </View>
     );
   },
-
-  _login: function(){
-    AlertIOS.alert('登陆失败','服务器无响应');
-  },
-
-  _launchSignup: function () {
-    AlertIOS.alert('注册失败','page not ready yet')
-  }
 
 });
 

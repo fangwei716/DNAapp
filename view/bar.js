@@ -12,17 +12,28 @@ import React, {
   View
 } from 'react-native';
 
+/**
+ * isFirstTime:
+ *   -true. Only User tab is enabled. User needs to fill
+ *   out the info before using other functions.
+ *   -false. fully functioned. 
+ */
+
 var Bar = React.createClass({
   getInitialState: function () {
     StatusBarIOS.setStyle(0);
     return {
-      selectedTab: '全部订单'
+      selectedTab: this.props.isFirstTime? '我的帐户':'华大商城',
+      isFirstTime: this.props.isFirstTime
     }
   },
   changeTab(tabName) {
-    this.setState({
-      selectedTab: tabName
-    });
+    if (!this.state.isFirstTime) {
+      this.setState({
+        selectedTab: tabName
+      });
+    };
+
   },
   render: function(){
     return (
@@ -58,7 +69,7 @@ var Bar = React.createClass({
         selectedIconName="ios-person"
         onPress={ () => this.changeTab('我的帐户') }
         selected={ this.state.selectedTab === '我的帐户'}>
-          <User></User>
+          <User isFirstTime={this.props.isFirstTime} callbackLogout={this.props.callbackLogout}></User>
         </Icon.TabBarItem>
       </TabBarIOS>
     );

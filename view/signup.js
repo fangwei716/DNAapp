@@ -1,6 +1,8 @@
 var Util = require('./utils')
 var Icon = require('react-native-vector-icons/FontAwesome');
 
+import Form from 'react-native-form'
+
 import React, {
   TouchableHighlight,
   StyleSheet,
@@ -11,9 +13,53 @@ import React, {
   View
 } from 'react-native';
 
+/**
+ * Signup
+ *  - init state, isFirstTime = true.
+ *    For details goes to tab.js
+ */
 
 var Signup = React.createClass({
-
+  getInitialState: function () {
+    return({
+      isLogin: this.props.isLogin,
+      onSignup: this.props.onSignup
+    })
+  },
+  _signup: function(){
+    this._signupSuccess()
+    // var onThis =this;
+    // Util.post("url",this.refs.form.getValues(),function(resData) {
+    //     if (resData) {
+    //       if (resData.error) {
+    //         AlertIOS.alert('注册失败', '验证码错误');
+    //       }else{
+    //         onThis._signupSuccess()
+    //       }
+    //     }else{
+    //       AlertIOS.alert('注册失败', '服务器无响应');
+    //     }
+    // })
+  },
+  _signupSuccess: function () {
+    var newState = {
+      isLogin: true,
+      onSignup: false
+    }
+    this.setState(newState);
+    this.props.callbackSignup(newState);
+  },
+  _launchLogin: function () {
+    var newState = {
+      isLogin: false,
+      onSignup: false
+    }
+    this.setState(newState);
+    this.props.callbackSignup(newState);
+  },
+  _getPhoneText: function () {
+    AlertIOS.alert("手机号无效", this.refs.form.getValues().phoneNum)
+  },
   render: function(){
     return (
       <View style={styles.container}>
@@ -24,20 +70,21 @@ var Signup = React.createClass({
           <Image style={styles.logo} source={require('./img/dna15.png')}></Image>
           <Text style={styles.logoText}>华大DNA</Text>
         </View>
-        <View style={styles.inputRow}>
-          <TextInput placeholderTextColor="#777" style={styles.input} placeholder="手机号" keyboardType="number-pad"/>
-          <View>
-            <TouchableHighlight underlayColor="#fff" style={styles.btn_text} onPress={this._getText}>
-              <Text style={{color:'#777',fontSize:10}}>获取验证码</Text>
-            </TouchableHighlight>
-          </View>
+        <View style={{flex: 1}}>
+          <Form ref="form">
+            <View style={styles.inputRow}>
+              <TextInput type="TextInput" name="phoneNum" placeholderTextColor="#777" style={styles.input} placeholder="手机号" keyboardType="number-pad"/>
+            </View>
+            <View style={styles.inputRow}>
+              <TextInput type="TextInput" name="veriCode" placeholderTextColor="#777" style={styles.input} placeholder="验证码" keyboardType="number-pad"/>
+            </View>
+          </Form>
+          <TouchableHighlight underlayColor="#fff" style={styles.btn_text} onPress={this._getPhoneText}>
+            <Text style={{color:'#777',fontSize:10}}>获取验证码</Text>
+          </TouchableHighlight>
         </View>
         <View style={styles.inputRow}>
-          <TextInput placeholderTextColor="#777" style={styles.input} placeholder="验证码" keyboardType="number-pad"/>
-        </View>
-
-        <View style={styles.inputRow}>
-          <TouchableHighlight underlayColor="#fff" style={styles.btn_pm} onPress={this._launchLogin}>
+          <TouchableHighlight underlayColor="#48aeb4" style={styles.btn_pm} onPress={this._signup}>
             <Text style={{color:'#fff'}}>注册</Text>
           </TouchableHighlight>
         </View>
@@ -47,20 +94,12 @@ var Signup = React.createClass({
           <View style={styles.btn_dec}></View>
         </View>
         <View style={styles.inputRow}>
-          <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this._signup}>
+          <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this._launchLogin}>
             <Text style={{color:'#777'}}>登陆</Text>
           </TouchableHighlight>
         </View>
       </View>
     );
-  },
-
-  _signup: function(){
-    AlertIOS.alert('登陆失败','服务器无响应');
-  },
-
-  _launchLogin: function () {
-    AlertIOS.alert('注册失败','page not ready yet')
   }
 
 });
@@ -140,7 +179,7 @@ var styles = StyleSheet.create({
     height:35,
     position: "absolute",
     right:0,
-    top:-18,
+    top:0,
     borderColor:'#eee',
     borderWidth:Util.pixel,
     justifyContent:'center',

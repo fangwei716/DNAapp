@@ -29,9 +29,11 @@ var Util = {
     };
 
     fetch(url, fetchOptions)
-    .then((response) => response.text())
-    .then((responseText) => {
-      callback(JSON.parse(responseText));
+    .then((response) => {
+      return response.json() // respose a json object
+    })
+    .then((responseData) => {
+      callback(JSON.parse(responseData));
     });
   },
   //Key

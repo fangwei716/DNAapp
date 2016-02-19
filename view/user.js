@@ -9,16 +9,12 @@ import React, {
   StyleSheet,
   TextInput,
   WebView,
+  ScrollView,
   StatusBarIOS,
   Text,
   Image,
   View
 } from 'react-native';
-
-var userData = {
-  name:"Wei Fang",
-  ac:"fanwei716@gmail.com"
-}
 
 /**
  * - User
@@ -43,8 +39,9 @@ var UserInfo = React.createClass({
 
 var UserLink = React.createClass({
   render: function () {
+    //ajax to get alipay link
     return(
-           <WebView
+          <WebView
           automaticallyAdjustContentInsets={false}
           source={{uri: "http://www.alipay.com"}}
           javaScriptEnabled={true}
@@ -101,14 +98,30 @@ var UserShare = React.createClass({
 
 var UserView = React.createClass({
   getInitialState: function () {
-    return null
+    //get Ajax here
+    return({
+      isFirstTime: this.props.isFirstTime,
+      userData:{
+        username: "Wei Fang",
+        email: null,
+        alipayLinked: false,
+        img: require('./img/icon.jpg'), // should use default "?" avatar for first time user
+      }
+    })
+  },
+  _logout: function () {
+    var newState = {
+      isLogin: false,
+      onSignup: false
+    }
+    this.props.callbackLogout(newState);
   },
   _onInfoPress: function (data) {
     this.props.navigator.push({
       title: "编辑资料",
       component:UserInfo,
       navigationBarHidden: false,
-      passProps: { data: data },
+      passProps:{data:data}
     })
   },
   _onLinkPress: function () {
@@ -146,32 +159,41 @@ var UserView = React.createClass({
       navigationBarHidden: false,
     })
   },
-  _logout:function () {
-    
+  _renderFirstTimeMsg:function () {
+    if (this.state.isFirstTime) {
+      return(
+        <View style={styles.ftMsg}>
+          <Text style={{color:"#fff"}}>
+            你的资料尚未填写完整或正在审核中，请点击上面进入编辑资料或查看你的资料审核进度。审核成功后，你便可以使用微代理的完整功能。
+          </Text>
+        </View>
+      )
+    };
   },
   render: function () {
-    var data = this.props.data;
+    var data = this.state.userData;
     return(
-      <View>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.userContainer}>
         <TouchableHighlight style={{marginBottom:35}} onPress={()=>this._onInfoPress(data)}>
           <View style={styles.userHero}>
             <View style={styles.bgImageWrapper}>
-              <Image source={require('./img/icon.jpg')} style={styles.backgroundImage}>
+              <Image source={data.img} style={styles.backgroundImage}>
                 <BlurView blurType="light" style={styles.blur}>
-                  <Image source={require('./img/icon.jpg')} style={styles.icon}>
+                  <Image source={data.img} style={styles.icon}>
                   </Image>
-                  <Text style={{fontSize:18,color:"#3a3a3a"}}>{data.name}</Text>
-                  <Text style={{fontSize:13,color:"#3a3a3a",marginTop:10}}>帐号：{data.ac}</Text>
+                  <Text style={{fontSize:18,color:"#3a3a3a"}}>{data.username? data.username:"用户名未设置"}</Text>
+                  <Text style={{fontSize:13,color:"#3a3a3a",marginTop:10}}>帐号：{data.email?data.email:"邮箱未绑定"}</Text>
                 </BlurView>
               </Image>
               <Icon style={styles.itemNav} name="angle-right" size={35}></Icon>
             </View>
           </View>
         </TouchableHighlight>
+        {this._renderFirstTimeMsg()}
         <TouchableHighlight  underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={this._onLinkPress}>
           <View style={styles.userMenu}>
             <Icon style={styles.itemNavIcon} name="link" size={18}></Icon>
-            <Text>支付宝帐户：已绑定</Text>
+            <Text>支付宝帐户：{data.alipayLinked?"已绑定":"未绑定"}</Text>
             <Icon style={styles.itemNavMenu} name="angle-right" size={20}></Icon>
           </View>
         </TouchableHighlight>
@@ -208,7 +230,7 @@ var UserView = React.createClass({
               <Text style={{color:'#fff'}}>注销帐户</Text>
           </TouchableHighlight>
         </View>
-      </View>
+      </ScrollView>
     )
   }
 
@@ -217,9 +239,13 @@ var UserView = React.createClass({
 var User = React.createClass({
   getInitialState: function () {
     StatusBarIOS.setStyle(0);
-    return null;
+    return({
+      isFirstTime: this.props.isFirstTime
+    })
   },
   render: function(){
+    var callback = this.props.callbackLogout,
+    isFirstTime = this.state.isFirstTime;
     return (
       <NavigatorIOS
       ref='nav'
@@ -227,7 +253,10 @@ var User = React.createClass({
       initialRoute={{
         title:"我的帐户",
         component: UserView,
-        passProps: {data: userData},
+        passProps: {
+          callbackLogout: callback,
+          isFirstTime: isFirstTime,
+        },
         shadowHidden: true
       }}
       itemWrapperStyle={styles.itemWrapper}
@@ -244,8 +273,12 @@ const styles = StyleSheet.create({
   itemWrapper:{
     backgroundColor: '#eaeaea'
   },
+  userContainer:{
+    position:"relative",
+    top: -50
+  },
   userHero:{
-    height:170,
+    height:150,
     flex:1,
     flexDirection:'row',
   },
@@ -261,7 +294,7 @@ const styles = StyleSheet.create({
   blur:{
     position: 'absolute',
     top: 0, bottom: 0, left: 0, right: 0,
-    paddingTop: 93,
+    paddingTop: 73,
     paddingLeft: 135,
     backgroundColor:"rgba(255,255,255,0.05)"
   },
@@ -276,7 +309,7 @@ const styles = StyleSheet.create({
   },
   itemNav:{
     position:"absolute",
-    top:97,
+    top:77,
     right:10,
     color: "rgba(0,0,0,0.3)",
     backgroundColor:"transparent"
@@ -319,6 +352,16 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
   },
+  ftMsg:{
+    backgroundColor:"#d73c37",
+    paddingLeft:20,
+    paddingRight: 20,
+    paddingTop:10,
+    paddingBottom: 10,
+    marginTop:-35,
+    marginBottom: 20,
+    flex:1
+  }
 })
 
 module.exports = User;
