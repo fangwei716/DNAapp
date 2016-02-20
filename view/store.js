@@ -56,8 +56,8 @@ var ItemDetail = React.createClass({
     if (this.state.selectedIndex==0) {
       // to be done
       return(
-        <View style={{height:1200,paddingTop:10,flex : 1, alignItems: 'center'}}>
-          <Image source={require('./img/detail1.jpg')} style={{height: 1200, resizeMode: Image.resizeMode.contain}}>
+        <View style={{paddingTop:10, alignItems: 'center'}}>
+          <Image source={this.props.data.detailImg} style={{height: (Util.size.width-40)*this.props.data.detailImgRatio, width: Util.size.width-40, resizeMode: Image.resizeMode.contain}}>
           </Image>
         </View>
       )
@@ -108,19 +108,16 @@ var ItemDetail = React.createClass({
                   <View style={styles.detailPrice}>
                     <Text numberOfLines={data.lines} style={{fontSize:20}}>¥ {data.price}</Text>
                   </View>
-                  <View style={{flexDirection:"row",marginTop:10}}>
-                    <Icon size={15} style={{paddingRight:5}} name="dot-circle-o"></Icon>
-                    <Text>{data.type}</Text>
-                    <Icon size={15} style={{paddingLeft:15,paddingRight:5}} name="shopping-bag"></Icon>
-                    <Text>{data.deliver}</Text>
-                    <Icon size={15} style={{paddingLeft:15,paddingRight:5}} name="tags"></Icon>
-                    <Text>{data.tag}</Text>
+                  <View style={{flexWrap:"wrap",width:Util.size.width-60,flexDirection:"row",marginTop:10}}>
+                    <Icon size={15} style={{paddingRight:15}} name="dot-circle-o"> <Text>{data.type}</Text></Icon>
+                    <Icon size={15} style={{paddingRight:15}} name="shopping-bag"> <Text>{data.deliver}</Text></Icon>
+                    <Icon size={15} style={{paddingRight:15}} name="tags"> <Text>{data.tag}</Text></Icon>
                   </View>
                 </View>
               </VibrancyView>
             </Image>
             <View style={styles.noblur}>
-              <Text numberOfLines={data.lines} style={{fontSize:12,color:"rgba(0,0,0,0.5)"}}>{data.fullIntro}</Text>
+              <Text numberOfLines={data.lines} style={{fontSize:12,color:"rgba(0,0,0,0.5)",flex:1}}>{data.fullIntro}</Text>
             </View>
             <View style={styles.placeorderContainer}>
               <TouchableOpacity activeOpacity={0.7} onPress={()=>this._onPress(data.key)} style={styles.placeorder}><Text style={{color:"rgba(0,0,0,0.4)"}}>填写订单</Text></TouchableOpacity>
@@ -162,8 +159,10 @@ var storeItemData=[{
   lines: 4,
   relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"},{label: "爷爷",value:"ff"},{label:"奶奶",value:"mm"},{label: "外公",value:"f"},{label:"外婆",value:"m"}],
   sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
-  fullIntro:"华大DNA服务提供的DNA档案是用DNA技术建立一个人的\n基因组图谱，主要用于银行、保险、交通行业、人身安全、\n人身担保、遗产继承、失踪、急救医学等目的。\n人身担保、遗产继承、失踪、急救医学等目的。",
-  intro:"华大DNA服务提供的DNA档案是用DNA技术建立一个人的基因组图谱，\n主要用于银行、保险、交通行业、人身安全、人身担保...",
+  fullIntro:"华大DNA服务提供的DNA档案是用DNA技术建立一个人的基因组图谱，主要用于银行、保险、交通行业、人身安全、人身担保、遗产继承、失踪、急救医学等目的。人身担保、遗产继承、失踪、急救医学等目的。",
+  intro:"华大DNA服务提供的DNA档案是用DNA技术建立一个人的基因组图谱，主要用于银行、保险、交通行业、人身安全、人身担保",
+  detailImg: require('./img/detail1.jpg'),
+  detailImgRatio: 3.52, //actual img height/width
   reviews:[{key:1,user:"用户1***",date:"2016-02-13",review:"★★★★☆"},{key:2,user:"用户2***",date:"2016-01-12",review:"★★★★★"}],
   sales:[{key:1,user:"用户1***",date:"2016-02-13",price:"¥1200"},{key:2,user:"用户2***",date:"2016-01-12",price:"¥1200"}],
 },{
@@ -178,8 +177,10 @@ var storeItemData=[{
   lines:4,
   relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"}],
   sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
-  fullIntro: "亲子鉴定服务可以判定谁是孩子的亲生父亲或者生物学父亲，\n即鉴定父与子的血缘关系。华大DNA提供法医亲子鉴定、\n家庭亲子鉴定以及妊娠亲子鉴定三大服务，以满足\n客户的不同需求。",
-  intro:"亲子鉴定服务可以判定谁是孩子的亲生父亲或者生物学父亲，\n即鉴定父与子的血缘关系...",
+  fullIntro: "亲子鉴定服务可以判定谁是孩子的亲生父亲或者生物学父亲，即鉴定父与子的血缘关系。华大DNA提供法医亲子鉴定、家庭亲子鉴定以及妊娠亲子鉴定三大服务，以满足客户的不同需求。",
+  intro:"亲子鉴定服务可以判定谁是孩子的亲生父亲或者生物学父亲，即鉴定父与子的血缘关系",
+  detailImg: require('./img/detail1.jpg'),
+  detailImgRatio: 3.52, //actual img height/width
   reviews:[{key:1,user:"用户1***",date:"2016-02-13",review:"★★★★☆"},{key:2,user:"用户2***",date:"2016-01-12",review:"★★★★★"}],
   sales:[{key:1,user:"用户1***",date:"2016-02-13",price:"¥1200"},{key:2,user:"用户2***",date:"2016-01-12",price:"¥1200"}],
 },{
@@ -194,8 +195,10 @@ var storeItemData=[{
   lines: 4,
   relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"}],
   sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
-  fullIntro:"华大DNA服务提供源自同一父系或母系的成员之间的亲缘\n关系鉴定，例如曾祖父、祖父、与孙子、曾孙子之间，同\n胞兄弟之间，叔侄之间，外曾祖母，外祖母，与外孙女，\n之间的关系鉴定，绘制父系或母系家谱和遗传关系。",
-  intro:"华大DNA服务提供源自同一父系或母系的成员之间的亲缘关系鉴定，\n例如曾祖父、祖父、与孙子、曾孙子之间，同胞兄弟之间，叔侄之间...",
+  fullIntro:"华大DNA服务提供源自同一父系或母系的成员之间的亲缘关系鉴定，例如曾祖父、祖父、与孙子、曾孙子之间，同胞兄弟之间，叔侄之间，外曾祖母，外祖母，与外孙女，之间的关系鉴定，绘制父系或母系家谱和遗传关系。",
+  intro:"华大DNA服务提供源自同一父系或母系的成员之间的亲缘关系鉴定，例如曾祖父、祖父、与孙子、曾孙子之间，同胞兄弟之间，叔侄之间",
+  detailImg: require('./img/detail1.jpg'),
+  detailImgRatio: 3.52, //actual img height/width
   reviews:[{key:1,user:"用户1***",date:"2016-02-13",review:"★★★★☆"},{key:2,user:"用户2***",date:"2016-01-12",review:"★★★★★"}],
   sales:[{key:1,user:"用户1***",date:"2016-02-13",price:"¥1200"},{key:2,user:"用户2***",date:"2016-01-12",price:"¥1200"}],
 }]
@@ -315,6 +318,27 @@ var Store = React.createClass({
 
 });
 
+/**
+ * responsive
+ *
+ * @iphone5/5s ratio=2
+ * 
+ */
+var responsive = {
+}
+if (Util.ratio === 2 ) {
+  responsive = {
+    noblurT: 180,
+    placeorderContainerB:17
+  }
+}else{
+  responsive = {
+    noblurT:170,
+    placeorderContainerB:25
+  }
+}
+
+
 const styles = StyleSheet.create({
   container:{
     flex:1,
@@ -356,6 +380,8 @@ const styles = StyleSheet.create({
   },
   itemText2:{
     position: "absolute",
+    flexWrap:"wrap",
+    width: Util.size.width-40,
     left: 20,
     top: 60,
     flexDirection: "row"
@@ -397,8 +423,10 @@ const styles = StyleSheet.create({
     backgroundColor:"rgba(0,0,0,0.15)"
   },
   noblur:{
+    flexWrap:"wrap",
     position:"absolute",
-    top:170,
+    width: Util.size.width-60,
+    top:responsive.noblurT,
     left: 30,
     backgroundColor:"transparent"
   },
@@ -411,7 +439,7 @@ const styles = StyleSheet.create({
   placeorderContainer:{
     alignItems:'center',
     position:"absolute",
-    bottom:25,
+    bottom:responsive.placeorderContainerB,
     width:Util.size.width,
     flex:1
   },

@@ -10,6 +10,7 @@ var {
 var Util = {
 
   //单位像素
+  ratio: PixelRatio.get(),
   pixel: 1 / PixelRatio.get(),
   //屏幕尺寸
   size: {

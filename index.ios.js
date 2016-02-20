@@ -40,6 +40,7 @@
 var Login = require('./view/login');
 var Signup = require('./view/signup');
 var Bar = require('./view/bar')
+var Util = require('./view/utils')
 
 import React, {
   AppRegistry,
@@ -48,6 +49,7 @@ import React, {
   TextInput,
   TabBarIOS,
   StatusBarIOS,
+  Image,
   Text,
   View
 } from 'react-native';
@@ -76,7 +78,7 @@ var DNA = React.createClass({
     StatusBarIOS.setStyle(1);
     // get via SSH here
     var userData = {
-      isLogin: true,
+      isLogin: false,
       onSignup: false,
       isFirstTime: false,
     }
@@ -91,6 +93,7 @@ var DNA = React.createClass({
     this.setState(newState);
   },
   render:function () {
+    var lsView = null;
     if (this.state.isLogin) {
       return (
         <Bar
@@ -99,20 +102,28 @@ var DNA = React.createClass({
       );
     }else{
       if (this.state.onSignup) {
-        return(
-          <Signup
-           isLogin={this.state.isLogin}
-           onSignin={this.state.onSignin}
-           callbackSignup={this._onStateChange}></Signup>
-        )
+        lsView = <Signup
+             isLogin={this.state.isLogin}
+             onSignin={this.state.onSignin}
+             callbackSignup={this._onStateChange}></Signup>
       }else{
-        return (
-          <Login
-           isLogin={this.state.isLogin}
-           onSignin={this.state.onSignin}
-           callbackLogin={this._onStateChange}></Login>
-        );
+        lsView = <Login
+             isLogin={this.state.isLogin}
+             onSignin={this.state.onSignin}
+             callbackLogin={this._onStateChange}></Login>
       }
+      return (
+          <View style={styles.container}>
+            <View style={styles.bgImageWrapper}>
+              <Image style={styles.backgroundImage} source={require('./view/img/DNA1.png')}></Image>
+            </View>
+            <View>
+              <Image style={styles.logo} source={require('./view/img/dna15.png')}></Image>
+              <Text style={styles.logoText}>华大DNA</Text>
+            </View>
+            {lsView}
+          </View>
+      );
 
     }  
   }
@@ -120,7 +131,32 @@ var DNA = React.createClass({
 })
 
 const styles = StyleSheet.create({
-  
+  container:{
+    paddingTop:50,
+    alignItems:'center',
+    backgroundColor:"#222"
+  },
+  bgImageWrapper: {
+      position: 'absolute',
+      top: 0, bottom: 0, left: 0, right: 0
+  },
+  backgroundImage: {
+    flex: 1,
+    alignSelf: 'stretch',
+    width: null,
+  },
+  logo:{
+    width:70,
+    height:70,
+    resizeMode: Image.resizeMode.contain,
+    marginBottom: 10
+  },
+  logoText:{
+    color: "#fff",
+    backgroundColor: "transparent",
+    marginBottom:Util.ratio == 2? 40:50,
+    fontSize: 16
+  },
 });
 
 AppRegistry.registerComponent('DNA', () => DNA);

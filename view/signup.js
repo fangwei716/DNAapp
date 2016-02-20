@@ -62,14 +62,7 @@ var Signup = React.createClass({
   },
   render: function(){
     return (
-      <View style={styles.container}>
-        <View style={styles.bgImageWrapper}>
-          <Image style={styles.backgroundImage} source={require('./img/DNA1.png')}></Image>
-        </View>
-        <View>
-          <Image style={styles.logo} source={require('./img/dna15.png')}></Image>
-          <Text style={styles.logoText}>华大DNA</Text>
-        </View>
+      <View style={{alignItems:"center"}}>
         <View style={{flex: 1}}>
           <Form ref="form">
             <View style={styles.inputRow}>
@@ -106,37 +99,12 @@ var Signup = React.createClass({
 
 
 var styles = StyleSheet.create({
-  container:{
-    paddingTop:50,
-    alignItems:'center'
-  },
-  bgImageWrapper: {
-      position: 'absolute',
-      top: 0, bottom: 0, left: 0, right: 0
-  },
-  backgroundImage: {
-    flex: 1,
-    alignSelf: 'stretch',
-    width: null,
-  },
   icon:{
     position: 'absolute',
     right: 10,
-    top:6,
-    color: '#aaa',
+    top:9,
+    color: '#999',
     backgroundColor: "transparent"
-  },
-  logo:{
-    width:70,
-    height:70,
-    resizeMode: Image.resizeMode.contain,
-    marginBottom: 10
-  },
-  logoText:{
-    color: "#fff",
-    backgroundColor: "transparent",
-    marginBottom:50,
-    fontSize:16
   },
   inputRow:{
     flexDirection:'row',
@@ -148,9 +116,9 @@ var styles = StyleSheet.create({
     marginLeft:10,
     padding:1,
     marginRight: 80,
-    width:250,
+    width:Util.size.width-140,
     borderWidth:Util.pixel,
-    height:35,
+    height:40,
     paddingLeft:8,
     borderColor:'#eee',
     borderRadius:1,
@@ -175,7 +143,7 @@ var styles = StyleSheet.create({
   },
   btn_text:{
     width:71,
-    height:35,
+    height:40,
     position: "absolute",
     right:0,
     top:0,

@@ -18,7 +18,7 @@ var Login = React.createClass({
   getInitialState: function () {
     return({
       isLogin: this.props.isLogin,
-      onSignup: this.props.onSignup
+      onSignup: this.props.onSignup,
     })
   },
   _login: function(){
@@ -54,14 +54,7 @@ var Login = React.createClass({
   },
   render: function(){
     return (
-      <View style={styles.container}>
-        <View style={styles.bgImageWrapper}>
-          <Image style={styles.backgroundImage} source={require('./img/DNA1.png')}></Image>
-        </View>
-        <View>
-          <Image style={styles.logo} source={require('./img/dna15.png')}></Image>
-          <Text style={styles.logoText}>华大DNA</Text>
-        </View>
+      <View style={{alignItems:"center"}}>
         <Form ref="form">
           <View style={styles.inputRow}>
             <TextInput type="TextInput" name="userName" placeholderTextColor="#777" style={styles.input} placeholder="用户名"/>
@@ -95,38 +88,12 @@ var Login = React.createClass({
 
 
 var styles = StyleSheet.create({
-  container:{
-    paddingTop:50,
-    alignItems:'center'
-  },
-  bgImageWrapper: {
-      position: 'absolute',
-      // alignItems: 'stretch',
-      top: 0, bottom: 0, left: 0, right: 0
-  },
-  backgroundImage: {
-    flex: 1,
-    alignSelf: 'stretch',
-    width: null,
-  },
   icon:{
-  	position: 'absolute',
-  	right: 10,
-  	top:9,
-  	color: '#999',
+    position: 'absolute',
+    right: 10,
+    top:9,
+    color: '#999',
     backgroundColor: "transparent"
-  },
-  logo:{
-    width:70,
-    height:70,
-    resizeMode: Image.resizeMode.contain,
-    marginBottom: 10
-  },
-  logoText:{
-    color: "#fff",
-    backgroundColor: "transparent",
-    marginBottom:50,
-    fontSize: 16
   },
   inputRow:{
     flexDirection:'row',
@@ -137,7 +104,7 @@ var styles = StyleSheet.create({
   input:{
     marginLeft:10,
     padding:1,
-    width:300,
+    width:Util.size.width-80,
     borderWidth:Util.pixel,
     height:40,
     paddingLeft:12,

@@ -34,6 +34,18 @@ import React, {
 
 var ItemOrder = React.createClass({
   getInitialState: function () {
+    styles.form1={
+    }
+    styles.form2={
+      width:0,
+      height:0,
+      opacity:0
+    }
+    styles.form3={
+      width:0,
+      height:0,
+      opacity:0
+    }
    // fetch via SSH
    var ItemOrderData ={
       orderID: "dsjhflsjdklcxsnkds", 
@@ -57,8 +69,6 @@ var ItemOrder = React.createClass({
       progress: 0,
       step:0,
       serviceKey: this.props.data,
-      relSelected: 0,
-      samSelected: 0,
       stepTitle: "第一步: 委托人／受检人信息",
       orderID: ItemOrderData.orderID,
       price: ItemOrderData.price,
@@ -190,7 +200,7 @@ var ItemOrder = React.createClass({
                   <TextInput defaultValue={this.state.form2.msg} type="TextInput" name="msg" style={styles.orderInput}/>
                 </View>
               </Form>
-              <View style={{flexDirection:"row", marginLeft:20, marginTop:20}}>
+              <View style={{flexDirection:"row", marginLeft:10, marginTop:20}}>
                 <TouchableHighlight underlayColor="#eee" style={[styles.btn_pm_half,{backgroundColor:"#ddd"}]} onPress={()=>this._updateStep(0)}>
                   <Text style={{color:'#fff'}}>上一步</Text>
                 </TouchableHighlight>
@@ -206,7 +216,7 @@ var ItemOrder = React.createClass({
                 <TouchableHighlight underlayColor="#eee" style={[styles.btn_pm_half,{backgroundColor:"#ddd"}]} onPress={()=>this._updateStep(1)}>
                   <Text style={{color:'#fff'}}>上一步</Text>
                 </TouchableHighlight>
-                <TouchableHighlight underlayColor="#48aeb4" style={[styles.btn_pm_half,{backgroundColor:"#1E868C"}]} onPress={()=>this._pay(payInfo)}>
+                <TouchableHighlight underlayColor="#48aeb4" style={[styles.btn_pm_half,{backgroundColor:"#1E868C"}]} onPress={()=>this._pay(this.state.orderID)}>
                   <Text style={{color:'#fff'}}>前往支付</Text>
                 </TouchableHighlight>
               </View>
