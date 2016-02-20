@@ -324,7 +324,7 @@ var OrderList = React.createClass({
     return {
       isRefreshing: false,
       loaded: 0,
-      rowData: orderData,
+      rowData: this.props.data,
       refreshTitle: "下拉更新"
     };
   },
@@ -338,7 +338,7 @@ var OrderList = React.createClass({
       this.setState({
         // loaded: this.state.loaded,
         isRefreshing: false,
-        rowData: orderData,
+        rowData: this.props.data,
         refreshTitle: "更新完毕"
       });
       // 1s after refresh
@@ -384,7 +384,7 @@ var Order = React.createClass({
         shadowHidden: true
       }}
       itemWrapperStyle={styles.itemWrapper}
-      tintColor="#555"/>
+      tintColor="#777"/>
     );
   }
 

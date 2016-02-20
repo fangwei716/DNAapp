@@ -62,12 +62,34 @@ var ItemDetail = React.createClass({
         </View>
       )
     }else if(this.state.selectedIndex==1){
+      var reviews = this.props.data.reviews.map(function(elem) {
+        return(
+          <View key={elem.key} style={styles.reviews}>
+            <Text style={{flex:2,paddingLeft:10,alignItems:"center"}}>{elem.user}</Text>
+            <Text style={{flex:3,paddingLeft:10,alignItems:"center"}}>{elem.date}</Text>
+            <Text style={{flex:3,paddingLeft:10,alignItems:"center"}}>{elem.review}</Text>
+          </View>
+        )
+      })
       return(
-        <Text>To be done</Text>
+        <View style={{marginTop:10}}>
+          {reviews}
+        </View>
       )
     }else{
+      var sales = this.props.data.sales.map(function(elem) {
+        return(
+          <View key={elem.key} style={styles.reviews}>
+            <Text style={{flex:2,paddingLeft:10,alignItems:"center"}}>{elem.user}</Text>
+            <Text style={{flex:3,paddingLeft:10,alignItems:"center"}}>{elem.date}</Text>
+            <Text style={{flex:3,paddingLeft:10,alignItems:"center"}}>{elem.price}</Text>
+          </View>
+        )
+      })
       return(
-        <Text>To be done</Text>
+        <View style={{marginTop:10}}>
+          {sales}
+        </View>
       )
     }
   },
@@ -131,7 +153,9 @@ var storeItemData=[{
   relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"},{label: "爷爷",value:"ff"},{label:"奶奶",value:"mm"},{label: "外公",value:"f"},{label:"外婆",value:"m"}],
   sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
   fullIntro:"华大DNA服务提供的DNA档案是用DNA技术建立一个人的\n基因组图谱，主要用于银行、保险、交通行业、人身安全、\n人身担保、遗产继承、失踪、急救医学等目的。\n人身担保、遗产继承、失踪、急救医学等目的。",
-  intro:"华大DNA服务提供的DNA档案是用DNA技术建立一个人的基因组图谱，\n主要用于银行、保险、交通行业、人身安全、人身担保..."
+  intro:"华大DNA服务提供的DNA档案是用DNA技术建立一个人的基因组图谱，\n主要用于银行、保险、交通行业、人身安全、人身担保...",
+  reviews:[{key:1,user:"用户1***",date:"2016-02-13",review:"★★★★☆"},{key:2,user:"用户2***",date:"2016-01-12",review:"★★★★★"}],
+  sales:[{key:1,user:"用户1***",date:"2016-02-13",price:"¥1200"},{key:2,user:"用户2***",date:"2016-01-12",price:"¥1200"}],
 },{
   title:"亲子鉴定",
   star: 4,
@@ -145,7 +169,9 @@ var storeItemData=[{
   relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"}],
   sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
   fullIntro: "亲子鉴定服务可以判定谁是孩子的亲生父亲或者生物学父亲，\n即鉴定父与子的血缘关系。华大DNA提供法医亲子鉴定、\n家庭亲子鉴定以及妊娠亲子鉴定三大服务，以满足\n客户的不同需求。",
-  intro:"亲子鉴定服务可以判定谁是孩子的亲生父亲或者生物学父亲，\n即鉴定父与子的血缘关系..."
+  intro:"亲子鉴定服务可以判定谁是孩子的亲生父亲或者生物学父亲，\n即鉴定父与子的血缘关系...",
+  reviews:[{key:1,user:"用户1***",date:"2016-02-13",review:"★★★★☆"},{key:2,user:"用户2***",date:"2016-01-12",review:"★★★★★"}],
+  sales:[{key:1,user:"用户1***",date:"2016-02-13",price:"¥1200"},{key:2,user:"用户2***",date:"2016-01-12",price:"¥1200"}],
 },{
   title:"DNA家谱",
   star: 4,
@@ -159,7 +185,9 @@ var storeItemData=[{
   relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"}],
   sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
   fullIntro:"华大DNA服务提供源自同一父系或母系的成员之间的亲缘\n关系鉴定，例如曾祖父、祖父、与孙子、曾孙子之间，同\n胞兄弟之间，叔侄之间，外曾祖母，外祖母，与外孙女，\n之间的关系鉴定，绘制父系或母系家谱和遗传关系。",
-  intro:"华大DNA服务提供源自同一父系或母系的成员之间的亲缘关系鉴定，\n例如曾祖父、祖父、与孙子、曾孙子之间，同胞兄弟之间，叔侄之间..."
+  intro:"华大DNA服务提供源自同一父系或母系的成员之间的亲缘关系鉴定，\n例如曾祖父、祖父、与孙子、曾孙子之间，同胞兄弟之间，叔侄之间...",
+  reviews:[{key:1,user:"用户1***",date:"2016-02-13",review:"★★★★☆"},{key:2,user:"用户2***",date:"2016-01-12",review:"★★★★★"}],
+  sales:[{key:1,user:"用户1***",date:"2016-02-13",price:"¥1200"},{key:2,user:"用户2***",date:"2016-01-12",price:"¥1200"}],
 }]
 
 var StoreItemList = React.createClass({
@@ -271,7 +299,7 @@ var Store = React.createClass({
         shadowHidden: true
       }}
       itemWrapperStyle={styles.itemWrapper}
-      tintColor="#555"/>
+      tintColor="#777"/>
     );
   }
 
@@ -388,6 +416,15 @@ const styles = StyleSheet.create({
     flex:1,
     alignItems:'center'
   },
+  reviews:{
+    alignItems:"center",
+    flexDirection:"row",
+    paddingTop:10,
+    paddingBottom:10,
+    borderBottomWidth: Util.pixel,
+    borderBottomColor:"#bbb",
+    paddingLeft:10
+  }
 });
 
 

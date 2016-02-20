@@ -2,6 +2,8 @@ var Util = require('./utils')
 var Icon = require('react-native-vector-icons/FontAwesome');
 const { BlurView, VibrancyView } = require('react-native-blur');
 
+import Form from 'react-native-form'
+
 import React, {
   NavigatorIOS,
   TouchableHighlight,
@@ -20,6 +22,7 @@ import React, {
  * - User
  *  - UserView
  *    - UserInfo
+ *      - UserUpload
  *    - UserLink
  *    - UserHelp
  *    - UserSetting
@@ -29,10 +32,84 @@ import React, {
  * @data userData from Ajax 
  */
 
-var UserInfo = React.createClass({
+var UserUpload = React.createClass({
   render: function () {
     return(
-      <View></View>
+           <WebView
+          automaticallyAdjustContentInsets={false}
+          source={{uri: "http://m.dnafw.com/upload"}}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          decelerationRate="normal"
+          startInLoadingState={true}/>
+    )
+  }
+})
+
+var UserInfo = React.createClass({
+  _saveChanges: function () {
+    // ajax post: this.refs.form.getValues()
+    // When finish
+    this.props.navigator.pop();
+  },
+  _uploadId: function () {
+    this.props.navigator.push({
+      title: "完善资料 > 上传身份证",
+      component:UserUpload,
+      navigationBarHidden: false,
+    })
+  },
+  render: function () {
+    var data = this.props.data, 
+      oldPass = null;
+    if (!data.isNew) {
+      oldPass = <View style={styles.orderInputContainer}>
+                  <Text style={styles.orderInputText}>旧密码：</Text>
+                  <TextInput type="TextInput"  password={true} name="oldPassword" style={styles.orderInput}/>
+                </View>
+    }else{
+      oldPass = <View></View>
+    }
+    return(
+      <ScrollView style={{backgroundColor:"#f7f7f7"}} showsVerticalScrollIndicator={false}>
+        <Form style={styles.orderContainer} ref="form">
+          <View style={styles.orderInputContainer}>
+            <Text style={styles.orderInputText}>用户名：</Text>
+            <TextInput type="TextInput" name="username" style={styles.orderInput}/>
+          </View>
+          <View style={styles.orderInputContainer}>
+            <Text style={styles.orderInputText}>邮箱：</Text>
+            <TextInput type="TextInput" keyboardType="email-address" name="email" style={styles.orderInput}/>
+          </View>
+          {oldPass}
+          <View style={styles.orderInputContainer}>
+            <Text style={styles.orderInputText}>新密码：</Text>
+            <TextInput  type="TextInput"  password={true} name="newPassword" style={styles.orderInput}/>
+          </View>
+          <View style={styles.orderInputContainer}>
+            <Text style={styles.orderInputText}>身份证号码：</Text>
+            <TextInput type="TextInput" name="idNum" keyboardType="number-pad" style={styles.orderInput}/>
+          </View>
+          <View style={styles.orderInputContainer}>
+            <Text style={styles.orderInputText}>地址：</Text>
+            <TextInput type="TextInput" name="address" style={styles.orderInput}/>
+          </View>
+          <View style={styles.orderInputContainer}>
+            <Text style={styles.orderInputText}>邮编：</Text>
+            <TextInput type="TextInput" name="postcode" keyboardType="number-pad" style={styles.orderInput}/>
+          </View>
+        </Form>
+        <View style={styles.orderButtonContainer}>
+          <TouchableHighlight underlayColor="#eee" style={[styles.btn_if,{backgroundColor:'#ddd'}]} onPress={this._uploadId}>
+            <Text style={{color:'#555'}}>上传身份证正反面照</Text>
+          </TouchableHighlight>
+        </View>
+        <View style={[styles.orderButtonContainer,{marginBottom:30}]}>
+          <TouchableHighlight underlayColor="#48aeb4" style={[styles.btn_if,{backgroundColor:'#1E868C'}]} onPress={this._saveChanges}>
+            <Text style={{color:'#fff'}}>更新资料</Text>
+          </TouchableHighlight>
+        </View>
+      </ScrollView>
     )
   }
 })
@@ -102,6 +179,7 @@ var UserView = React.createClass({
     return({
       isFirstTime: this.props.isFirstTime,
       userData:{
+        isNew: true,
         username: "Wei Fang",
         email: null,
         alipayLinked: false,
@@ -260,7 +338,7 @@ var User = React.createClass({
         shadowHidden: true
       }}
       itemWrapperStyle={styles.itemWrapper}
-      tintColor="#555"/>
+      tintColor="#777"/>
     );
   }
 
@@ -361,6 +439,45 @@ const styles = StyleSheet.create({
     marginTop:-35,
     marginBottom: 20,
     flex:1
+  },
+  orderContainer:{
+    alignItems:'center',
+    flex:1,
+    width: Util.size.width-40,
+    marginLeft:20, marginTop: 10
+  },
+  orderInputContainer:{
+    marginTop: 20, 
+  },
+  orderButtonContainer:{
+    marginTop: 20, 
+    width: Util.size.width-40,
+    marginLeft:20,
+    alignItems:"center"
+  },
+  orderInputText:{
+    fontSize:12
+  },
+  orderInput:{
+    marginTop: 10,
+    paddingLeft:10,
+    paddingRight: 10,
+    paddingTop:5,
+    paddingBottom:5,
+    width:Util.size.width-80,
+    borderWidth:Util.pixel,
+    height:40,
+    borderColor:'#777',
+    borderRadius:2,
+    color:"#333",
+  },
+  btn_if:{
+    marginTop:13,
+    width:Util.size.width-80,
+    height:40,
+    borderRadius:2,
+    justifyContent:'center',
+    alignItems:'center',
   }
 })
 

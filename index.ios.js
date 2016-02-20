@@ -37,7 +37,7 @@ var DNA = React.createClass({
     return({
       isLogin: true,
       onSignup: false,
-      isFirstTime: true,
+      isFirstTime: false,
     });
   },
   _onStateChange: function (newState) {

@@ -10,7 +10,9 @@ Require node.js & xcode
 To do:
 
 1. updates
-2. edit profile
-3. submit form
-4. handle multiple forms
-5. sign up info
+2. edit profile !Done
+3. submit form !Done
+4. handle multiple forms !Dome
+5. sign up info !Done
+6. page navigations !Done
+7. reviews and sales !Done
