@@ -21,6 +21,8 @@ import React, {
 } from 'react-native';
 
 /**
+ * orderData
+ * @dynamic
  * Type
  * 0: 未确认订单
  * 1: 等待付款
@@ -274,7 +276,7 @@ var OrderDetail = React.createClass({
           <View style={[styles.detialSubtitle,{borderLeftColor:data.bg}]}>
             <Text style={{fontSize:16}} >详情：</Text>
           </View>
-          <Text style={{fontSize:14, paddingLeft:20,paddingTop:10}} >From Ajax：</Text>
+          <Text style={{fontSize:14, paddingLeft:20,paddingTop:10}} >From SSH：</Text>
         </View>
       </View>
     )
@@ -334,7 +336,7 @@ var OrderList = React.createClass({
       refreshTitle: "正在更新"
     });
     setTimeout(() => {
-      // get new data via Ajax
+      // get new data via SSH
       this.setState({
         // loaded: this.state.loaded,
         isRefreshing: false,

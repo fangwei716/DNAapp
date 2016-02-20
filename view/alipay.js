@@ -4,7 +4,8 @@ import React, {
 
 /**
  * Alipay
- * Used for Alipay payment
+ * - Used for Alipay payment
+ * - link varies. Refer to the alipay API
  */
 
 var Alipay = React.createClass({

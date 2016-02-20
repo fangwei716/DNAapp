@@ -99,7 +99,7 @@ var UpdateList = React.createClass({
       refreshTitle: "正在更新"
     });
     setTimeout(() => {
-      // get new data via Ajax
+      // get new data via SSH
       this.setState({
         // loaded: this.state.loaded,
         isRefreshing: false,

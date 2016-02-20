@@ -123,7 +123,7 @@ var ItemDetail = React.createClass({
               <Text numberOfLines={data.lines} style={{fontSize:12,color:"rgba(0,0,0,0.5)"}}>{data.fullIntro}</Text>
             </View>
             <View style={styles.placeorderContainer}>
-              <TouchableOpacity activeOpacity={0.7} onPress={()=>this._onPress(data)} style={styles.placeorder}><Text style={{color:"rgba(0,0,0,0.4)"}}>填写订单</Text></TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.7} onPress={()=>this._onPress(data.key)} style={styles.placeorder}><Text style={{color:"rgba(0,0,0,0.4)"}}>填写订单</Text></TouchableOpacity>
             </View>
           </View>
         </View>
@@ -139,6 +139,16 @@ var ItemDetail = React.createClass({
     )
   }
 })
+
+/**
+ * storeItemData
+ * @static 
+ * List of all services. 
+ * 
+ * Data Flow
+ * sotreItemData -> Store -> StoreItems 
+ * StoreItems -> sotreItemData{key} -> ItemOrder        
+ */
 
 var storeItemData=[{
   title:"DNA档案",
@@ -251,7 +261,7 @@ var StoreView = React.createClass({
       refreshTitle: "正在更新"
     });
     setTimeout(() => {
-      // get new data via Ajax
+      // get new data via SSH
       this.setState({
         // loaded: this.state.loaded,
         isRefreshing: false,

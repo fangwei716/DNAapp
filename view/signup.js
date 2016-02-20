@@ -28,7 +28,7 @@ var Signup = React.createClass({
   },
   _signup: function(){
     this._signupSuccess()
-    // var onThis =this;
+    // var onThis = this;
     // Util.post("url",this.refs.form.getValues(),function(resData) {
     //     if (resData) {
     //       if (resData.error) {
@@ -112,7 +112,6 @@ var styles = StyleSheet.create({
   },
   bgImageWrapper: {
       position: 'absolute',
-      // alignItems: 'stretch',
       top: 0, bottom: 0, left: 0, right: 0
   },
   backgroundImage: {

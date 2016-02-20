@@ -17,20 +17,28 @@ import React, {
 
 /**
  * ItemOrder
- * @props data
+ * @props data: storeItemData.key
+ */  
+  
+/**
+ * ItemOrderData
+ * @dynamic based on the passed key; get init form1 and form2 value via SSH
+ *   - form1
+ *     - ...
+ *   - form2
+ *     - ...
+ *   - orderID
+ *   - price
+ *   - userID 
  */
 
 var ItemOrder = React.createClass({
   getInitialState: function () {
-    // based on the passed data; get init form1 and form2 value via ajax
-    return {
-      progress: 0,
-      step:0,
-      data: this.props.data,
-      relSelected: 0,
-      samSelected: 0,
-      stepTitle: "第一步: 委托人／受检人信息",
-      // ajax some user profile infos
+   // fetch via SSH
+   var ItemOrderData ={
+      orderID: "dsjhflsjdklcxsnkds", 
+      price:1200, 
+      userID:"fiorujewlknmwenfmsd",
       form1:{
         name:"Wei Fang",
         phoneNum: "1345555336",
@@ -44,7 +52,20 @@ var ItemOrder = React.createClass({
         sample:"",
         msg:""
       }
-    };
+   }
+   return({
+      progress: 0,
+      step:0,
+      serviceKey: this.props.data,
+      relSelected: 0,
+      samSelected: 0,
+      stepTitle: "第一步: 委托人／受检人信息",
+      orderID: ItemOrderData.orderID,
+      price: ItemOrderData.price,
+      userID: ItemOrderData.userID,
+      form1: ItemOrderData.form1,
+      form2: ItemOrderData.form2
+    })
   },
   _getProgress: function (progress) {
     return Math.sin(progress % Math.PI) % 1;
@@ -180,7 +201,7 @@ var ItemOrder = React.createClass({
           </View>
           <View style={[styles.orderContainer,styles.form3]}>
             <ProgressViewIOS progressTintColor="#1E868C" style={styles.progressView} progress={this._getProgress(1)}/>
-            <Text style={{marginTop:20}}>订单详情。。。from Ajax</Text>
+            <Text style={{marginTop:20}}>订单详情。。。from SSH</Text>
             <View style={{flexDirection:"row", marginLeft:20, marginTop:20}}>
                 <TouchableHighlight underlayColor="#eee" style={[styles.btn_pm_half,{backgroundColor:"#ddd"}]} onPress={()=>this._updateStep(1)}>
                   <Text style={{color:'#fff'}}>上一步</Text>

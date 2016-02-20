@@ -28,9 +28,21 @@ import React, {
  *    - UserSetting
  *    - UserAbout
  *    - UserShare
- *  
- * @data userData from Ajax 
  */
+
+var UserChangePhoneNum = React.createClass({
+  render: function () {
+    return(
+           <WebView
+          automaticallyAdjustContentInsets={false}
+          source={{uri: "http://m.dnafw.com/changePhoneNum"}}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          decelerationRate="normal"
+          startInLoadingState={true}/>
+    )
+  }
+})
 
 var UserUpload = React.createClass({
   render: function () {
@@ -48,8 +60,19 @@ var UserUpload = React.createClass({
 
 var UserInfo = React.createClass({
   _saveChanges: function () {
-    // ajax post: this.refs.form.getValues()
-    // When finish
+    // SSH post: this.refs.form.getValues()
+    // var onThis = this;
+    // Util.post("url",this.refs.form.getValues(),function(resData) {
+    //     if (resData) {
+    //       if (resData.error) {
+    //         AlertIOS.alert('更新失败', '某某资料错误');
+    //       }else{
+    //         onThis.props.navigator.pop();
+    //       }
+    //     }else{
+    //       AlertIOS.alert('更新失败', '服务器无响应');
+    //     }
+    // })
     this.props.navigator.pop();
   },
   _uploadId: function () {
@@ -59,9 +82,18 @@ var UserInfo = React.createClass({
       navigationBarHidden: false,
     })
   },
+  _changePhoneNum: function () {
+    this.props.navigator.push({
+      title: "更改绑定手机号",
+      component:UserChangePhoneNum,
+      navigationBarHidden: false,
+    })
+  },
   render: function () {
     var data = this.props.data, 
-      oldPass = null;
+      oldPass = null,
+      idInput = null,
+      idUpload = null;
     if (!data.isNew) {
       oldPass = <View style={styles.orderInputContainer}>
                   <Text style={styles.orderInputText}>旧密码：</Text>
@@ -70,43 +102,57 @@ var UserInfo = React.createClass({
     }else{
       oldPass = <View></View>
     }
+
+    if (!data.hasIdLinked) {
+      idInput = <View style={styles.orderInputContainer}>
+                  <Text style={styles.orderInputText}>身份证号码：</Text>
+                  <TextInput type="TextInput" name="idNum" keyboardType="number-pad" style={styles.orderInput}/>
+                </View>
+      idUpload = <View style={styles.orderButtonContainer}>
+                  <TouchableHighlight underlayColor="#eee" style={[styles.btn_if,{backgroundColor:'#ddd'}]} onPress={this._uploadId}>
+                    <Text style={{color:'#555'}}>上传身份证正反面照</Text>
+                  </TouchableHighlight>
+                </View>
+    }else{
+      idInput = <View></View>;
+      idUpload = <View></View>;
+    }
+
     return(
       <ScrollView style={{backgroundColor:"#f7f7f7"}} showsVerticalScrollIndicator={false}>
         <Form style={styles.orderContainer} ref="form">
           <View style={styles.orderInputContainer}>
             <Text style={styles.orderInputText}>用户名：</Text>
-            <TextInput type="TextInput" name="username" style={styles.orderInput}/>
+            <TextInput defaultValue={data.username} type="TextInput" name="username" style={styles.orderInput}/>
           </View>
           <View style={styles.orderInputContainer}>
             <Text style={styles.orderInputText}>邮箱：</Text>
-            <TextInput type="TextInput" keyboardType="email-address" name="email" style={styles.orderInput}/>
+            <TextInput defaultValue={data.email} type="TextInput" keyboardType="email-address" name="email" style={styles.orderInput}/>
           </View>
           {oldPass}
           <View style={styles.orderInputContainer}>
             <Text style={styles.orderInputText}>新密码：</Text>
             <TextInput  type="TextInput"  password={true} name="newPassword" style={styles.orderInput}/>
           </View>
-          <View style={styles.orderInputContainer}>
-            <Text style={styles.orderInputText}>身份证号码：</Text>
-            <TextInput type="TextInput" name="idNum" keyboardType="number-pad" style={styles.orderInput}/>
-          </View>
+          {idInput}
           <View style={styles.orderInputContainer}>
             <Text style={styles.orderInputText}>地址：</Text>
-            <TextInput type="TextInput" name="address" style={styles.orderInput}/>
+            <TextInput defaultValue={data.address} type="TextInput" name="address" style={styles.orderInput}/>
           </View>
           <View style={styles.orderInputContainer}>
             <Text style={styles.orderInputText}>邮编：</Text>
-            <TextInput type="TextInput" name="postcode" keyboardType="number-pad" style={styles.orderInput}/>
+            <TextInput defaultValue={data.postcode} type="TextInput" name="postcode" keyboardType="number-pad" style={styles.orderInput}/>
           </View>
         </Form>
+        {idUpload}
         <View style={styles.orderButtonContainer}>
-          <TouchableHighlight underlayColor="#eee" style={[styles.btn_if,{backgroundColor:'#ddd'}]} onPress={this._uploadId}>
-            <Text style={{color:'#555'}}>上传身份证正反面照</Text>
+          <TouchableHighlight underlayColor="#48aeb4" style={[styles.btn_if,{backgroundColor:'#1E868C'}]} onPress={this._saveChanges}>
+            <Text style={{color:'#fff'}}>更新资料</Text>
           </TouchableHighlight>
         </View>
         <View style={[styles.orderButtonContainer,{marginBottom:30}]}>
-          <TouchableHighlight underlayColor="#48aeb4" style={[styles.btn_if,{backgroundColor:'#1E868C'}]} onPress={this._saveChanges}>
-            <Text style={{color:'#fff'}}>更新资料</Text>
+          <TouchableHighlight underlayColor="#ee6146" style={[styles.btn_if,{backgroundColor:'#d73c37'}]} onPress={this._changePhoneNum}>
+            <Text style={{color:'#fff'}}>更改绑定手机号</Text>
           </TouchableHighlight>
         </View>
       </ScrollView>
@@ -116,7 +162,7 @@ var UserInfo = React.createClass({
 
 var UserLink = React.createClass({
   render: function () {
-    //ajax to get alipay link
+    //SSH to get alipay link, see alipay api
     return(
           <WebView
           automaticallyAdjustContentInsets={false}
@@ -164,27 +210,80 @@ var UserAbout = React.createClass({
 })
 
 var UserShare = React.createClass({
+  _shareWechat: function () {
+    
+  },
+  _shareWeibo: function () {
+    
+  },
+  _shareQQ: function () {
+    
+  },
   render: function () {
     return(
-      <View>
-        <Text style={{marginTop: 100, marginLeft:30}}>分享到...</Text>
+      <View style={{paddingTop:90}}>
+       <View style={styles.orderButtonContainer}>
+          <TouchableHighlight underlayColor="#55D95D" style={[styles.btn_if,{backgroundColor:'#24bf2f'}]} onPress={this._shareWechat}>
+            <Text style={{color:'#fff'}}>
+            <Icon size={15} name="weixin"></Icon> 分享到微信
+            </Text>
+          </TouchableHighlight>
+        </View>
+        <View style={styles.orderButtonContainer}>
+          <TouchableHighlight underlayColor="#db7822" style={[styles.btn_if,{backgroundColor:'#F27405'}]} onPress={this._shareWeibo}>
+            <Text style={{color:'#fff'}}>
+            <Icon size={15} name="weibo"></Icon> 分享到微博</Text>
+          </TouchableHighlight>
+        </View>
+        <View style={styles.orderButtonContainer}>
+          <TouchableHighlight underlayColor="#38b4db" style={[styles.btn_if,{backgroundColor:'#15b3e5'}]} onPress={this._shareQQ}>
+            <Text style={{color:'#fff'}}>
+              <Icon size={15} name="qq"></Icon> 分享到QQ
+            </Text>
+          </TouchableHighlight>
+        </View>
       </View>
     )
   }
 })
 
+/**
+ * userData
+ * @dynamic
+ * 
+ * Data Flow:
+ * userData -> UserView -> userInfo
+ *                      -> userLink
+ */
+
 var UserView = React.createClass({
   getInitialState: function () {
-    //get Ajax here
+    // pass token and get userData via SSH
+    // var onThis = this, userData;
+    // Util.post("url",this.refs.form.getValues(),function(resData) {
+    //     if (resData) {
+    //       if (resData.error) {
+    //          err msg
+    //       }else{
+    //         userData = resData
+    //       }
+    //     }else{
+    //          err msg
+    //     }
+    // })
+    var userData = {
+      isNew: true,
+      username: "Wei Fang",
+      email: null,
+      alipayLinked: false,
+      hasIdLinked: false,
+      address:"",
+      postcode:"",
+      img: require('./img/icon.jpg'), // should use default "?" avatar for first time user
+    }
     return({
       isFirstTime: this.props.isFirstTime,
-      userData:{
-        isNew: true,
-        username: "Wei Fang",
-        email: null,
-        alipayLinked: false,
-        img: require('./img/icon.jpg'), // should use default "?" avatar for first time user
-      }
+      userData: userData
     })
   },
   _logout: function () {
@@ -472,7 +571,7 @@ const styles = StyleSheet.create({
     color:"#333",
   },
   btn_if:{
-    marginTop:13,
+    marginTop:10,
     width:Util.size.width-80,
     height:40,
     borderRadius:2,
