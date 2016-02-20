@@ -10,6 +10,9 @@ Require node.js & xcode
 Compatibility and Responsibility
 
 iPhone 6(s) plus - pass
-iPhone 6(s) -pass
-iphone 5(s) -pass
-iphone4s -pass
+
+iPhone 6(s) - pass
+
+iphone 5(s) - pass
+
+iphone4s - pass
