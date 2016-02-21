@@ -57,12 +57,6 @@ var ItemOrder = React.createClass({
         email:"fangwei716@gmail.com",
         postcode:"350110",
         address:"somewhere"
-      },
-      form2:{
-        name:"",
-        rel:"",
-        sample:"",
-        msg:""
       }
    }
    return({
@@ -70,11 +64,11 @@ var ItemOrder = React.createClass({
       step:0,
       serviceKey: this.props.data,
       stepTitle: "第一步: 委托人／受检人信息",
+      numOfTesters: 1,
       orderID: ItemOrderData.orderID,
       price: ItemOrderData.price,
       userID: ItemOrderData.userID,
       form1: ItemOrderData.form1,
-      form2: ItemOrderData.form2
     })
   },
   _getProgress: function (progress) {
@@ -146,32 +140,83 @@ var ItemOrder = React.createClass({
       passProps: { data: data },
     })
   },
+  _addTester: function () {
+    this.setState({
+      numOfTesters: this.state.numOfTesters+1
+    })
+  },
+  _refFocus: function (nextField,i) {
+    this.refs[nextField+i].focus();
+  },
+  _inputFocused: function(refName) {
+    setTimeout(() => {
+      let scrollResponder = this.refs.scrollView.getScrollResponder();
+      scrollResponder.scrollResponderScrollNativeHandleToKeyboard(
+        React.findNodeHandle(this.refs[refName]),
+        110, //additionalOffset
+        true
+      );
+    }, 50);
+  },
+  _renderSecondFormItem: function (index) {
+    return(
+      <View key={"form2"+index}>
+        <View style={{marginTop:20, paddingBottom:5, borderBottomColor:"#aaa",borderBottomWidth: 1}}>
+          <Text>被鉴定人{index}</Text>
+        </View>
+        <View style={styles.orderInputContainer}>
+          <Text style={styles.orderInputText}>姓名：</Text>
+          <TextInput ref={"name"+index} onFocus={()=>this._inputFocused('name'+index)} returnKeyType = {"next"} onSubmitEditing={(event) => {this._refFocus("rel",index);}} type="TextInput" name={"name"+index} style={styles.orderInput}/>
+        </View>
+        <View style={styles.orderInputContainer}>
+          <Text style={styles.orderInputText}>关系：</Text>
+          <TextInput ref={"rel"+index} onFocus={()=>this._inputFocused('rel'+index)} returnKeyType = {"next"} onSubmitEditing={(event) => {this._refFocus("sample",index);}} type="TextInput" name={"rel"+index} style={styles.orderInput}/>
+        </View>
+        <View style={styles.orderInputContainer}>
+          <Text style={styles.orderInputText}>样本类型：</Text>
+          <TextInput ref={"sample"+index} onFocus={()=>this._inputFocused('sample'+index)} returnKeyType = {"next"} onSubmitEditing={(event) => {this._refFocus("msg",index);}} type="TextInput" name={"sample"+index} style={styles.orderInput}/>
+        </View>
+        <View style={styles.orderInputContainer}>
+          <Text style={styles.orderInputText}>附加信息：</Text>
+          <TextInput ref={"msg"+index} onFocus={()=>this._inputFocused('msg'+index)} type="TextInput" name={"msg"+index} style={styles.orderInput}/>
+        </View>
+      </View>
+    )
+  },
+  _renderSecondForm: function () {
+    var formContainer = [], form2Elem;
+    for (var i = 1; i <= this.state.numOfTesters; i++) {
+      form2Elem = this._renderSecondFormItem(i)
+      formContainer.push(form2Elem);
+    };
+    return(formContainer)
+  },
   render: function () {
     return(
-      <ScrollView  showsVerticalScrollIndicator={false} style={{paddingLeft:20, paddingRight:20, backgroundColor:"#f7f7f7"}}>
+      <ScrollView ref='scrollView' showsVerticalScrollIndicator={false} style={{paddingLeft:20, paddingRight:20, backgroundColor:"#f7f7f7"}}>
         <Text style={{marginTop: 10}}>{this.state.stepTitle}</Text>
         <View style={[styles.orderContainer,styles.form1]}>
             <ProgressViewIOS progressTintColor="#1E868C" style={styles.progressView} progress={this._getProgress(0.333)}/>
             <Form ref="form1">
               <View style={styles.orderInputContainer}>
                 <Text style={styles.orderInputText}>姓名：</Text>
-                <TextInput defaultValue={this.state.form1.name}  type="TextInput" name="name" style={styles.orderInput}/>
+                <TextInput ref="FirstInput" onFocus={()=>this._inputFocused("FirstInput")} returnKeyType = {"next"} onSubmitEditing={(event) => {this.refs.SecondInput.focus(); }} defaultValue={this.state.form1.name}  type="TextInput" name="name" style={styles.orderInput}/>
               </View>
               <View style={styles.orderInputContainer}>
                 <Text style={styles.orderInputText}>手机号：</Text>
-                <TextInput defaultValue={this.state.form1.phoneNum} type="TextInput" name="phoneNum"  keyboardType="phone-pad" style={styles.orderInput}/>
+                <TextInput ref="SecondInput" onFocus={()=>this._inputFocused("SecondInput")} returnKeyType = {"next"} onSubmitEditing={(event) => {this.refs.ThirdInput.focus(); }} defaultValue={this.state.form1.phoneNum} type="TextInput" name="phoneNum"  keyboardType="phone-pad" style={styles.orderInput}/>
               </View>
               <View style={styles.orderInputContainer}>
                 <Text style={styles.orderInputText}>电子邮箱（选填）：</Text>
-                <TextInput defaultValue={this.state.form1.email}  type="TextInput" name="email" keyboardType="email-address" style={styles.orderInput}/>
+                <TextInput ref="ThirdInput" onFocus={()=>this._inputFocused("ThirdInput")} returnKeyType = {"next"} onSubmitEditing={(event) => {this.refs.FourthInput.focus(); }} defaultValue={this.state.form1.email}  type="TextInput" name="email" keyboardType="email-address" style={styles.orderInput}/>
               </View>
               <View style={styles.orderInputContainer}>
                 <Text style={styles.orderInputText}>邮编（选填）：</Text>
-                <TextInput defaultValue={this.state.form1.postcode} type="TextInput" name="postcode"  keyboardType="number-pad" style={styles.orderInput}/>
+                <TextInput ref="FourthInput" onFocus={()=>this._inputFocused("FourthInput")} returnKeyType = {"next"} onSubmitEditing={(event) => {this.refs.FifthInput.focus(); }} defaultValue={this.state.form1.postcode} type="TextInput" name="postcode"  keyboardType="number-pad" style={styles.orderInput}/>
               </View>
               <View style={styles.orderInputContainer}>
                 <Text style={styles.orderInputText}>地址：</Text>
-                <TextInput defaultValue={this.state.form1.address} type="TextInput" name="address" style={styles.orderInput}/>
+                <TextInput ref="FifthInput" onFocus={()=>this._inputFocused("FifthInput")} defaultValue={this.state.form1.address} type="TextInput" name="address" style={styles.orderInput}/>
               </View>
             </Form>
             <View style={styles.orderInputContainer}>
@@ -183,24 +228,12 @@ var ItemOrder = React.createClass({
           <View style={[styles.orderContainer, styles.form2]}>
             <ProgressViewIOS progressTintColor="#1E868C" style={styles.progressView} progress={this._getProgress(0.666)}/>
               <Form ref="form2">
-                <View style={styles.orderInputContainer}>
-                  <Text style={styles.orderInputText}>姓名：</Text>
-                  <TextInput defaultValue={this.state.form2.name} type="TextInput" name="name" style={styles.orderInput}/>
-                </View>
-                <View style={styles.orderInputContainer}>
-                  <Text style={styles.orderInputText}>关系：</Text>
-                  <TextInput defaultValue={this.state.form2.rel} type="TextInput" name="rel" style={styles.orderInput}/>
-                </View>
-                <View style={styles.orderInputContainer}>
-                  <Text style={styles.orderInputText}>样本类型：</Text>
-                  <TextInput defaultValue={this.state.form2.sample} type="TextInput" name="sample" style={styles.orderInput}/>
-                </View>
-                <View style={styles.orderInputContainer}>
-                  <Text style={styles.orderInputText}>附加信息：</Text>
-                  <TextInput defaultValue={this.state.form2.msg} type="TextInput" name="msg" style={styles.orderInput}/>
-                </View>
+                {this._renderSecondForm()}
               </Form>
-              <View style={{flexDirection:"row", marginLeft:10, marginTop:20}}>
+              <TouchableHighlight underlayColor="#eee" style={[styles.btn_pm,{marginTop:30,backgroundColor:"#aaa"}]} onPress={this._addTester}>
+                  <Text style={{color:'#fff'}}>添加被鉴定人</Text>
+                </TouchableHighlight>
+              <View style={{flexDirection:"row", marginLeft:10, marginTop:10, marginBottom:30}}>
                 <TouchableHighlight underlayColor="#eee" style={[styles.btn_pm_half,{backgroundColor:"#ddd"}]} onPress={()=>this._updateStep(0)}>
                   <Text style={{color:'#fff'}}>上一步</Text>
                 </TouchableHighlight>

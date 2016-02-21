@@ -57,11 +57,11 @@ var Login = React.createClass({
       <View style={{alignItems:"center"}}>
         <Form ref="form">
           <View style={styles.inputRow}>
-            <TextInput type="TextInput" name="userName" placeholderTextColor="#777" style={styles.input} placeholder="用户名"/>
+            <TextInput type="TextInput" name="userName" returnKeyType = {"next"} onSubmitEditing={(event) => {this.refs.SecondInput.focus(); }} placeholderTextColor="#777" style={styles.input} placeholder="用户名"/>
             <Icon name="user" style={styles.icon} size={20} />
           </View>
           <View style={styles.inputRow}>
-            <TextInput type="TextInput" name="password" placeholderTextColor="#777" style={styles.input} placeholder="密码" password={true}/>
+            <TextInput type="TextInput" name="password" ref='SecondInput' placeholderTextColor="#777" style={styles.input} placeholder="密码" password={true}/>
             <Icon name="lock" style={styles.icon} size={20} />
           </View>
         </Form>
