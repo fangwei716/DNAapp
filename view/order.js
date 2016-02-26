@@ -4,6 +4,7 @@ var ItemOrder = require('./itemOrder');
 var Alipay = require('./alipay');
 
 import React, {
+  AsyncStorage,
   TouchableOpacity,
   TouchableHighlight,
   StyleSheet,
@@ -32,6 +33,12 @@ import React, {
  * 5: 订单完成
  */
 
+// var orderData = {};
+// Util.post("http://dnafw.com/iosapp/all_orders/",{
+//    uid: AsyncStorage.getItem('uid')
+// },function(resData) {
+//     orderData = resData
+// })
 var orderData = [{
   type:0,
   date: "2016-02-18",
@@ -40,6 +47,8 @@ var orderData = [{
   send: "无预计时间",
   bg:"#6D6D6D",
   icon:"pencil",
+  orderItem: "0",
+  orderID:"dslfhdlsfhjksdhfjskd",
   key:-1
 },{
   type:1,
@@ -49,6 +58,8 @@ var orderData = [{
   send: "无预计时间",
   bg:"#DE574F",
   icon:"shopping-cart",
+  orderItem: "1",
+  orderID:"djsfkhsdhfwelkfwehfj",
   key:0
 },{
   type:2,
@@ -58,6 +69,8 @@ var orderData = [{
   send: "预计 2016-02-25",
   bg:"#E9CA70",
   icon:"hourglass-half",
+  orderItem: "1",
+  orderID:"fsdlfjewlfjsdfsdfnms",
   key:1
 },{
   type:3,
@@ -67,6 +80,8 @@ var orderData = [{
   send: "预计 2016-02-18",
   bg:"#1a94c5",
   icon:"car",
+  orderItem: "2",
+  orderID:"akslhdoiewhdhfdjsh",
   key:2
 },{
   type:4,
@@ -76,6 +91,8 @@ var orderData = [{
   send: "已于2016-01-15送达",
   bg:"#39979d",
   icon:"star-half-o",
+  orderItem: "0",
+  orderID:"dlsfsdoifsdifnjsd",
   key:3
 },{
   type:4,
@@ -85,6 +102,8 @@ var orderData = [{
   send: "已于2016-01-15送达",
   bg:"#39979d",
   icon:"star-half-o",
+  orderItem: "0",
+  orderID:"dsljfpsdjflsdkfjsldf",
   key:4
 },{
   type:5,
@@ -94,6 +113,8 @@ var orderData = [{
   send: "已于2016-01-15送达",
   bg:"#339b6d",
   icon:"info-circle",
+  orderItem: "sadlnlhfjkdsnfkjsdnjfn",
+  orderID:"",
   key:5
 },{
   type:5,
@@ -103,6 +124,8 @@ var orderData = [{
   send: "已于2016-01-15送达",
   bg:"#339b6d",
   icon:"info-circle",
+  orderItem: "0",
+  orderID:"sdlflsdjfklsdjflsj",
   key:6
 }];
 

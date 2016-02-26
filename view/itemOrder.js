@@ -5,6 +5,7 @@ var Alipay = require('./alipay');
 import Form from 'react-native-form'
 
 import React, {
+  AsyncStorage,
   ProgressViewIOS,
   TouchableHighlight,
   StyleSheet,
@@ -46,7 +47,22 @@ var ItemOrder = React.createClass({
       height:0,
       opacity:0
     }
-   // fetch via SSH
+    // var ItemOrderData ={};
+    // Util.post("http://dnafw.com/iosapp/init_order/",{
+    //   uid: AsyncStorage.getItem("uid"),
+    //   orderItem: this.props.data.orderItem,
+    //   orderID: this.props.data.orderID,
+    // },function(resData) {
+    //     if (resData) {
+    //       if (resData.error) {
+    //          console.log("error")
+    //       }else{
+    //           ItemOrderData = resData
+    //       }
+    //     }else{
+    //       AlertIOS.alert('创建订单失败', '服务器无响应');
+    //     }
+    // })
    var ItemOrderData ={
       orderID: "dsjhflsjdklcxsnkds", 
       price:1200, 
@@ -133,12 +149,27 @@ var ItemOrder = React.createClass({
     });
   },
   _pay:function (data) {
-   this.props.navigator.push({
-      title: "支付宝",
-      component:Alipay,
-      navigationBarHidden: false,
-      passProps: { data: data },
-    })
+    // Util.post("http://dnafw.com/iosapp/create_order/",{
+    //   uid: AsyncStorage.getItem("uid"),
+    //   form1:this.refs.form1.getValues(),
+    //   form2:this.refs.form2.getValues(),
+    //   orderId: this.state.orderID,
+    // },function(resData) {
+    //     if (resData) {
+    //       if (resData.error) {
+    //         AlertIOS.alert('订单信息有误', resData.errMsg);
+    //       }else{
+    //            this.props.navigator.push({
+    //             title: "支付宝",
+    //             component:Alipay,
+    //             navigationBarHidden: false,
+    //             passProps: { data: resData },
+    //           })
+    //       }
+    //     }else{
+    //       AlertIOS.alert('支付失败', '服务器无响应');
+    //     }
+    // })
   },
   _addTester: function () {
     this.setState({

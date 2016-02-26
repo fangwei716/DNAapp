@@ -120,7 +120,7 @@ var ItemDetail = React.createClass({
               <Text numberOfLines={data.lines} style={{fontSize:12,color:"rgba(0,0,0,0.5)",flex:1}}>{data.fullIntro}</Text>
             </View>
             <View style={styles.placeorderContainer}>
-              <TouchableOpacity activeOpacity={0.7} onPress={()=>this._onPress(data.key)} style={styles.placeorder}><Text style={{color:"rgba(0,0,0,0.4)"}}>填写订单</Text></TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.7} onPress={()=>this._onPress(data)} style={styles.placeorder}><Text style={{color:"rgba(0,0,0,0.4)"}}>填写订单</Text></TouchableOpacity>
             </View>
           </View>
         </View>
@@ -157,6 +157,8 @@ var storeItemData=[{
   deliver:"免运费",
   tag:"特价优惠",
   lines: 4,
+  orderItem: "0",
+  orderID:"",
   relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"},{label: "爷爷",value:"ff"},{label:"奶奶",value:"mm"},{label: "外公",value:"f"},{label:"外婆",value:"m"}],
   sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
   fullIntro:"华大DNA服务提供的DNA档案是用DNA技术建立一个人的基因组图谱，主要用于银行、保险、交通行业、人身安全、人身担保、遗产继承、失踪、急救医学等目的。人身担保、遗产继承、失踪、急救医学等目的。",
@@ -175,6 +177,8 @@ var storeItemData=[{
   deliver:"免运费",
   tag:"特价优惠",
   lines:4,
+  orderItem: "1",
+  orderID:"",
   relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"}],
   sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
   fullIntro: "亲子鉴定服务可以判定谁是孩子的亲生父亲或者生物学父亲，即鉴定父与子的血缘关系。华大DNA提供法医亲子鉴定、家庭亲子鉴定以及妊娠亲子鉴定三大服务，以满足客户的不同需求。",
@@ -193,6 +197,8 @@ var storeItemData=[{
   deliver:"免运费",
   tag:"特价优惠",
   lines: 4,
+  orderItem: "2",
+  orderID:"",
   relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"}],
   sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
   fullIntro:"华大DNA服务提供源自同一父系或母系的成员之间的亲缘关系鉴定，例如曾祖父、祖父、与孙子、曾孙子之间，同胞兄弟之间，叔侄之间，外曾祖母，外祖母，与外孙女，之间的关系鉴定，绘制父系或母系家谱和遗传关系。",

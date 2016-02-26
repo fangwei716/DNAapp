@@ -5,6 +5,7 @@ const { BlurView, VibrancyView } = require('react-native-blur');
 import Form from 'react-native-form'
 
 import React, {
+  AsyncStorage,
   NavigatorIOS,
   TouchableHighlight,
   TouchableOpacity,
@@ -62,7 +63,10 @@ var UserInfo = React.createClass({
   _saveChanges: function () {
     // SSH post: this.refs.form.getValues()
     // var onThis = this;
-    // Util.post("url",this.refs.form.getValues(),function(resData) {
+    // Util.post("http://dnafw.com/iosapp/update_info/",{
+    //    info: this.refs.form.getValues(),
+    //    uid: AsyncStorage.getItem("uid")
+    // },function(resData) {
     //     if (resData) {
     //       if (resData.error) {
     //         AlertIOS.alert('更新失败', '某某资料错误');
@@ -259,16 +263,12 @@ var UserShare = React.createClass({
 var UserView = React.createClass({
   getInitialState: function () {
     // pass token and get userData via SSH
-    // var onThis = this, userData;
-    // Util.post("url",this.refs.form.getValues(),function(resData) {
-    //     if (resData) {
-    //       if (resData.error) {
-    //          err msg
-    //       }else{
+    // var userData = {};
+    // Util.post("http://dnafw.com/iosapp/user_info/",{
+    //    uid: AsyncStorage.getItem('uid')
+    // },function(resData) {
+    //     if (resData){
     //         userData = resData
-    //       }
-    //     }else{
-    //          err msg
     //     }
     // })
     var userData = {

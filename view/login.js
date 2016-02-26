@@ -4,6 +4,7 @@ var Icon = require('react-native-vector-icons/FontAwesome');
 import Form from 'react-native-form'
 
 import React, {
+  AsyncStorage,
   TouchableHighlight,
   StyleSheet,
   TextInput,
@@ -24,12 +25,24 @@ var Login = React.createClass({
   _login: function(){
     this._loginSuccess()
     // var onThis =this;
-    // Util.post("url",this.refs.form.getValues(),function(resData) {
+    // Util.post("http://dnafw.com/iosapp/login/",this.refs.form.getValues(),function(resData) {
     //     if (resData) {
     //       if (resData.error) {
-    //         AlertIOS.alert('登陆失败', '用户名或密码不正确');
+    //         var errMsg = ""
+    //         switch(resData.loginState){
+    //            case "2": 
+    //               errMsg = "用户名不存在";
+    //               break;
+    //            case  "3":
+    //               errMsg = "用户名或密码不匹配"
+    //         }
+    //         AlertIOS.alert('登陆失败', errMsg);
     //       }else{
     //         onThis._loginSuccess()
+    //         // update the local token
+    //         AsyncStorage.setItem('loginState',"1")
+    //         AsyncStorage.setItem('isFirstTime',resData.isFirstTime)
+    //         AsyncStorage.setItem('uid',resData.uid)
     //       }
     //     }else{
     //       AlertIOS.alert('登陆失败', '服务器无响应');

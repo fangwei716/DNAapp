@@ -25,7 +25,7 @@ var Bar = React.createClass({
     StatusBarIOS.setStyle(0);
     return {
       selectedTab: this.props.isFirstTime? '我的帐户':'华大商城',
-      isFirstTime: this.props.isFirstTime
+      isFirstTime: this.props.isFirstTime==="1"? true: false
     }
   },
   changeTab(tabName) {

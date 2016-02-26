@@ -44,6 +44,7 @@ var Util = require('./view/utils')
 
 import React, {
   AppRegistry,
+  AsyncStorage,
   Component,
   StyleSheet,
   TextInput,
@@ -76,17 +77,14 @@ import React, {
 var DNA = React.createClass({
   getInitialState:function() {
     StatusBarIOS.setStyle(1);
-    // get via SSH here
-    var userData = {
-      isLogin: false,
-      onSignup: false,
-      isFirstTime: false,
-    }
+    // get state from token
+    var loginState = AsyncStorage.getItem('loginState');
     return({
-      isLogin: userData.isLogin,
-      onSignup: userData.onSignup,
-      isFirstTime: userData.isFirstTime,
-    });
+      isLogin: loginState==="1"? true:false,
+      onSignup: false,
+      isFirstTime: loginState==="1"? AsyncStorage.getItem('isFirstTime'): "",
+      uid: loginState==="1"? AsyncStorage.getItem('uid'):null
+    })
   },
   _onStateChange: function (newState) {
     //login ,signup or logout
