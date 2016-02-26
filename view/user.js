@@ -1,5 +1,7 @@
 var Util = require('./utils')
 var Icon = require('react-native-vector-icons/FontAwesome');
+var ActivityView = require('react-native-activity-view');
+var ImagePickerManager = require('NativeModules').ImagePickerManager;
 const { BlurView, VibrancyView } = require('react-native-blur');
 
 import Form from 'react-native-form'
@@ -45,27 +47,24 @@ var UserChangePhoneNum = React.createClass({
   }
 })
 
-var UserUpload = React.createClass({
-  render: function () {
-    return(
-           <WebView
-          automaticallyAdjustContentInsets={false}
-          source={{uri: "http://m.dnafw.com/upload"}}
-          javaScriptEnabled={true}
-          domStorageEnabled={true}
-          decelerationRate="normal"
-          startInLoadingState={true}/>
-    )
-  }
-})
-
 var UserInfo = React.createClass({
+  getInitialState: function () {
+    return({
+      idFrontSource: require('./img/idfront.png'),
+      idFrontSourceData: "",
+      idBackSource: require('./img/idback.png'),
+      idBackSourceData:""
+    })
+  },
   _saveChanges: function () {
     // SSH post: this.refs.form.getValues()
     // var onThis = this;
     // Util.post("http://dnafw.com/iosapp/update_info/",{
     //    info: this.refs.form.getValues(),
-    //    uid: AsyncStorage.getItem("uid")
+    //    uid: AsyncStorage.getItem("uid"),
+    //    // images are sent as jpeg base64
+    //    idFront: this.state.idFrontSourceData,
+    //    idBack: this.state.idBackSourceData,
     // },function(resData) {
     //     if (resData) {
     //       if (resData.error) {
@@ -80,11 +79,77 @@ var UserInfo = React.createClass({
     this.props.navigator.pop();
   },
   _uploadId: function () {
-    this.props.navigator.push({
-      title: "完善资料 > 上传身份证",
-      component:UserUpload,
-      navigationBarHidden: false,
-    })
+    var options = {
+      title: '选择身份证正面照', 
+      cancelButtonTitle: '取消',
+      takePhotoButtonTitle: '拍照', 
+      chooseFromLibraryButtonTitle: '从手机相册选取', 
+      cameraType: 'back', 
+      mediaType: 'photo', 
+      allowsEditing: false,
+      noData: false, 
+      storageOptions: { 
+        skipBackup: true, 
+        path: 'images'
+      }
+    };
+    ImagePickerManager.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      }
+      else if (response.error) {
+        console.log('ImagePickerManager Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        const source = {uri: response.uri.replace('file://', ''), isStatic: true};
+        const sourceData = 'data:image/jpeg;base64,' + response.data;
+        this.setState({
+          idFrontSource: source,
+          idFrontSourceData: sourceData
+        });
+        console.log(this.state.idFrontSource)
+      }
+    });
+  },
+  _uploadIdBack: function () {
+    var options = {
+      title: '选择身份证背面照', 
+      cancelButtonTitle: '取消',
+      takePhotoButtonTitle: '拍照', 
+      chooseFromLibraryButtonTitle: '从手机相册选取', 
+      cameraType: 'back', 
+      mediaType: 'photo', 
+      allowsEditing: false, 
+      noData: false, 
+      storageOptions: { 
+        skipBackup: true, 
+        path: 'images' 
+      }
+    };
+    ImagePickerManager.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      }
+      else if (response.error) {
+        console.log('ImagePickerManager Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        const source = {uri: response.uri.replace('file://', ''), isStatic: true};
+        const sourceData = 'data:image/jpeg;base64,' + response.data;
+        this.setState({
+          idBackSource: source,
+          idBackSourceData: sourceData
+        });
+      }
+    });
   },
   _changePhoneNum: function () {
     this.props.navigator.push({
@@ -114,8 +179,15 @@ var UserInfo = React.createClass({
                 </View>
       idUpload = <View style={styles.orderButtonContainer}>
                   <TouchableHighlight underlayColor="#eee" style={[styles.btn_if,{backgroundColor:'#ddd'}]} onPress={this._uploadId}>
-                    <Text style={{color:'#555'}}>上传身份证正反面照</Text>
+                    <Text style={{color:'#555'}}>上传身份证正面照</Text>
                   </TouchableHighlight>
+                  <TouchableHighlight underlayColor="#eee" style={[styles.btn_if,{backgroundColor:'#ddd'}]} onPress={this._uploadIdBack}>
+                    <Text style={{color:'#555'}}>上传身份证背面照</Text>
+                  </TouchableHighlight>
+                  <View style={{flex:1,flexDirection:"row"}}>
+                    <Image source={this.state.idFrontSource} style={[styles.uploadId,{marginRight:30}]} />
+                    <Image source={this.state.idBackSource} style={styles.uploadId} />
+                  </View>
                 </View>
     }else{
       idInput = <View></View>;
@@ -330,11 +402,14 @@ var UserView = React.createClass({
     })
   },
   _onSharePress: function () {
-    this.props.navigator.push({
-      title: "分享到",
-      component:UserShare,
-      navigationBarHidden: false,
-    })
+    // this.props.navigator.push({
+    //   title: "分享到",
+    //   component:UserShare,
+    //   navigationBarHidden: false,
+    // })
+    ActivityView.show({
+      url: 'https://www.dnafw.com/iosapp',
+    });
   },
   _renderFirstTimeMsg:function () {
     if (this.state.isFirstTime) {
@@ -398,7 +473,7 @@ var UserView = React.createClass({
         <TouchableHighlight underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={this._onSharePress}>
           <View style={styles.userMenu}>
             <Icon style={styles.itemNavIcon} name="share-alt-square" size={18}></Icon>
-            <Text>推荐给朋友</Text>
+            <Text ref="share">推荐给朋友</Text>
             <Icon style={styles.itemNavMenu} name="angle-right" size={20}></Icon>
           </View>
         </TouchableHighlight>
@@ -569,6 +644,14 @@ const styles = StyleSheet.create({
     borderColor:'#777',
     borderRadius:2,
     color:"#333",
+  },
+  uploadId:{
+    height:100,
+    width:100,
+    marginTop:20,
+    flex:1,
+    borderWidth: 1,
+    borderColor: "#aaa"
   },
   btn_if:{
     marginTop:10,

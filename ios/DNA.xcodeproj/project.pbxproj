@@ -24,6 +24,8 @@
 		1D705DB219474412B0EC713D /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7E1C1F49EA7D41919AF9FC19 /* Entypo.ttf */; };
 		27B229A25F924EBF9912BF3B /* libRNBlur.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BFA5E9621EC450D978F6222 /* libRNBlur.a */; };
 		4D378A573372410DB7A02192 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C6E49B8E818C4DBD9E909EC3 /* FontAwesome.ttf */; };
+		59630CD01C80C26600F47014 /* libActivityView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59630CCF1C80C24900F47014 /* libActivityView.a */; };
+		59630CD71C80C5A000F47014 /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59630CD61C80C59800F47014 /* libRNImagePicker.a */; };
 		59C625D81C6D3C5B0078E481 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59C625D71C6D3C520078E481 /* libRNVectorIcons.a */; };
 		68E01E49FBB24D089EB85C3E /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 546EC4EE02F64C7497C08C44 /* Zocial.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
@@ -104,6 +106,20 @@
 			remoteGlobalIDString = A68BD7BC1BC31318005F02DF;
 			remoteInfo = RNBlur;
 		};
+		59630CCE1C80C24900F47014 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 59630CCA1C80C24900F47014 /* ActivityView.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = ActivityView;
+		};
+		59630CD51C80C59800F47014 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 59630CD11C80C59700F47014 /* RNImagePicker.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 014A3B5C1C6CF33500B6D375;
+			remoteInfo = RNImagePicker;
+		};
 		59C625D61C6D3C520078E481 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 59C625C71C6D3C520078E481 /* RNVectorIcons.xcodeproj */;
@@ -150,6 +166,8 @@
 		14383E61534B4348A8D901BB /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		546EC4EE02F64C7497C08C44 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
+		59630CCA1C80C24900F47014 /* ActivityView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ActivityView.xcodeproj; path = "../node_modules/react-native-activity-view/ActivityView.xcodeproj"; sourceTree = "<group>"; };
+		59630CD11C80C59700F47014 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
 		59C625C71C6D3C520078E481 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		59D874DB1C654AF500AA4AD2 /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Entypo.ttf; sourceTree = "<group>"; };
 		59D874DC1C654AF500AA4AD2 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
@@ -181,6 +199,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59630CD71C80C5A000F47014 /* libRNImagePicker.a in Frameworks */,
+				59630CD01C80C26600F47014 /* libActivityView.a in Frameworks */,
 				59C625D81C6D3C5B0078E481 /* libRNVectorIcons.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
@@ -316,6 +336,22 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		59630CCB1C80C24900F47014 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				59630CCF1C80C24900F47014 /* libActivityView.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		59630CD21C80C59700F47014 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				59630CD61C80C59800F47014 /* libRNImagePicker.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		59C625C81C6D3C520078E481 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -351,6 +387,8 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				59630CD11C80C59700F47014 /* RNImagePicker.xcodeproj */,
+				59630CCA1C80C24900F47014 /* ActivityView.xcodeproj */,
 				59C625C71C6D3C520078E481 /* RNVectorIcons.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -468,6 +506,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 59630CCB1C80C24900F47014 /* Products */;
+					ProjectRef = 59630CCA1C80C24900F47014 /* ActivityView.xcodeproj */;
+				},
+				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
 					ProjectRef = 00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */;
 				},
@@ -510,6 +552,10 @@
 				{
 					ProductGroup = 59052B4D1C6E82250047A991 /* Products */;
 					ProjectRef = 9DBC0666E5EC4633997576A8 /* RNBlur.xcodeproj */;
+				},
+				{
+					ProductGroup = 59630CD21C80C59700F47014 /* Products */;
+					ProjectRef = 59630CD11C80C59700F47014 /* RNImagePicker.xcodeproj */;
 				},
 				{
 					ProductGroup = 59C625C81C6D3C520078E481 /* Products */;
@@ -586,6 +632,20 @@
 			fileType = archive.ar;
 			path = libRNBlur.a;
 			remoteRef = 59052B5B1C6E82250047A991 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		59630CCF1C80C24900F47014 /* libActivityView.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libActivityView.a;
+			remoteRef = 59630CCE1C80C24900F47014 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		59630CD61C80C59800F47014 /* libRNImagePicker.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNImagePicker.a;
+			remoteRef = 59630CD51C80C59800F47014 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		59C625D71C6D3C520078E481 /* libRNVectorIcons.a */ = {
@@ -731,6 +791,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -754,6 +815,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
