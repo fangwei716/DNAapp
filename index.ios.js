@@ -59,12 +59,15 @@ import React, {
   * userData
   *  @dynamic
   *  - isLogin
-  *    - true: goes into main view
-  *    - false: on login/signup page
+  *    - depends on AsyncStorage.getItem('loginState') 
+  *    - '1': true, '0' false
+  *    - on login/signup AsyncStorage.setItem('loginState','1') //upon ssh success
+  *    - on logout (user.js) AsyncStorage.setItem('loginState','0')
   *  - onSignup
-  *    - true: goes to signup page
+  *    - true: goes to signup page 
   *    - false: goes to login page
   *  - isFirstTime
+  *    // get info from server
   *    - true: first time user. Only have access to user info
   *    - false: The user infos have filled and verified
   *    
@@ -77,53 +80,83 @@ import React, {
 var DNA = React.createClass({
   getInitialState:function() {
     StatusBarIOS.setStyle(1);
-    // get state from token
-    var loginState = AsyncStorage.getItem('loginState');
+
+    // to delete; for test purpose only
+    AsyncStorage.setItem('uid','aifhioewhfjkdsfhkshgafyeiwfhdsjf');
+    // "0" not first time, "1" first time
+    AsyncStorage.setItem('isFirstTime','0');
+    // end of test
+
     return({
-      isLogin: loginState==="1"? true:false,
+      isLogin: false,
       onSignup: false,
-      isFirstTime: loginState==="1"? AsyncStorage.getItem('isFirstTime'): "",
-      uid: loginState==="1"? AsyncStorage.getItem('uid'):null
+      isFirstTime: "0",
+      uid: "",
+      page: <View></View>
     })
+  },
+  componentWillMount: function () {
+    this._renderPage();
   },
   _onStateChange: function (newState) {
     //login ,signup or logout
     this.setState(newState);
+    this._renderPage();
+  },
+  _renderPage: function () {
+    var content = null;
+    AsyncStorage.getItem("uid").then((value) => {
+        this.setState({
+          uid: value
+        })
+        return AsyncStorage.getItem("isFirstTime")
+    }).then((value) => {
+        this.setState({
+          isFirstTime: value
+        })
+        return AsyncStorage.getItem("loginState")
+    }).then((value) => {
+      this.setState({
+        isLogin: value=="1"? true:false
+      })
+    }).done(()=>{
+      var lsView = null;
+      if (this.state.isLogin) {
+        content= <Bar
+           isFirstTime={this.state.isFirstTime}
+           callbackLogout={this._onStateChange}></Bar>
+      }else{
+        if (this.state.onSignup) {
+          lsView = <Signup
+               isLogin={this.state.isLogin}
+               onSignin={this.state.onSignin}
+               callbackSignup={this._onStateChange}></Signup>
+        }else{
+          lsView = <Login
+               isLogin={this.state.isLogin}
+               onSignin={this.state.onSignin}
+               callbackLogin={this._onStateChange}></Login>
+        }
+        content = <View style={styles.container}>
+              <View style={styles.bgImageWrapper}>
+                <Image style={styles.backgroundImage} source={require('./view/img/DNA1.png')}></Image>
+              </View>
+              <View>
+                <Image style={styles.logo} source={require('./view/img/dna15.png')}></Image>
+                <Text style={styles.logoText}>华大DNA</Text>
+              </View>
+              {lsView}
+            </View>
+      }  
+      //update state in promise
+      this.setState({
+        page: content
+      }) 
+    });
+
   },
   render:function () {
-    var lsView = null;
-    if (this.state.isLogin) {
-      return (
-        <Bar
-         isFirstTime={this.state.isFirstTime}
-         callbackLogout={this._onStateChange}></Bar>
-      );
-    }else{
-      if (this.state.onSignup) {
-        lsView = <Signup
-             isLogin={this.state.isLogin}
-             onSignin={this.state.onSignin}
-             callbackSignup={this._onStateChange}></Signup>
-      }else{
-        lsView = <Login
-             isLogin={this.state.isLogin}
-             onSignin={this.state.onSignin}
-             callbackLogin={this._onStateChange}></Login>
-      }
-      return (
-          <View style={styles.container}>
-            <View style={styles.bgImageWrapper}>
-              <Image style={styles.backgroundImage} source={require('./view/img/DNA1.png')}></Image>
-            </View>
-            <View>
-              <Image style={styles.logo} source={require('./view/img/dna15.png')}></Image>
-              <Text style={styles.logoText}>华大DNA</Text>
-            </View>
-            {lsView}
-          </View>
-      );
-
-    }  
+    return this.state.page
   }
 
 })

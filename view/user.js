@@ -285,6 +285,21 @@ var UserAbout = React.createClass({
   }
 })
 
+var UserPurse = React.createClass({
+  getInitialState: function () {
+    uid = this.props.uid;
+    //ssh to get purse info
+    return null
+  },
+  render: function () {
+    return(
+      <View>
+        <Text style={{marginTop: 100, marginLeft:30}}>My purse</Text>
+      </View>
+    )
+  }
+})
+
 var UserShare = React.createClass({
   _shareWechat: function () {
     
@@ -344,9 +359,11 @@ var UserView = React.createClass({
     //     }
     // })
     var userData = {
+      uid:"",
       isNew: true,
       username: "Wei Fang",
       email: null,
+      purse: 0,
       alipayLinked: false,
       hasIdLinked: false,
       address:"",
@@ -359,11 +376,19 @@ var UserView = React.createClass({
     })
   },
   _logout: function () {
+    AsyncStorage.setItem('loginState',"0")
     var newState = {
-      isLogin: false,
       onSignup: false
     }
     this.props.callbackLogout(newState);
+  },
+  _onPursePress: function () {
+    this.props.navigator.push({
+      title: "我的钱包",
+      component:UserPurse,
+      navigationBarHidden: false,
+      passProps:{uid:this.state.userData.uid}
+    })
   },
   _onInfoPress: function (data) {
     this.props.navigator.push({
@@ -434,7 +459,8 @@ var UserView = React.createClass({
                   <Image source={data.img} style={styles.icon}>
                   </Image>
                   <Text style={{fontSize:18,color:"#3a3a3a"}}>{data.username? data.username:"用户名未设置"}</Text>
-                  <Text style={{fontSize:13,color:"#3a3a3a",marginTop:10}}>帐号：{data.email?data.email:"邮箱未绑定"}</Text>
+                  <Text style={{fontSize:13,color:"#3a3a3a",marginTop:5}}>帐号：{data.email?data.email:"邮箱未绑定"}</Text>
+                  <Text style={{fontSize:13,color:"#3a3a3a",marginTop:5}}>钱包：¥{data.purse}</Text>
                 </BlurView>
               </Image>
               <Icon style={styles.itemNav} name="angle-right" size={35}></Icon>
@@ -446,6 +472,13 @@ var UserView = React.createClass({
           <View style={styles.userMenu}>
             <Icon style={styles.itemNavIcon} name="link" size={18}></Icon>
             <Text>支付宝帐户：{data.alipayLinked?"已绑定":"未绑定"}</Text>
+            <Icon style={styles.itemNavMenu} name="angle-right" size={20}></Icon>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight  underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={this._onPursePress}>
+          <View style={styles.userMenu}>
+            <Icon style={styles.itemNavIcon} name="shopping-bag" size={18}></Icon>
+            <Text>我的钱包</Text>
             <Icon style={styles.itemNavMenu} name="angle-right" size={20}></Icon>
           </View>
         </TouchableHighlight>
@@ -546,7 +579,7 @@ const styles = StyleSheet.create({
   blur:{
     position: 'absolute',
     top: 0, bottom: 0, left: 0, right: 0,
-    paddingTop: 73,
+    paddingTop: 69,
     paddingLeft: 135,
     backgroundColor:"rgba(255,255,255,0.05)"
   },

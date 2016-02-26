@@ -47,8 +47,10 @@ var Signup = React.createClass({
     // })
   },
   _signupSuccess: function () {
+    // to delete
+    AsyncStorage.setItem('loginState',"1")
+    // end of to delete
     var newState = {
-      isLogin: true,
       onSignup: false
     }
     this.setState(newState);
@@ -56,7 +58,6 @@ var Signup = React.createClass({
   },
   _launchLogin: function () {
     var newState = {
-      isLogin: false,
       onSignup: false
     }
     this.setState(newState);

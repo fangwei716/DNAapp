@@ -24,7 +24,7 @@ var Bar = React.createClass({
   getInitialState: function () {
     StatusBarIOS.setStyle(0);
     return {
-      selectedTab: this.props.isFirstTime? '我的帐户':'华大商城',
+      selectedTab: this.props.isFirstTime==="1"? '我的帐户':'华大商城',
       isFirstTime: this.props.isFirstTime==="1"? true: false
     }
   },
@@ -70,7 +70,7 @@ var Bar = React.createClass({
         selectedIconName="ios-person"
         onPress={ () => this.changeTab('我的帐户') }
         selected={ this.state.selectedTab === '我的帐户'}>
-          <User isFirstTime={this.props.isFirstTime} callbackLogout={this.props.callbackLogout}></User>
+          <User isFirstTime={this.state.isFirstTime} callbackLogout={this.props.callbackLogout}></User>
         </Icon.TabBarItem>
       </TabBarIOS>
     );
