@@ -149,6 +149,15 @@ var ItemOrder = React.createClass({
     });
   },
   _pay:function (data) {
+    // to delete, for test only
+     this.props.navigator.push({
+        title: "支付宝",
+        component:Alipay,
+        navigationBarHidden: false,
+        passProps: { data: data },
+      })
+    // end of to delete
+    
     // Util.post("http://dnafw.com/iosapp/create_order/",{
     //   uid: AsyncStorage.getItem("uid"),
     //   form1:this.refs.form1.getValues(),

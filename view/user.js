@@ -8,11 +8,13 @@ import Form from 'react-native-form'
 
 import React, {
   AsyncStorage,
+  AlertIOS,
   NavigatorIOS,
   TouchableHighlight,
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  ListView,
   WebView,
   ScrollView,
   StatusBarIOS,
@@ -25,12 +27,12 @@ import React, {
  * - User
  *  - UserView
  *    - UserInfo
- *      - UserUpload
+ *      - UserChangePhoneNum
  *    - UserLink
  *    - UserHelp
  *    - UserSetting
  *    - UserAbout
- *    - UserShare
+ *    - UserPurse
  */
 
 var UserChangePhoneNum = React.createClass({
@@ -38,7 +40,8 @@ var UserChangePhoneNum = React.createClass({
     return(
            <WebView
           automaticallyAdjustContentInsets={false}
-          source={{uri: "http://m.dnafw.com/changePhoneNum"}}
+          url={"http://www.dnafw.com"}
+          style={{marginTop:60}}
           javaScriptEnabled={true}
           domStorageEnabled={true}
           decelerationRate="normal"
@@ -236,13 +239,102 @@ var UserInfo = React.createClass({
   }
 })
 
+var UserRefund = React.createClass({
+  getInitialState: function () {
+    return{
+      purseData: this.props.data
+    }
+  },
+  _onSubmitRefund: function () {
+      var inputMoney = parseInt(this.refs.refundForm.getValues().refundMoney);
+      if (inputMoney>this.state.purseData.purse) {
+        AlertIOS.alert("提现失败","你的钱包里没有足够的钱")
+      }else{
+        AlertIOS.alert("提现成功","将在24小时内转到你的支付宝账户");
+        this.props.navigator.pop();
+      }
+  },
+  render: function () {
+    return(
+      <View style={{marginTop:70, alignItems:"center"}}>
+        <Form ref="refundForm">
+          <View style={styles.orderInputContainer}>
+            <Text style={styles.orderInputText}>提现金额：</Text>
+            <TextInput keyboardType="number-pad" type="TextInput" name="refundMoney" style={styles.orderInput}/>
+          </View>
+        </Form>
+        <TouchableHighlight underlayColor="#48aeb4" style={[styles.btn_if,{backgroundColor:'#1E868C',marginTop:20}]} onPress={this._onSubmitRefund}>
+          <Text style={{color:'#fff'}}>确认提现</Text>
+        </TouchableHighlight>
+      </View>
+    )
+  }
+})
+
+var UserPurse = React.createClass({
+  getInitialState: function () {
+    return {
+      purseData: this.props.data
+    }
+  },
+  _onPressPurse: function () {
+    this.props.navigator.push({
+      title: "收支明细",
+      component:UserIncome,
+      navigationBarHidden: false,
+      passProps:{uid:this.state.purseData.uid}
+    })
+  },
+  _onPressRefund: function () {
+    this.props.navigator.push({
+      title: "提现到支付宝",
+      component:UserRefund,
+      navigationBarHidden: false,
+      passProps:{data:this.state.purseData}
+    })
+  },
+  _onPressLink: function () {
+    this.props.navigator.push({
+      title: "关联支付宝",
+      component:UserLink,
+      navigationBarHidden: false,
+      passProps:{data:this.state.purseData}
+    })
+  },
+  render: function () {
+    return(
+          <View style={{marginTop:80}}>
+            <TouchableHighlight underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={this._onPressPurse}>
+              <View style={[styles.userMenu,{paddingLeft:15,paddingRight:15}]}>
+                <Text>钱包余额</Text>
+                <Text style={styles.itemNavText}>{this.state.purseData.purse}元 </Text>
+                <Icon style={styles.itemNavMenu} name="angle-right" size={20}></Icon>
+              </View>
+            </TouchableHighlight>
+            <TouchableHighlight  underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={this._onPressRefund}>
+              <View style={[styles.userMenu,{paddingLeft:15,paddingRight:15}]}>
+                <Text>提现到支付宝</Text>
+                <Icon style={styles.itemNavMenu} name="angle-right" size={20}></Icon>
+              </View>
+            </TouchableHighlight>
+            <TouchableHighlight  underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={this._onPressLink}>
+              <View style={[styles.userMenu,{paddingLeft:15,paddingRight:15}]}>
+                <Text>关联支付宝</Text>
+                <Icon style={styles.itemNavMenu} name="angle-right" size={20}></Icon>
+              </View>
+            </TouchableHighlight>
+          </View>
+    )
+  }
+})
+
 var UserLink = React.createClass({
   render: function () {
-    //SSH to get alipay link, see alipay api
     return(
-          <WebView
+           <WebView
           automaticallyAdjustContentInsets={false}
-          source={{uri: "http://www.alipay.com"}}
+          url={"http://www.alipay.com"}
+          style={{marginTop:60}}
           javaScriptEnabled={true}
           domStorageEnabled={true}
           decelerationRate="normal"
@@ -256,7 +348,8 @@ var UserHelp = React.createClass({
     return(
            <WebView
           automaticallyAdjustContentInsets={false}
-          source={{uri: "http://m.dnafw.com/help"}}
+          url={"http://www.dnafw.com"}
+          style={{marginTop:60}}
           javaScriptEnabled={true}
           domStorageEnabled={true}
           decelerationRate="normal"
@@ -285,17 +378,145 @@ var UserAbout = React.createClass({
   }
 })
 
-var UserPurse = React.createClass({
+var UserIncome = React.createClass({
   getInitialState: function () {
     uid = this.props.uid;
     //ssh to get purse info
-    return null
+    //return resData{data:data,sectionData:sectionData}
+    var data = [[{
+        income:"+ ¥50",
+        day:"02-23",
+        week:"周二",
+        icon:require('./img/baby.png'),
+        orderItem:"亲子鉴定",
+        orderId:"65438023"
+      },{
+        income:"- ¥320",
+        day:"02-22",
+        week:"周一",
+        icon:require('./img/refund.png'),
+        orderItem:"提现到支付宝",
+        orderId:"f7d9437"
+      },{
+        income:"+ ¥70",
+        day:"02-14",
+        week:"周日",
+        icon:require('./img/file.png'),
+        orderItem:"DNA档案",
+        orderId:"749327474"
+      },{
+        income:"+ ¥60",
+        day:"02-10",
+        week:"周三",
+        icon:require('./img/baby.png'),
+        orderItem:"亲子鉴定",
+        orderId:"237957923"
+      },],[{
+        income:"+ ¥60",
+        day:"01-27",
+        week:"周三",
+        icon:require('./img/family.png'),
+        orderItem:"DNA家谱",
+        orderId:"597927595"
+      },{
+        income:"+ ¥60",
+        day:"01-16",
+        week:"周六",
+        icon:require('./img/file.png'),
+        orderItem:"DNA档案",
+        orderId:"598734987"
+      },{
+        income:"+ ¥60",
+        day:"01-15",
+        week:"周二",
+        icon:require('./img/baby.png'),
+        orderItem:"亲子鉴定",
+        orderId:"597927595"
+      },{
+        income:"+ ¥60",
+        day:"01-11",
+        week:"周一",
+        icon:require('./img/file.png'),
+        orderItem:"DNA档案",
+        orderId:"598734987"
+      },{
+        income:"+ ¥60",
+        day:"01-03",
+        week:"周日",
+        icon:require('./img/family.png'),
+        orderItem:"DNA家谱",
+        orderId:"597927595"
+      },{
+        income:"+ ¥60",
+        day:"01-16",
+        week:"周六",
+        icon:require('./img/file.png'),
+        orderItem:"DNA档案",
+        orderId:"598734987"
+      }],[{
+        income:"+ ¥60",
+        day:"12-25",
+        week:"周五",
+        icon:require('./img/file.png'),
+        orderItem:"DNA档案",
+        orderId:"759473957"
+      },{
+        income:"+ ¥60",
+        day:"12-11",
+        week:"周五",
+        icon:require('./img/family.png'),
+        orderItem:"DNA家谱",
+        orderId:"493275429"
+      }]];
+    var sectionData = ["本月","2016年1月","2015年12月"]
+    var getSectionData = function(dataIncome, sectionID) {
+      return dataIncome[sectionID];
+    };
+    return {
+      dataSection: sectionData,
+      dataSource: new ListView.DataSource({
+        getSectionData: getSectionData,
+        rowHasChanged: (r1, r2) => r1 !== r2,
+        sectionHeaderHasChanged: (s1, s2) => s1 !== s2
+      }).cloneWithRowsAndSections(data),
+    }
+
+  },
+  _renderSectionHeader: function (sectionData, sectionID) {
+    return(
+      <View style={styles.section}>
+        <Text style={styles.sectionText}>{this.state.dataSection[sectionID]}</Text>
+      </View>
+    )
+  },
+  _renderRow: function(rowData: object, sectionID: number, rowID: number) {
+    return (
+      <TouchableHighlight underlayColor='rgba(0,0,0,0)'>
+        <View>
+          <View style={styles.incomeRow}>
+            <View style={styles.incomeRowText}>
+              <Text style={{color:"#777"}}>{rowData.week}</Text>
+              <Text style={{color:"#777"}}>{rowData.day}</Text>
+            </View>
+            <View style={styles.incomeRowIcon}>
+              <Image source={rowData.icon} style={{width:30,height:30}}></Image>
+            </View>
+            <View style={styles.incomeRowOrder}>
+              <Text style={{color:"#333",fontSize:17,paddingBottom:3}}>{rowData.income}</Text>
+              <Text style={{color:"#555",fontSize:12}}>{rowData.orderItem+"："+rowData.orderId}</Text>
+            </View>
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
   },
   render: function () {
     return(
-      <View>
-        <Text style={{marginTop: 100, marginLeft:30}}>My purse</Text>
-      </View>
+        <ListView
+        contentContainerStyle={styles.list}
+        dataSource={this.state.dataSource}
+        renderRow={this._renderRow}
+        renderSectionHeader={this._renderSectionHeader}/>
     )
   }
 })
@@ -363,7 +584,7 @@ var UserView = React.createClass({
       isNew: true,
       username: "Wei Fang",
       email: null,
-      purse: 0,
+      purse: 120,
       alipayLinked: false,
       hasIdLinked: false,
       address:"",
@@ -382,27 +603,28 @@ var UserView = React.createClass({
     }
     this.props.callbackLogout(newState);
   },
+  _onIncomePress: function () {
+    this.props.navigator.push({
+      title: "收支明细",
+      component:UserIncome,
+      navigationBarHidden: false,
+      passProps:{uid:this.state.userData.uid}
+    })
+  },
+  _onInfoPress: function () {
+    this.props.navigator.push({
+      title: "编辑资料",
+      component:UserInfo,
+      navigationBarHidden: false,
+      passProps:{data:this.state.userData}
+    })
+  },
   _onPursePress: function () {
     this.props.navigator.push({
       title: "我的钱包",
       component:UserPurse,
       navigationBarHidden: false,
-      passProps:{uid:this.state.userData.uid}
-    })
-  },
-  _onInfoPress: function (data) {
-    this.props.navigator.push({
-      title: "编辑资料",
-      component:UserInfo,
-      navigationBarHidden: false,
-      passProps:{data:data}
-    })
-  },
-  _onLinkPress: function () {
-    this.props.navigator.push({
-      title: "绑定支付宝",
-      component:UserLink,
-      navigationBarHidden: false,
+      passProps:{data:this.state.userData}
     })
   },
   _onHelpPress: function () {
@@ -451,7 +673,7 @@ var UserView = React.createClass({
     var data = this.state.userData;
     return(
       <ScrollView showsVerticalScrollIndicator={false} style={styles.userContainer}>
-        <TouchableHighlight style={{marginBottom:35}} onPress={()=>this._onInfoPress(data)}>
+        <TouchableHighlight style={{marginBottom:35}} onPress={this._onInfoPress}>
           <View style={styles.userHero}>
             <View style={styles.bgImageWrapper}>
               <Image source={data.img} style={styles.backgroundImage}>
@@ -468,17 +690,17 @@ var UserView = React.createClass({
           </View>
         </TouchableHighlight>
         {this._renderFirstTimeMsg()}
-        <TouchableHighlight  underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={this._onLinkPress}>
-          <View style={styles.userMenu}>
-            <Icon style={styles.itemNavIcon} name="link" size={18}></Icon>
-            <Text>支付宝帐户：{data.alipayLinked?"已绑定":"未绑定"}</Text>
-            <Icon style={styles.itemNavMenu} name="angle-right" size={20}></Icon>
-          </View>
-        </TouchableHighlight>
         <TouchableHighlight  underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={this._onPursePress}>
           <View style={styles.userMenu}>
             <Icon style={styles.itemNavIcon} name="shopping-bag" size={18}></Icon>
             <Text>我的钱包</Text>
+            <Icon style={styles.itemNavMenu} name="angle-right" size={20}></Icon>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight  underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={this._onIncomePress}>
+          <View style={styles.userMenu}>
+            <Icon style={styles.itemNavIcon} name="list-alt" size={18}></Icon>
+            <Text>支出明细</Text>
             <Icon style={styles.itemNavMenu} name="angle-right" size={20}></Icon>
           </View>
         </TouchableHighlight>
@@ -606,6 +828,13 @@ const styles = StyleSheet.create({
     color: "#bbb",
     backgroundColor:"transparent"
   },
+  itemNavText:{
+    position:"absolute",
+    top:13,
+    right:30,
+    color: "#777",
+    backgroundColor:"transparent"
+  },
   userMenuContainer:{
     height:45,
     borderTopWidth: Util.pixel,
@@ -693,7 +922,40 @@ const styles = StyleSheet.create({
     borderRadius:2,
     justifyContent:'center',
     alignItems:'center',
-  }
+  },
+  section:{
+    backgroundColor: "#f3f3f3",
+    paddingLeft:15,
+    paddingTop:7,
+    paddingBottom:7,
+    borderBottomColor:"#ddd",
+    borderBottomWidth: Util.pixel
+  },
+  sectionText:{
+
+  },
+  incomeRow:{
+    backgroundColor: "#fff",
+    height:60,
+    borderBottomColor:"#ddd",
+    borderBottomWidth: Util.pixel,
+    flexDirection:"row",
+    paddingLeft:15,
+    paddingRight: 15,
+    justifyContent:"center"
+  },
+  incomeRowText:{
+    flex:1,
+    justifyContent:"center"
+  },
+  incomeRowIcon:{
+    flex:1,
+    justifyContent:"center"
+  },
+  incomeRowOrder:{
+    flex:3,
+    justifyContent:"center"
+  },
 })
 
 module.exports = User;

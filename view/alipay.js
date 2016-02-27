@@ -13,11 +13,12 @@ var Alipay = React.createClass({
     return(
            <WebView
           automaticallyAdjustContentInsets={false}
-          source={{uri: "http://www.alipay.com"}}
+          url={"http://www.alipay.com"}
           javaScriptEnabled={true}
           domStorageEnabled={true}
           decelerationRate="normal"
-          startInLoadingState={true}/>
+          startInLoadingState={true}
+          style={{marginTop:60}}/>
     )
   }
 })
