@@ -13,7 +13,7 @@ node.js server side: https://github.com/fangwei716/ap-express (combined with Alg
 
 (passed the test for login and resposed with correct error message.)
 
-### request:login  
+### POST: ios-login  
 
 ```javascript
 router.post('/ios-login', function(req, res, next) {
