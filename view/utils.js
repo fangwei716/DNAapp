@@ -34,7 +34,7 @@ var Util = {
       return response.json() // respose a json object
     })
     .then((responseData) => {
-      callback(JSON.parse(responseData));
+      callback(responseData);
     });
   },
   //Key

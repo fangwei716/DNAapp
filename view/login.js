@@ -25,18 +25,18 @@ var Login = React.createClass({
   _login: function(){
     this._loginSuccess()
     // var onThis =this;
-    // Util.post("http://dnafw.com/iosapp/login/",this.refs.form.getValues(),function(resData) {
+    // Util.post("http://localhost:3000/ios-login",this.refs.form.getValues(),function(resData) {
+    //     console.log(resData)
     //     if (resData) {
     //       if (resData.error) {
-    //         var errMsg = ""
     //         switch(resData.loginState){
     //            case "2": 
-    //               errMsg = "用户名不存在";
+    //               AlertIOS.alert('登陆失败', '用户名不存在');
     //               break;
-    //            case  "3":
-    //               errMsg = "用户名或密码不匹配"
+    //            case "3":
+    //               AlertIOS.alert('登陆失败', '用户名或密码不匹配')
     //         }
-    //         AlertIOS.alert('登陆失败', errMsg);
+            
     //       }else{
     //         onThis._loginSuccess()
     //         // update the local token
@@ -71,7 +71,7 @@ var Login = React.createClass({
       <View style={{alignItems:"center"}}>
         <Form ref="form">
           <View style={styles.inputRow}>
-            <TextInput type="TextInput" name="userName" returnKeyType = {"next"} onSubmitEditing={(event) => {this.refs.SecondInput.focus(); }} placeholderTextColor="#777" style={styles.input} placeholder="用户名"/>
+            <TextInput type="TextInput" name="username" returnKeyType = {"next"} onSubmitEditing={(event) => {this.refs.SecondInput.focus(); }} placeholderTextColor="#777" style={styles.input} placeholder="用户名"/>
             <Icon name="user" style={styles.icon} size={20} />
           </View>
           <View style={styles.inputRow}>
