@@ -7,6 +7,7 @@ import React, {
   AsyncStorage,
   TouchableHighlight,
   StyleSheet,
+  StatusBarIOS,
   TextInput,
   Text,
   Image,
@@ -17,6 +18,7 @@ import React, {
 
 var Login = React.createClass({
   getInitialState: function () {
+    StatusBarIOS.setStyle(1);
     return({
       isLogin: this.props.isLogin,
       onSignup: this.props.onSignup,

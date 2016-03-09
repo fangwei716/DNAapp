@@ -7,6 +7,11 @@ Require node.js & xcode
 
 2. `run DNA.xcodeproj`
 
+## Screenshots
+![login](https://raw.githubusercontent.com/fangwei716/DNAapp/master/screenshot/login.gif)
+
+![main](https://raw.githubusercontent.com/fangwei716/DNAapp/master/screenshot/main.gif)
+
 ## Server side
 
 node.js server side: https://github.com/fangwei716/ap-express (combined with Algorithm platform)

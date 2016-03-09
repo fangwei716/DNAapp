@@ -41,6 +41,7 @@ var Login = require('./view/login');
 var Signup = require('./view/signup');
 var Bar = require('./view/bar')
 var Util = require('./view/utils')
+import Video from 'react-native-video';
 
 import React, {
   AppRegistry,
@@ -138,15 +139,16 @@ var DNA = React.createClass({
                callbackLogin={this._onStateChange}></Login>
         }
         content = <View style={styles.container}>
-              <View style={styles.bgImageWrapper}>
-                <Image style={styles.backgroundImage} source={require('./view/img/DNA1.png')}></Image>
+                <Video source={{uri: "in"}}
+                  style={styles.bgImageWrapper}
+                  rate={0.5}
+                  resizeMode="cover" repeat={true} key="video1" />
+                <View>
+                  <Image style={styles.logo} source={require('./view/img/dna15.png')}></Image>
+                  <Text style={styles.logoText}>华大DNA</Text>
+                </View>
+                {lsView}
               </View>
-              <View>
-                <Image style={styles.logo} source={require('./view/img/dna15.png')}></Image>
-                <Text style={styles.logoText}>华大DNA</Text>
-              </View>
-              {lsView}
-            </View>
       }  
       //update state in promise
       this.setState({
@@ -165,16 +167,15 @@ const styles = StyleSheet.create({
   container:{
     paddingTop:50,
     alignItems:'center',
-    backgroundColor:"#222"
+    backgroundColor:"#222",
+    height: Util.size.height,
+    width: Util.size.width
   },
   bgImageWrapper: {
       position: 'absolute',
-      top: 0, bottom: 0, left: 0, right: 0
-  },
-  backgroundImage: {
-    flex: 1,
-    alignSelf: 'stretch',
-    width: null,
+      top: 0, bottom: 0, left: 0, right: 0,
+      height: Util.size.height,
+      width: Util.size.width
   },
   logo:{
     width:70,
