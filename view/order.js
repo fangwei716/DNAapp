@@ -39,6 +39,7 @@ import React, {
 // },function(resData) {
 //     orderData = resData
 // })
+
 var orderData = [{
   type:0,
   date: "2016-02-18",
@@ -48,8 +49,27 @@ var orderData = [{
   bg:"#6D6D6D",
   icon:"pencil",
   orderItem: "0",
-  orderID:"dslfhdlsfhjksdhfjskd",
-  key:-1
+  key:-1,
+  order_number: 42375247038242389, 
+  created:"2016-12-13 23:23:57", 
+  pay_time: "未付款", 
+  product: "DNA家谱", 
+  pay_price: 0, 
+  status_num: 1, 
+  client: {
+    name: "XXX", 
+    cellphone: "XXX", 
+    email: "XXX", 
+    address: "XXX",
+  },
+  identifier: [
+    {
+      name: "XXX", 
+      relationship: "XXX", 
+      sample: "XXX", 
+      additional_info: "XXX",
+    }
+  ]
 },{
   type:1,
   date: "2016-02-15",
@@ -59,8 +79,27 @@ var orderData = [{
   bg:"#DE574F",
   icon:"shopping-cart",
   orderItem: "1",
-  orderID:"djsfkhsdhfwelkfwehfj",
-  key:0
+  key:0,
+  order_number: 42375247038242389, 
+  created:"2016-12-13 23:23:57", 
+  pay_time: "未付款", 
+  product: "DNA档案", 
+  pay_price: 0, 
+  status_num: 1, 
+  client: {
+    name: "XXX", 
+    cellphone: "XXX", 
+    email: "XXX", 
+    address: "XXX",
+  },
+  identifier: [
+    {
+      name: "XXX", 
+      relationship: "XXX", 
+      sample: "XXX", 
+      additional_info: "XXX",
+    }
+  ]
 },{
   type:2,
   date: "2016-02-13",
@@ -70,8 +109,27 @@ var orderData = [{
   bg:"#E9CA70",
   icon:"hourglass-half",
   orderItem: "1",
-  orderID:"fsdlfjewlfjsdfsdfnms",
-  key:1
+  key:1,
+  order_number: 42375247038242389, 
+  created:"2016-12-13 23:23:57", 
+  pay_time: "2016-12-13 23:23:57", 
+  product: "DNA档案", 
+  pay_price: 1200, 
+  status_num: 1, 
+  client: {
+    name: "XXX", 
+    cellphone: "XXX", 
+    email: "XXX", 
+    address: "XXX",
+  },
+  identifier: [
+    {
+      name: "XXX", 
+      relationship: "XXX", 
+      sample: "XXX", 
+      additional_info: "XXX",
+    }
+  ]
 },{
   type:3,
   date: "2016-02-03",
@@ -81,8 +139,27 @@ var orderData = [{
   bg:"#1a94c5",
   icon:"car",
   orderItem: "2",
-  orderID:"akslhdoiewhdhfdjsh",
-  key:2
+  key:2,
+  order_number: 42375247038242389, 
+  created:"2016-12-13 23:23:57", 
+  pay_time: "2016-12-13 23:23:57", 
+  product: "亲子鉴定", 
+  pay_price: 1200, 
+  status_num: 1, 
+  client: {
+    name: "XXX", 
+    cellphone: "XXX", 
+    email: "XXX", 
+    address: "XXX",
+  },
+  identifier: [
+    {
+      name: "XXX", 
+      relationship: "XXX", 
+      sample: "XXX", 
+      additional_info: "XXX",
+    }
+  ]
 },{
   type:4,
   date: "2016-01-05",
@@ -92,8 +169,27 @@ var orderData = [{
   bg:"#39979d",
   icon:"star-half-o",
   orderItem: "0",
-  orderID:"dlsfsdoifsdifnjsd",
-  key:3
+  key:3,
+  order_number: 42375247038242389, 
+  created:"2016-12-13 23:23:57", 
+  pay_time: "2016-12-13 23:23:57", 
+  product: "DNA家谱", 
+  pay_price: 1200, 
+  status_num: 1, 
+  client: {
+    name: "XXX", 
+    cellphone: "XXX", 
+    email: "XXX", 
+    address: "XXX",
+  },
+  identifier: [
+    {
+      name: "XXX", 
+      relationship: "XXX", 
+      sample: "XXX", 
+      additional_info: "XXX",
+    }
+  ]
 },{
   type:4,
   date: "2016-01-05",
@@ -103,8 +199,27 @@ var orderData = [{
   bg:"#39979d",
   icon:"star-half-o",
   orderItem: "0",
-  orderID:"dsljfpsdjflsdkfjsldf",
-  key:4
+  key:4,
+  order_number: 42375247038242389, 
+  created:"2016-12-13 23:23:57", 
+  pay_time: "2016-12-13 23:23:57", 
+  product: "DNA家谱", 
+  pay_price: 1200, 
+  status_num: 1, 
+  client: {
+    name: "XXX", 
+    cellphone: "XXX", 
+    email: "XXX", 
+    address: "XXX",
+  },
+  identifier: [
+    {
+      name: "XXX", 
+      relationship: "XXX", 
+      sample: "XXX", 
+      additional_info: "XXX",
+    }
+  ]
 },{
   type:5,
   date: "2016-01-05",
@@ -113,9 +228,28 @@ var orderData = [{
   send: "已于2016-01-15送达",
   bg:"#339b6d",
   icon:"info-circle",
-  orderItem: "sadlnlhfjkdsnfkjsdnjfn",
   orderID:"",
-  key:5
+  key:5,
+  order_number: 42375247038242389, 
+  created:"2016-12-13 23:23:57", 
+  pay_time: "2016-12-13 23:23:57", 
+  product: "DNA家谱", 
+  pay_price: 1200, 
+  status_num: 1, 
+  client: {
+    name: "XXX", 
+    cellphone: "XXX", 
+    email: "XXX", 
+    address: "XXX",
+  },
+  identifier: [
+    {
+      name: "XXX", 
+      relationship: "XXX", 
+      sample: "XXX", 
+      additional_info: "XXX",
+    }
+  ]
 },{
   type:5,
   date: "2016-01-05",
@@ -125,8 +259,27 @@ var orderData = [{
   bg:"#339b6d",
   icon:"info-circle",
   orderItem: "0",
-  orderID:"sdlflsdjfklsdjflsj",
-  key:6
+  key:6,
+  order_number: 42375247038242389, 
+  created:"2016-12-13 23:23:57", 
+  pay_time: "2016-12-13 23:23:57", 
+  product: "DNA家谱", 
+  pay_price: 1200, 
+  status_num: 1, 
+  client: {
+    name: "XXX", 
+    cellphone: "XXX", 
+    email: "XXX", 
+    address: "XXX",
+  },
+  identifier: [
+    {
+      name: "XXX", 
+      relationship: "XXX", 
+      sample: "XXX", 
+      additional_info: "XXX",
+    }
+  ]
 }];
 
 /**
@@ -289,6 +442,17 @@ var OrderDetail = React.createClass({
   },
   render: function () {
     var data = this.props.data;
+    var identifiers = data.identifier.map(function(elem, index) {
+      return(
+        <View key={elem.name}>
+          <Text></Text>
+          <Text style={styles.detailListReg}><Text style={styles.detailListEm}>被鉴定人{index+1}：</Text>{elem.name}</Text>
+          <Text style={styles.detailListReg}><Text style={styles.detailListEm}>被鉴定人{index+1}关系：</Text>{elem.relationship}</Text>
+          <Text style={styles.detailListReg}><Text style={styles.detailListEm}>被鉴定人{index+1}样本类型：</Text>{elem.sample}</Text>
+          <Text style={styles.detailListReg}><Text style={styles.detailListEm}>附加信息：</Text>{elem.additional_info}</Text>
+        </View>
+      );
+    });
     return(
       <View style={styles.orderDetailContainer}>
         <View style={{height:120, paddingTop:80, paddingLeft:25, backgroundColor:data.bg}}>
@@ -299,7 +463,19 @@ var OrderDetail = React.createClass({
           <View style={[styles.detialSubtitle,{borderLeftColor:data.bg}]}>
             <Text style={{fontSize:16}} >详情：</Text>
           </View>
-          <Text style={{fontSize:14, paddingLeft:20,paddingTop:10}} >From SSH：</Text>
+          <ScrollView style={styles.detailList} contentInset={{top:0}} automaticallyAdjustContentInsets={false}>
+            <Text style={styles.detailListReg}><Text style={styles.detailListEm}>订单项目：</Text>{data.product}</Text>
+            <Text style={styles.detailListReg}><Text style={styles.detailListEm}>订单编号：</Text>{data.order_number}</Text>
+            <Text style={styles.detailListReg}><Text style={styles.detailListEm}>创建时间：</Text>{data.created}</Text>
+            <Text style={styles.detailListReg}><Text style={styles.detailListEm}>付款时间：</Text>{data.pay_time}</Text>
+            <Text style={styles.detailListReg}><Text style={styles.detailListEm}>付款金额：</Text>{data.pay_price}</Text>
+            <Text></Text>
+            <Text style={styles.detailListReg}><Text style={styles.detailListEm}>委托人：</Text>{data.client.name}</Text>
+            <Text style={styles.detailListReg}><Text style={styles.detailListEm}>委托人电话：</Text>{data.client.cellphone}</Text>
+            <Text style={styles.detailListReg}><Text style={styles.detailListEm}>委托人邮箱：</Text>{data.client.email}</Text>
+            <Text style={styles.detailListReg}><Text style={styles.detailListEm}>委托人地址：</Text>{data.client.address}</Text>
+            {identifiers}
+          </ScrollView>
         </View>
       </View>
     )
@@ -310,6 +486,7 @@ var OrderListItems =  React.createClass({
   _renderOrderDetail: function (data) {
     this.props.navigator.push({
       title: "订单详情",
+      tintColor:data.bg,
       component:OrderDetail,
       navigationBarHidden: false,
       passProps:{data:data}
@@ -377,7 +554,7 @@ var OrderList = React.createClass({
   },
   render: function() {
     return (
-      <ScrollView showsVerticalScrollIndicator={false} 
+      <ScrollView 
       style={styles.orderListContainer}
       refreshControl={
           <RefreshControl
@@ -474,7 +651,7 @@ var styles = StyleSheet.create({
     paddingLeft:10,
     paddingTop:2,
     paddingBottom:2,
-    marginBottom:10,
+    marginBottom:20,
     justifyContent:'center',
     marginTop:20
   },
@@ -486,6 +663,19 @@ var styles = StyleSheet.create({
     borderRadius:2,
     justifyContent:'center',
     alignItems:'center',
+  },
+  detailList:{
+    height: Util.size.height-370,
+    paddingLeft:20,paddingRight:20,//paddingTop:10,  paddingBottom:20
+  },
+  detailListEm:{
+    fontWeight:"500",
+    color: "#333",
+    paddingRight:10
+  },
+  detailListReg:{
+    color:"#555",
+    paddingBottom:5,
   },
 });
 

@@ -491,7 +491,7 @@ var UserIncome = React.createClass({
   },
   _renderRow: function(rowData: object, sectionID: number, rowID: number) {
     return (
-      <TouchableHighlight underlayColor='rgba(0,0,0,0)'>
+      <View>
         <View>
           <View style={styles.incomeRow}>
             <View style={styles.incomeRowText}>
@@ -507,7 +507,7 @@ var UserIncome = React.createClass({
             </View>
           </View>
         </View>
-      </TouchableHighlight>
+      </View>
     );
   },
   render: function () {
