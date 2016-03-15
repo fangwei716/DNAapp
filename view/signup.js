@@ -29,11 +29,43 @@ var Signup = React.createClass({
     })
   },
   _signup: function(){
-    this._signupSuccess()
+    //to delete，  should use post!
+    Util.get("http://dnafw.com:8100/iosapp/verify_validate_code/?phone=12345&timeOfOperation=1458060792663&code=123",function(resData) {
+        if (resData) {
+          console.log(resData);
+          if (resData.correct=="false") {
+            AlertIOS.alert('注册失败', '验证码错误');
+          }else{
+            AlertIOS.alert('注册成功');
+          }
+        }else{
+          AlertIOS.alert('注册失败', '服务器无响应');
+        }
+    })
+    // end of to delete
+    
+    /**
+     * reqData = {
+     *   phone: this.refs.form.getValues().phoneNum,
+     *   timeOfOperation: timeStamp,
+     *   code:this.refs.form.getValues().veriCode,
+     * }
+     * resData = {
+     *  correct:"false",
+     *  uid: uid
+     * }
+     */
+
+    // var d = new Date();
+    // var timeStamp = d.getTime();
     // var onThis = this;
-    // Util.post("http://dnafw.com/iosapp/register/",this.refs.form.getValues(),function(resData) {
+    // Util.post("http://dnafw.com:8100/iosapp/verify_validate_code/",{
+    //   phone: onThis.refs.form.getValues().phoneNum,
+    //   timeOfOperation: timeStamp,
+    //   code:onThis.refs.form.getValues().veriCode,
+    // },function(resData) {
     //     if (resData) {
-    //       if (resData.error) {
+    //       if (!resData.correct) {
     //         AlertIOS.alert('注册失败', '验证码错误');
     //       }else{
     //         onThis._signupSuccess()
@@ -64,35 +96,46 @@ var Signup = React.createClass({
     this.props.callbackSignup(newState);
   },
   _getPhoneText: function () {
-    // var onThis = this;
+    /**
+     * reqData = {
+     *   phone: this.refs.form.getValues().phoneNum,
+     *   timeOfOperation: timeStamp,
+     * }
+     * resData = {
+     *  error:"false",
+     *  message: message
+     * }
+     */
+    
+    var onThis = this;
     var d = new Date();
     var timeStamp = d.getTime();
     if (this.state.timeStamp == 0 || timeStamp - this.state.timeStamp > 60000) {
       this.setState({
          timeStamp: timeStamp
       })
-    // Util.post("http://dnafw.com/iosapp/send_validate_code/",{ 
-    //   phone: this.refs.form.getValues().phoneNum,
-    //   timeOfOperation: timeStamp
-    // },function(resData) {
-    //     if (resData) {
-    //       if (resData.error) {
-    //         AlertIOS.alert('获取验证码失败', '手机号已注册或无效');
-    //         onThis.setState({
-    //            timeStamp: 0
-    //         })
-    //       }else{
-    //         AlertIOS.alert('获取验证码成功', '已发送到你的手机，每分钟可获取一次');
-    //       }
-    //     }else{
-    //       AlertIOS.alert('获取验证码失败', '服务器无响应');
-    //       onThis.setState({
-    //          timeStamp: 0
-    //       })
-    //     }
-    // })
+      Util.post("http://dnafw.com/iosapp:8100/send_validate_code/",{ 
+        phone: onThis.refs.form.getValues().phoneNum,
+        timeOfOperation: timeStamp
+      },function(resData) {
+          if (resData) {
+            if (resData.error=="true") {
+              AlertIOS.alert('获取验证码失败', resData.message=='0'?'发送失败':'手机号已被注册');
+              onThis.setState({
+                 timeStamp: 0
+              })
+            }else{
+              AlertIOS.alert('获取验证码成功', '已发送到你的手机，有效时间30分钟');
+            }
+          }else{
+            AlertIOS.alert('获取验证码失败', '服务器无响应');
+            onThis.setState({
+               timeStamp: 0
+            })
+          }
+      })
     //  delete the following
-      AlertIOS.alert("手机号无效", this.refs.form.getValues().phoneNum)
+    //   AlertIOS.alert("手机号无效", this.refs.form.getValues().phoneNum)
     } else {
       AlertIOS.alert("获取验证码失败", "一分钟只可获取一次")
     }

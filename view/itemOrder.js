@@ -48,16 +48,16 @@ var ItemOrder = React.createClass({
       opacity:0
     }
     // var ItemOrderData ={};
-    // Util.post("http://dnafw.com/iosapp/init_order/",{
+    // Util.post("http://dnafw.com:8100/iosapp/init_order/",{
     //   uid: AsyncStorage.getItem("uid"),
     //   orderItem: this.props.data.orderItem,
     //   orderID: this.props.data.orderID,
     // },function(resData) {
-    //     if (resData) {
+    //     if (resData.ItemOrderData) {
     //       if (resData.error) {
     //          console.log("error")
     //       }else{
-    //           ItemOrderData = resData
+    //           ItemOrderData = resData.ItemOrderData
     //       }
     //     }else{
     //       AlertIOS.alert('创建订单失败', '服务器无响应');
@@ -158,7 +158,7 @@ var ItemOrder = React.createClass({
       })
     // end of to delete
     
-    // Util.post("http://dnafw.com/iosapp/create_order/",{
+    // Util.post("http://dnafw.com:8100/iosapp/create_order/",{
     //   uid: AsyncStorage.getItem("uid"),
     //   form1:this.refs.form1.getValues(),
     //   form2:this.refs.form2.getValues(),

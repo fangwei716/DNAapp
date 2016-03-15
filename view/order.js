@@ -34,12 +34,11 @@ import React, {
  */
 
 // var orderData = {};
-// Util.post("http://dnafw.com/iosapp/all_orders/",{
-//    uid: AsyncStorage.getItem('uid')
-// },function(resData) {
-//     orderData = resData
+// Util.get("http://dnafw.com:8100/iosapp/all_orders?uid="+AsyncStorage.getItem('uid'),function(resData) {
+//     if (resData.orderData) orderData = resData.orderData;
 // })
 
+//to delete
 var orderData = [{
   type:0,
   date: "2016-02-18",

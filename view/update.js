@@ -32,6 +32,14 @@ var updateData = [{
   img: require('./img/forensics.jpg')
 }];
 
+Util.get("http://dnafw.com:8100/iosapp/promote",function(resData) {
+    if (resData.update) {
+      updateData.concat(resData.update);
+    }else{
+      console.log("error")
+    }
+})
+
 var UpdateDetail = React.createClass({
   render: function () {
     return(
@@ -94,26 +102,34 @@ var UpdateList = React.createClass({
     };
   },
   _onRefresh:function () {
+    var data = this.state.rowData;
     this.setState({
       isRefreshing: true,
       refreshTitle: "正在更新"
     });
-    setTimeout(() => {
-      // get new data via SSH
-      this.setState({
-        // loaded: this.state.loaded,
-        isRefreshing: false,
-        rowData: this.props.data,
-        refreshTitle: "更新完毕"
-      });
-      // 1s after refresh
-      setTimeout(() => {
-        this.setState({
-          refreshTitle: "下拉更新"
-        });
-      }, 1000);
+    Util.get("http://dnafw.com:8100/iosapp/promote",function(resData) {
+        if (resData) {
+          data.concat(resData.update);
+          this.setState({
+            loaded: 1,
+            isRefreshing: false,
+            rowData: data,
+            refreshTitle: "更新完毕"
+          });
+          setTimeout(() => {
+            this.setState({
+              refreshTitle: "下拉更新"
+            });
+          }, 500);
+        }else{
+          this.setState({
+            loaded: 1,
+            isRefreshing: false,
+            refreshTitle: "更新失败"
+          });
+        }
+    })
 
-    }, 1000);
   },
   render:function () {
     return(

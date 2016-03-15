@@ -26,11 +26,24 @@ var Login = React.createClass({
   },
   _login: function(){
     this._loginSuccess()
+    /**
+     * reqData = {
+     *   username:,
+     *   password:,
+     * }
+     *
+     * resData = {
+     *   isFirstTime,
+     *   uid,
+     *   error,
+     *   loginState
+     * }
+     */
     // var onThis =this;
-    // Util.post("http://localhost:3000/ios-login",this.refs.form.getValues(),function(resData) {
+    // Util.post("http://dnafw.com:8100/iosapp/login/",this.refs.form.getValues(),function(resData) {
     //     console.log(resData)
     //     if (resData) {
-    //       if (resData.error) {
+    //       if (resData.error=="true") {
     //         switch(resData.loginState){
     //            case "2": 
     //               AlertIOS.alert('登陆失败', '用户名不存在');
@@ -38,10 +51,8 @@ var Login = React.createClass({
     //            case "3":
     //               AlertIOS.alert('登陆失败', '用户名或密码不匹配')
     //         }
-            
     //       }else{
     //         onThis._loginSuccess()
-    //         // update the local token
     //         AsyncStorage.setItem('loginState',"1")
     //         AsyncStorage.setItem('isFirstTime',resData.isFirstTime)
     //         AsyncStorage.setItem('uid',resData.uid)

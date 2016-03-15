@@ -17,7 +17,20 @@ var Util = {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height
   },
-
+  //get 请求
+  get: function (url, callback) {
+    fetch(url)  
+    .then((response) => {
+      console.log(response)
+      return response.json() // respose a json object
+    })
+    .then((responseData) => {
+      callback(responseData);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  },
   //post请求
   post: function (url, data, callback) {
     var fetchOptions = {
@@ -31,10 +44,14 @@ var Util = {
 
     fetch(url, fetchOptions)
     .then((response) => {
+      console.log(response)
       return response.json() // respose a json object
     })
     .then((responseData) => {
       callback(responseData);
+    })
+    .catch((error) => {
+      console.log(error);
     });
   },
   //Key

@@ -62,7 +62,7 @@ var UserInfo = React.createClass({
   _saveChanges: function () {
     // SSH post: this.refs.form.getValues()
     // var onThis = this;
-    // Util.post("http://dnafw.com/iosapp/update_info/",{
+    // Util.post("http://dnafw.com:8100/iosapp/update_info/",{
     //    info: this.refs.form.getValues(),
     //    uid: AsyncStorage.getItem("uid"),
     //    // images are sent as jpeg base64
@@ -572,11 +572,9 @@ var UserView = React.createClass({
   getInitialState: function () {
     // pass token and get userData via SSH
     // var userData = {};
-    // Util.post("http://dnafw.com/iosapp/user_info/",{
-    //    uid: AsyncStorage.getItem('uid')
-    // },function(resData) {
-    //     if (resData){
-    //         userData = resData
+    // Util.get("http://dnafw.com:8100/iosapp/user_info?uid="+AsyncStorage.getItem('uid'),function(resData) {
+    //     if (resData.userData){
+    //         userData = resData.userData
     //     }
     // })
     var userData = {
@@ -649,11 +647,6 @@ var UserView = React.createClass({
     })
   },
   _onSharePress: function () {
-    // this.props.navigator.push({
-    //   title: "分享到",
-    //   component:UserShare,
-    //   navigationBarHidden: false,
-    // })
     ActivityView.show({
       url: 'https://www.dnafw.com/iosapp',
     });
