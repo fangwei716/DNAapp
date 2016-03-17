@@ -23,7 +23,7 @@ var updateData = [{
   date: "2016-02-18",
   link: "www.google.com",
   key:0,
-  img: require('./img/chip.jpg')
+  img: require('./img/chip.jpg') //just pass the url
 },{
   title:"推广消息的标题2",
   date: "2016-02-19",
@@ -31,14 +31,6 @@ var updateData = [{
   key:1,
   img: require('./img/forensics.jpg')
 }];
-
-Util.get("http://dnafw.com:8100/iosapp/promote",function(resData) {
-    if (resData.update) {
-      updateData.concat(resData.update);
-    }else{
-      console.log("error")
-    }
-})
 
 var UpdateDetail = React.createClass({
   render: function () {
@@ -150,6 +142,15 @@ var Update = React.createClass({
   getInitialState: function () {
     StatusBarIOS.setStyle(0);
     return null;
+  },
+  componentDidMount: function() {
+    // Util.get("http://dnafw.com:8100/iosapp/promote",function(resData) {
+    //     if (resData.update) {
+    //       updateData.concat(resData.update);
+    //     }else{
+    //       console.log("error")
+    //     }
+    // })
   },
   render: function(){
     return (

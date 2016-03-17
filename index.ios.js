@@ -87,6 +87,14 @@ var DNA = React.createClass({
     // "0" not first time, "1" first time
     AsyncStorage.setItem('isFirstTime','0');
     // end of test
+    
+    //to check is logined
+    // Util.get("http://dnafw.com:8100/iosapp/checkLogin?uid="+AsyncStorage.getItem('uid'),function(resData) {
+    //     if (resData){
+    //       AsyncStorage.setItem('uid', resData.uid);
+    //       AsyncStorage.setItem('isFirstTime',resData.isFirstTime);
+    //     }
+    // })
 
     return({
       isLogin: false,

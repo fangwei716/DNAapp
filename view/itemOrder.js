@@ -67,17 +67,21 @@ var ItemOrder = React.createClass({
       orderID: "dsjhflsjdklcxsnkds", 
       price:1200, 
       userID:"fiorujewlknmwenfmsd",
+      currentStep:0,
       form1:{
         name:"Wei Fang",
         phoneNum: "1345555336",
         email:"fangwei716@gmail.com",
         postcode:"350110",
         address:"somewhere"
+      },
+      form2:{
+
       }
    }
    return({
       progress: 0,
-      step:0,
+      step:ItemOrder.currentStep,
       serviceKey: this.props.data,
       stepTitle: "第一步: 委托人／受检人信息",
       numOfTesters: 1,
@@ -85,7 +89,13 @@ var ItemOrder = React.createClass({
       price: ItemOrderData.price,
       userID: ItemOrderData.userID,
       form1: ItemOrderData.form1,
+      form2:{
+
+      }
     })
+  },
+  componentDidMount: function() {
+    this._updateStep(this.state.step)
   },
   _getProgress: function (progress) {
     return Math.sin(progress % Math.PI) % 1;

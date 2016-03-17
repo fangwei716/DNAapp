@@ -242,16 +242,28 @@ var UserInfo = React.createClass({
 var UserRefund = React.createClass({
   getInitialState: function () {
     return{
-      purseData: this.props.data
+      uid: this.props.uid,
+      balance: this.props.balance
     }
   },
   _onSubmitRefund: function () {
       var inputMoney = parseInt(this.refs.refundForm.getValues().refundMoney);
-      if (inputMoney>this.state.purseData.purse) {
+      if (inputMoney>this.state.balance) {
         AlertIOS.alert("提现失败","你的钱包里没有足够的钱")
       }else{
         AlertIOS.alert("提现成功","将在24小时内转到你的支付宝账户");
+        this.props.updateMoney(this.state.balance-inputMoney);
         this.props.navigator.pop();
+        // Util.post("http://dnafw.com:8100/iosapp/withdraw_to_alipay",{
+        //   uid: this.state.uid,
+        //   money: inputMoney
+        // },function(resData) {
+        //    if (resData.message=="1") {
+        //       AlertIOS.alert("提现成功","将在24小时内转到你的支付宝账户");
+        //       this.props.updateMoney(resData.balance);
+        //       this.props.navigator.pop();
+        //    }
+        // })
       }
   },
   render: function () {
@@ -274,15 +286,22 @@ var UserRefund = React.createClass({
 var UserPurse = React.createClass({
   getInitialState: function () {
     return {
-      purseData: this.props.data
+      userData: this.props.data,
+      balance: this.props.balance
     }
+  },
+  _updatePurseMoney: function(amount) {
+    this.setState({
+      balance: amount
+    })
+    this.props.updateMoney(amount);
   },
   _onPressPurse: function () {
     this.props.navigator.push({
       title: "收支明细",
       component:UserIncome,
       navigationBarHidden: false,
-      passProps:{uid:this.state.purseData.uid}
+      passProps:{uid:this.state.userData.uid}
     })
   },
   _onPressRefund: function () {
@@ -290,7 +309,7 @@ var UserPurse = React.createClass({
       title: "提现到支付宝",
       component:UserRefund,
       navigationBarHidden: false,
-      passProps:{data:this.state.purseData}
+      passProps:{balance:this.state.balance,uid:this.state.userData.uid, updateMoney: this._updatePurseMoney}
     })
   },
   _onPressLink: function () {
@@ -298,7 +317,7 @@ var UserPurse = React.createClass({
       title: "关联支付宝",
       component:UserLink,
       navigationBarHidden: false,
-      passProps:{data:this.state.purseData}
+      passProps:{data:this.state.userData}
     })
   },
   render: function () {
@@ -307,7 +326,7 @@ var UserPurse = React.createClass({
             <TouchableHighlight underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={this._onPressPurse}>
               <View style={[styles.userMenu,{paddingLeft:15,paddingRight:15}]}>
                 <Text>钱包余额</Text>
-                <Text style={styles.itemNavText}>{this.state.purseData.purse}元 </Text>
+                <Text style={styles.itemNavText}>{this.state.balance}元 </Text>
                 <Icon style={styles.itemNavMenu} name="angle-right" size={20}></Icon>
               </View>
             </TouchableHighlight>
@@ -381,7 +400,13 @@ var UserAbout = React.createClass({
 var UserIncome = React.createClass({
   getInitialState: function () {
     uid = this.props.uid;
-    //ssh to get purse info
+    // var data, sectionData;
+    // Util.get("http://dnafw.com:8100/iosapp/balance_history/?uid="+uid,function(resData) {
+    //     if (resData.userData){
+    //         data = resData.data;
+    //         sectionData = resData.sectionData;
+    //     }
+    // })
     //return resData{data:data,sectionData:sectionData}
     var data = [[{
         income:"+ ¥50",
@@ -570,29 +595,37 @@ var UserShare = React.createClass({
 
 var UserView = React.createClass({
   getInitialState: function () {
-    // pass token and get userData via SSH
-    // var userData = {};
+    // var userData, userBalance;
     // Util.get("http://dnafw.com:8100/iosapp/user_info?uid="+AsyncStorage.getItem('uid'),function(resData) {
     //     if (resData.userData){
-    //         userData = resData.userData
+    //           userData=resData.userData;
+    //           userBalance=resData.userBalance;
     //     }
     // })
+    var userBalance = 120;
     var userData = {
       uid:"",
       isNew: true,
       username: "Wei Fang",
-      email: null,
-      purse: 120,
+      cellphone: 1212132421,
+      email:null,
       alipayLinked: false,
       hasIdLinked: false,
       address:"",
       postcode:"",
-      img: require('./img/icon.jpg'), // should use default "?" avatar for first time user
+      img: require('./img/icon.jpg'), //{uri:"the img url"} should use default "?" avatar for first time user
     }
     return({
       isFirstTime: this.props.isFirstTime,
-      userData: userData
+      userData: userData,
+      balance: userBalance
     })
+  },
+  _updateMoney: function(amount) {
+    console.log("success")
+     this.setState({
+      balance:amount
+     })
   },
   _logout: function () {
     AsyncStorage.setItem('loginState',"0")
@@ -622,7 +655,7 @@ var UserView = React.createClass({
       title: "我的钱包",
       component:UserPurse,
       navigationBarHidden: false,
-      passProps:{data:this.state.userData}
+      passProps:{data:this.state.userData,balance: this.state.balance, updateMoney: this._updateMoney}
     })
   },
   _onHelpPress: function () {
@@ -674,8 +707,8 @@ var UserView = React.createClass({
                   <Image source={data.img} style={styles.icon}>
                   </Image>
                   <Text style={{fontSize:18,color:"#3a3a3a"}}>{data.username? data.username:"用户名未设置"}</Text>
-                  <Text style={{fontSize:13,color:"#3a3a3a",marginTop:5}}>帐号：{data.email?data.email:"邮箱未绑定"}</Text>
-                  <Text style={{fontSize:13,color:"#3a3a3a",marginTop:5}}>钱包：¥{data.purse}</Text>
+                  <Text style={{fontSize:13,color:"#3a3a3a",marginTop:5}}>帐号：{data.cellphone}</Text>
+                  <Text style={{fontSize:13,color:"#3a3a3a",marginTop:5}}>钱包：¥{this.state.balance}</Text>
                 </BlurView>
               </Image>
               <Icon style={styles.itemNav} name="angle-right" size={35}></Icon>
