@@ -1,9 +1,9 @@
-var Util = require('./utils')
+var Util = require('./utils');
 var Icon = require('react-native-vector-icons/Ionicons');
-var Store = require('./store')
-var User = require('./user')
-var Order = require('./order')
-var Update = require('./update')
+var Store = require('./store');
+var {User} = require('./user');
+var Order = require('./order');
+var Update = require('./update');
 
 import React, {
   TabBarIOS,

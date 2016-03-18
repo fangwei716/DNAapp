@@ -1,4 +1,5 @@
-var Util = require('./utils')
+var Util = require('./utils');
+var {UserInfo} = require('./user')
 var Icon = require('react-native-vector-icons/FontAwesome');
 
 import Form from 'react-native-form'
@@ -9,8 +10,10 @@ import React, {
   StyleSheet,
   TextInput,
   Text,
+  Modal,
   Image,
   AlertIOS,
+  StatusBarIOS,
   View
 } from 'react-native';
 
@@ -22,7 +25,20 @@ import React, {
 
 var Signup = React.createClass({
   getInitialState: function () {
+    var userData = {
+      uid:"",
+      isNew: true,
+      username: "",
+      cellphone:"",
+      email:"",
+      alipayLinked: false,
+      hasIdLinked: false,
+      address:"",
+      postcode:"",
+    }
     return({
+      userData,
+      showModal:false,
       isLogin: this.props.isLogin,
       onSignup: this.props.onSignup,
       timeStamp: 0
@@ -30,18 +46,19 @@ var Signup = React.createClass({
   },
   _signup: function(){
     //to delete，  should use post!
-    Util.get("http://dnafw.com:8100/iosapp/verify_validate_code/?phone=12345&timeOfOperation=1458060792663&code=123",function(resData) {
-        if (resData) {
-          console.log(resData);
-          if (resData.correct=="false") {
-            AlertIOS.alert('注册失败', '验证码错误');
-          }else{
-            AlertIOS.alert('注册成功');
-          }
-        }else{
-          AlertIOS.alert('注册失败', '服务器无响应');
-        }
-    })
+    this._signupSuccess()
+    // Util.get("http://dnafw.com:8100/iosapp/verify_validate_code/?phone=12345&timeOfOperation=1458060792663&code=123",function(resData) {
+    //     if (resData) {
+    //       console.log(resData);
+    //       if (resData.correct=="false") {
+    //         AlertIOS.alert('注册失败', '验证码错误');
+    //       }else{
+    //         AlertIOS.alert('注册成功');
+    //       }
+    //     }else{
+    //       AlertIOS.alert('注册失败', '服务器无响应');
+    //     }
+    // })
     // end of to delete
     
     /**
@@ -80,13 +97,15 @@ var Signup = React.createClass({
   },
   _signupSuccess: function () {
     // to delete
-    AsyncStorage.setItem('loginState',"1")
+    // AsyncStorage.setItem('loginState',"1")
     // end of to delete
     var newState = {
-      onSignup: false
+      onSignup: false,
+      showModal: true
     }
     this.setState(newState);
-    this.props.callbackSignup(newState);
+    StatusBarIOS.setStyle(0);
+    // this.props.callbackSignup(newState);
   },
   _launchLogin: function () {
     var newState = {
@@ -94,6 +113,18 @@ var Signup = React.createClass({
     }
     this.setState(newState);
     this.props.callbackSignup(newState);
+  },
+  _closeModal: function() {
+    StatusBarIOS.setStyle(1);
+    this.setState({
+      showModal:false
+    })
+  },
+  _submit: function() {
+    if(this.refs.info._saveChanges()){
+      this._closeModal()
+      this._launchLogin()
+    }
   },
   _getPhoneText: function () {
     /**
@@ -172,6 +203,21 @@ var Signup = React.createClass({
             <Text style={{color:'#777'}}>登陆</Text>
           </TouchableHighlight>
         </View>
+        <Modal
+          animated={true}
+          transparent={false}
+          visible={this.state.showModal}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalNav}>
+              <TouchableHighlight underlayColor="#fff" onPress={this._closeModal}><Text style={[styles.btnText,{width:80,textAlign:"left"}]}>取消</Text></TouchableHighlight>
+              <Text style={styles.navTitle}>提交资料审核</Text>
+              <TouchableHighlight underlayColor="#fff" onPress={this._submit}><Text style={[styles.btnText,,{width:80,textAlign:"right"}]}>提交</Text></TouchableHighlight>
+            </View>
+            <View style={styles.modalContent}>
+              <UserInfo ref="info" data={this.state.userData}/>
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -256,6 +302,40 @@ var styles = StyleSheet.create({
     fontSize: 10,
     color: "#fff",
     backgroundColor:"transparent"
+  },
+    modalContainer:{
+    height: Util.size.height,
+    width: Util.size.width,
+    backgroundColor:"#f1f1f1"
+  },
+  modalNav:{
+    position:"absolute",
+    height:60,
+    width:375,
+    backgroundColor:"#fff",
+    flexDirection:"row",
+    justifyContent:"space-between",
+    paddingTop:20,
+    paddingLeft:15,
+    paddingRight:15
+  },
+  modalContent:{
+    alignItems:"center",
+    justifyContent:"center",
+    width:355,
+    height:Util.size.height-60,
+    marginTop:60
+  },
+  navTitle:{
+    paddingTop:8,
+    fontWeight:"500",
+    color:"#222",
+    fontSize:18
+  },
+  btnText:{
+    color:"#4285f4",
+    fontSize:16,
+    paddingTop:10,
   }
 });
 

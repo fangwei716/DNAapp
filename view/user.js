@@ -60,6 +60,8 @@ var UserInfo = React.createClass({
     })
   },
   _saveChanges: function () {
+    AlertIOS.alert('提交成功', '请耐心等待审核');
+    return true
     // SSH post: this.refs.form.getValues()
     // var onThis = this;
     // Util.post("http://dnafw.com:8100/iosapp/update_info/",{
@@ -71,15 +73,16 @@ var UserInfo = React.createClass({
     // },function(resData) {
     //     if (resData) {
     //       if (resData.error) {
-    //         AlertIOS.alert('更新失败', '某某资料错误');
+    //         AlertIOS.alert('提交失败', '某某资料错误');
+    //         return false
     //       }else{
-    //         onThis.props.navigator.pop();
+    //         return true
     //       }
     //     }else{
-    //       AlertIOS.alert('更新失败', '服务器无响应');
+    //       AlertIOS.alert('提交失败', '服务器无响应');
+    //       return false
     //     }
     // })
-    this.props.navigator.pop();
   },
   _uploadId: function () {
     var options = {
@@ -161,6 +164,19 @@ var UserInfo = React.createClass({
       navigationBarHidden: false,
     })
   },
+  _inputFocused: function(refName) {
+    setTimeout(() => {
+      let scrollResponder = this.refs.scrollView.getScrollResponder();
+      scrollResponder.scrollResponderScrollNativeHandleToKeyboard(
+        React.findNodeHandle(this.refs[refName]),
+        130, //additionalOffset
+        true
+      );
+    }, 50);
+  },
+  _refFocus: function (nextField) {
+    this.refs[nextField].focus();
+  },
   render: function () {
     var data = this.props.data, 
       oldPass = null,
@@ -178,9 +194,9 @@ var UserInfo = React.createClass({
     if (!data.hasIdLinked) {
       idInput = <View style={styles.orderInputContainer}>
                   <Text style={styles.orderInputText}>身份证号码：</Text>
-                  <TextInput type="TextInput" name="idNum" keyboardType="number-pad" style={styles.orderInput}/>
+                  <TextInput type="TextInput" name="idNum" keyboardType="number-pad" style={styles.orderInput} ref="id" returnKeyType = {"next"} onFocus={()=>this._inputFocused("id")} onSubmitEditing={(event) => {this._refFocus("address");}} />
                 </View>
-      idUpload = <View style={styles.orderButtonContainer}>
+      idUpload = <View style={[styles.orderButtonContainer,{paddingBottom:30}]}>
                   <TouchableHighlight underlayColor="#eee" style={[styles.btn_if,{backgroundColor:'#ddd'}]} onPress={this._uploadId}>
                     <Text style={{color:'#555'}}>上传身份证正面照</Text>
                   </TouchableHighlight>
@@ -198,42 +214,32 @@ var UserInfo = React.createClass({
     }
 
     return(
-      <ScrollView style={{backgroundColor:"#f7f7f7"}} showsVerticalScrollIndicator={false}>
+      <ScrollView  ref='scrollView' showsVerticalScrollIndicator={false}>
+        <Text style={{paddingLeft:30,paddingTop:20,color:"#888"}}>需要提交资料审核后完成注册，资料审核成功后将有邮件通知你。审核需要24小时。</Text>
         <Form style={styles.orderContainer} ref="form">
           <View style={styles.orderInputContainer}>
             <Text style={styles.orderInputText}>用户名：</Text>
-            <TextInput defaultValue={data.username} type="TextInput" name="username" style={styles.orderInput}/>
+            <TextInput defaultValue={data.username} type="TextInput" name="username" style={styles.orderInput} ref="username" returnKeyType = {"next"} onFocus={()=>this._inputFocused("username")}  onSubmitEditing={(event) => {this._refFocus("email");}} />
           </View>
           <View style={styles.orderInputContainer}>
             <Text style={styles.orderInputText}>邮箱：</Text>
-            <TextInput defaultValue={data.email} type="TextInput" keyboardType="email-address" name="email" style={styles.orderInput}/>
+            <TextInput defaultValue={data.email} type="TextInput" name="email" style={styles.orderInput} ref="email" returnKeyType = {"next"} onFocus={()=>this._inputFocused("email")}  onSubmitEditing={(event) => {this._refFocus("password");}} />
           </View>
-          {oldPass}
           <View style={styles.orderInputContainer}>
             <Text style={styles.orderInputText}>新密码：</Text>
-            <TextInput  type="TextInput"  password={true} name="newPassword" style={styles.orderInput}/>
+            <TextInput  type="TextInput"  password={true} name="newPassword" style={styles.orderInput} ref="password" returnKeyType = {"next"} onFocus={()=>this._inputFocused("password")}  onSubmitEditing={(event) => {this._refFocus("id");}} />
           </View>
           {idInput}
           <View style={styles.orderInputContainer}>
             <Text style={styles.orderInputText}>地址：</Text>
-            <TextInput defaultValue={data.address} type="TextInput" name="address" style={styles.orderInput}/>
+            <TextInput defaultValue={data.address} type="TextInput" name="address" style={styles.orderInput} ref="address" returnKeyType = {"next"} onFocus={()=>this._inputFocused("address")}  onSubmitEditing={(event) => {this._refFocus("postcode");}} />
           </View>
           <View style={styles.orderInputContainer}>
             <Text style={styles.orderInputText}>邮编：</Text>
-            <TextInput defaultValue={data.postcode} type="TextInput" name="postcode" keyboardType="number-pad" style={styles.orderInput}/>
+            <TextInput defaultValue={data.postcode} type="TextInput" name="postcode" keyboardType="number-pad" style={styles.orderInput} ref="postcode" onFocus={()=>this._inputFocused("postcode")} />
           </View>
         </Form>
         {idUpload}
-        <View style={styles.orderButtonContainer}>
-          <TouchableHighlight underlayColor="#48aeb4" style={[styles.btn_if,{backgroundColor:'#1E868C'}]} onPress={this._saveChanges}>
-            <Text style={{color:'#fff'}}>更新资料</Text>
-          </TouchableHighlight>
-        </View>
-        <View style={[styles.orderButtonContainer,{marginBottom:30}]}>
-          <TouchableHighlight underlayColor="#ee6146" style={[styles.btn_if,{backgroundColor:'#d73c37'}]} onPress={this._changePhoneNum}>
-            <Text style={{color:'#fff'}}>更改绑定手机号</Text>
-          </TouchableHighlight>
-        </View>
       </ScrollView>
     )
   }
@@ -699,7 +705,7 @@ var UserView = React.createClass({
     var data = this.state.userData;
     return(
       <ScrollView showsVerticalScrollIndicator={false} style={styles.userContainer}>
-        <TouchableHighlight style={{marginBottom:35}} onPress={this._onInfoPress}>
+        <View style={{marginBottom:35}}>
           <View style={styles.userHero}>
             <View style={styles.bgImageWrapper}>
               <Image source={data.img} style={styles.backgroundImage}>
@@ -711,10 +717,9 @@ var UserView = React.createClass({
                   <Text style={{fontSize:13,color:"#3a3a3a",marginTop:5}}>钱包：¥{this.state.balance}</Text>
                 </BlurView>
               </Image>
-              <Icon style={styles.itemNav} name="angle-right" size={35}></Icon>
             </View>
           </View>
-        </TouchableHighlight>
+        </View>
         {this._renderFirstTimeMsg()}
         <TouchableHighlight  underlayColor="#f1f1f1" style={styles.userMenuContainer} onPress={this._onPursePress}>
           <View style={styles.userMenu}>
@@ -984,4 +989,4 @@ const styles = StyleSheet.create({
   },
 })
 
-module.exports = User;
+module.exports = {User,UserInfo};
