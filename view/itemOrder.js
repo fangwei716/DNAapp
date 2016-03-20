@@ -1,20 +1,8 @@
-var Util = require('./utils');
-var Icon = require('react-native-vector-icons/FontAwesome');
-var Alipay = require('./alipay');
-
-import Form from 'react-native-form'
-
-import React, {
-  AsyncStorage,
-  ProgressViewIOS,
-  TouchableHighlight,
-  StyleSheet,
-  TextInput,
-  PickerIOS,
-  ScrollView,
-  Text,
-  View
-} from 'react-native';
+import React, {AsyncStorage,Component,ProgressViewIOS,TouchableHighlight,StyleSheet,TextInput,PickerIOS,ScrollView,Text,View} from 'react-native';
+import Util from './utils';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Alipay from './alipay';
+import Form from 'react-native-form';
 
 /**
  * ItemOrder
@@ -33,8 +21,9 @@ import React, {
  *   - userID 
  */
 
-var ItemOrder = React.createClass({
-  getInitialState: function () {
+export default class extends Component{
+  constructor(props) {
+    super(props);
     styles.form1={
     }
     styles.form2={
@@ -52,7 +41,7 @@ var ItemOrder = React.createClass({
     //   uid: AsyncStorage.getItem("uid"),
     //   orderItem: this.props.data.orderItem,
     //   orderID: this.props.data.orderID,
-    // },function(resData) {
+    // },(resData) => {
     //     if (resData.ItemOrderData) {
     //       if (resData.error) {
     //          console.log("error")
@@ -63,7 +52,7 @@ var ItemOrder = React.createClass({
     //       AlertIOS.alert('创建订单失败', '服务器无响应');
     //     }
     // })
-   var ItemOrderData ={
+    const ItemOrderData ={
       orderID: "dsjhflsjdklcxsnkds", 
       price:1200, 
       userID:"fiorujewlknmwenfmsd",
@@ -79,9 +68,9 @@ var ItemOrder = React.createClass({
 
       }
    }
-   return({
+   this.state = {
       progress: 0,
-      step:ItemOrder.currentStep,
+      step:ItemOrderData.currentStep,
       serviceKey: this.props.data,
       stepTitle: "第一步: 委托人／受检人信息",
       numOfTesters: 1,
@@ -90,17 +79,19 @@ var ItemOrder = React.createClass({
       userID: ItemOrderData.userID,
       form1: ItemOrderData.form1,
       form2:{
-
       }
-    })
-  },
-  componentDidMount: function() {
+    };
+  }
+
+  componentDidMount() {
     this._updateStep(this.state.step)
-  },
-  _getProgress: function (progress) {
+  }
+
+  _getProgress (progress) {
     return Math.sin(progress % Math.PI) % 1;
-  },
-  _updateStep: function (step) {
+  }
+
+  _updateStep = (step) => {
     var title = '';
     this.setState({
       form1: this.refs.form1.getValues(),
@@ -155,17 +146,18 @@ var ItemOrder = React.createClass({
     }
     this.setState({
       step: step,
-      stepTitle: title
+      stepTitle: title,
     });
-  },
-  _pay:function (data) {
+  };
+
+  _pay(data) {
     // to delete, for test only
-     this.props.navigator.push({
-        title: "支付宝",
-        component:Alipay,
-        navigationBarHidden: false,
-        passProps: { data: data },
-      })
+   this.props.navigator.push({
+      title: "支付宝",
+      component:Alipay,
+      navigationBarHidden: false,
+      passProps: { data: data },
+    });
     // end of to delete
     
     // Util.post("http://dnafw.com:8100/iosapp/create_order/",{
@@ -173,7 +165,7 @@ var ItemOrder = React.createClass({
     //   form1:this.refs.form1.getValues(),
     //   form2:this.refs.form2.getValues(),
     //   orderId: this.state.orderID,
-    // },function(resData) {
+    // },(resData) => {
     //     if (resData) {
     //       if (resData.error) {
     //         AlertIOS.alert('订单信息有误', resData.errMsg);
@@ -189,16 +181,19 @@ var ItemOrder = React.createClass({
     //       AlertIOS.alert('支付失败', '服务器无响应');
     //     }
     // })
-  },
-  _addTester: function () {
+  }
+
+  _addTester() {
     this.setState({
-      numOfTesters: this.state.numOfTesters+1
-    })
-  },
-  _refFocus: function (nextField,i) {
+      numOfTesters: this.state.numOfTesters+1,
+    });
+  }
+
+  _refFocus(nextField,i) {
     this.refs[nextField+i].focus();
-  },
-  _inputFocused: function(refName) {
+  }
+
+  _inputFocused(refName) {
     setTimeout(() => {
       let scrollResponder = this.refs.scrollView.getScrollResponder();
       scrollResponder.scrollResponderScrollNativeHandleToKeyboard(
@@ -207,8 +202,9 @@ var ItemOrder = React.createClass({
         true
       );
     }, 50);
-  },
-  _renderSecondFormItem: function (index) {
+  }
+
+  _renderSecondFormItem = (index) => {
     return(
       <View key={"form2"+index}>
         <View style={{marginTop:20, paddingBottom:5, borderBottomColor:"#aaa",borderBottomWidth: 1}}>
@@ -232,16 +228,18 @@ var ItemOrder = React.createClass({
         </View>
       </View>
     )
-  },
-  _renderSecondForm: function () {
+  };
+
+  _renderSecondForm() {
     var formContainer = [], form2Elem;
     for (var i = 1; i <= this.state.numOfTesters; i++) {
-      form2Elem = this._renderSecondFormItem(i)
+      form2Elem = this._renderSecondFormItem(i);
       formContainer.push(form2Elem);
     };
-    return(formContainer)
-  },
-  render: function () {
+    return(formContainer);
+  }
+
+  render() {
     return(
       <ScrollView ref='scrollView' showsVerticalScrollIndicator={false} style={{paddingLeft:20, paddingRight:20, backgroundColor:"#f7f7f7"}}>
         <Text style={{marginTop: 10}}>{this.state.stepTitle}</Text>
@@ -277,53 +275,53 @@ var ItemOrder = React.createClass({
           </View>
           <View style={[styles.orderContainer, styles.form2]}>
             <ProgressViewIOS progressTintColor="#1E868C" style={styles.progressView} progress={this._getProgress(0.666)}/>
-              <Form ref="form2">
-                {this._renderSecondForm()}
-              </Form>
-              <TouchableHighlight underlayColor="#eee" style={[styles.btn_pm,{marginTop:30,backgroundColor:"#aaa"}]} onPress={this._addTester}>
-                  <Text style={{color:'#fff'}}>添加被鉴定人</Text>
-                </TouchableHighlight>
-              <View style={{flexDirection:"row", marginLeft:10, marginTop:10, marginBottom:30}}>
-                <TouchableHighlight underlayColor="#eee" style={[styles.btn_pm_half,{backgroundColor:"#ddd"}]} onPress={()=>this._updateStep(0)}>
-                  <Text style={{color:'#fff'}}>上一步</Text>
-                </TouchableHighlight>
-                <TouchableHighlight underlayColor="#48aeb4" style={[styles.btn_pm_half,{backgroundColor:"#1E868C"}]} onPress={()=>this._updateStep(2)}>
-                  <Text style={{color:'#fff'}}>下一步</Text>
-                </TouchableHighlight>
-              </View>
+            <Form ref="form2">
+              {this._renderSecondForm()}
+            </Form>
+            <TouchableHighlight underlayColor="#eee" style={[styles.btn_pm,{marginTop:30,backgroundColor:"#aaa"}]} onPress={() => this._addTester()}>
+                <Text style={{color:'#fff'}}>添加被鉴定人</Text>
+              </TouchableHighlight>
+            <View style={{flexDirection:"row", marginLeft:10, marginTop:10, marginBottom:30}}>
+              <TouchableHighlight underlayColor="#eee" style={[styles.btn_pm_half,{backgroundColor:"#ddd"}]} onPress={()=>this._updateStep(0)}>
+                <Text style={{color:'#fff'}}>上一步</Text>
+              </TouchableHighlight>
+              <TouchableHighlight underlayColor="#48aeb4" style={[styles.btn_pm_half,{backgroundColor:"#1E868C"}]} onPress={()=>this._updateStep(2)}>
+                <Text style={{color:'#fff'}}>下一步</Text>
+              </TouchableHighlight>
+            </View>
           </View>
           <View style={[styles.orderContainer,styles.form3]}>
             <ProgressViewIOS progressTintColor="#1E868C" style={styles.progressView} progress={this._getProgress(1)}/>
             <Text style={{marginTop:20}}>订单详情。。。from SSH</Text>
             <View style={{flexDirection:"row", marginLeft:20, marginTop:20}}>
-                <TouchableHighlight underlayColor="#eee" style={[styles.btn_pm_half,{backgroundColor:"#ddd"}]} onPress={()=>this._updateStep(1)}>
-                  <Text style={{color:'#fff'}}>上一步</Text>
-                </TouchableHighlight>
-                <TouchableHighlight underlayColor="#48aeb4" style={[styles.btn_pm_half,{backgroundColor:"#1E868C"}]} onPress={()=>this._pay(this.state.orderID)}>
-                  <Text style={{color:'#fff'}}>前往支付</Text>
-                </TouchableHighlight>
-              </View>
+              <TouchableHighlight underlayColor="#eee" style={[styles.btn_pm_half,{backgroundColor:"#ddd"}]} onPress={()=>this._updateStep(1)}>
+                <Text style={{color:'#fff'}}>上一步</Text>
+              </TouchableHighlight>
+              <TouchableHighlight underlayColor="#48aeb4" style={[styles.btn_pm_half,{backgroundColor:"#1E868C"}]} onPress={()=>this._pay(this.state.orderID)}>
+                <Text style={{color:'#fff'}}>前往支付</Text>
+              </TouchableHighlight>
+            </View>
           </View>
       </ScrollView>
-    )
+    );
   }
-})
+}
 
 const styles = StyleSheet.create({
   progressView: {
     marginTop: 10,
-    width: Util.size.width-40
+    width: Util.size.width-40,
   },
   orderContainer:{
     alignItems:'center',
     flex:1,
-    width: Util.size.width-40
+    width: Util.size.width-40,
   },
   orderInputContainer:{
     marginTop: 20, 
   },
   orderInputText:{
-    fontSize:12
+    fontSize:12,
   },
   orderInput:{
     marginTop: 10,
@@ -356,21 +354,18 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
     flexDirection:"row",
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   form1:{
   },
   form2:{
     width:0,
     height:0,
-    opacity:0
+    opacity:0,
   },
   form3:{
     width:0,
     height:0,
-    opacity:0
-  }
+    opacity:0,
+  },
 })
-
-module.exports = ItemOrder;
-

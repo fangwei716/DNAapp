@@ -1,21 +1,8 @@
-var Util = require('./utils');
-var {UserInfo} = require('./user')
-var Icon = require('react-native-vector-icons/FontAwesome');
-
-import Form from 'react-native-form'
-
-import React, {
-  AsyncStorage,
-  TouchableHighlight,
-  StyleSheet,
-  TextInput,
-  Text,
-  Modal,
-  Image,
-  AlertIOS,
-  StatusBarIOS,
-  View
-} from 'react-native';
+import React, {AsyncStorage,Component,TouchableHighlight,StyleSheet,TextInput,Text,Modal,Image,AlertIOS,StatusBarIOS,View} from 'react-native';
+import Util from './utils';
+import {UserInfo} from './user';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Form from 'react-native-form';
 
 /**
  * Signup
@@ -23,9 +10,24 @@ import React, {
  *    For details goes to tab.js
  */
 
-var Signup = React.createClass({
-  getInitialState: function () {
-    var userData = {
+export default class extends Component{
+  static defaultProps = {
+      isLogin: false,
+      onSignup: false,
+  };
+
+  static propTypes = {
+    isLogin: React.PropTypes.bool.isRequired,
+    onSignup: React.PropTypes.bool.isRequired,
+    callbackSignup: React.PropTypes.func.isRequired,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.signupSuccess = this._signupSuccess.bind(this);
+    this.closeModal = this._closeModal.bind(this);
+    const userData = {
       uid:"",
       isNew: true,
       username: "",
@@ -35,31 +37,19 @@ var Signup = React.createClass({
       hasIdLinked: false,
       address:"",
       postcode:"",
-    }
-    return({
+    };
+
+    this.state = {
       userData,
       showModal:false,
       isLogin: this.props.isLogin,
       onSignup: this.props.onSignup,
-      timeStamp: 0
-    })
-  },
-  _signup: function(){
-    //to delete，  should use post!
-    this._signupSuccess()
-    // Util.get("http://dnafw.com:8100/iosapp/verify_validate_code/?phone=12345&timeOfOperation=1458060792663&code=123",function(resData) {
-    //     if (resData) {
-    //       console.log(resData);
-    //       if (resData.correct=="false") {
-    //         AlertIOS.alert('注册失败', '验证码错误');
-    //       }else{
-    //         AlertIOS.alert('注册成功');
-    //       }
-    //     }else{
-    //       AlertIOS.alert('注册失败', '服务器无响应');
-    //     }
-    // })
-    // end of to delete
+      timeStamp: 0,
+    };
+  }
+
+  _signup(){
+    this.signupSuccess();
     
     /**
      * reqData = {
@@ -75,58 +65,56 @@ var Signup = React.createClass({
 
     // var d = new Date();
     // var timeStamp = d.getTime();
-    // var onThis = this;
     // Util.post("http://dnafw.com:8100/iosapp/verify_validate_code/",{
-    //   phone: onThis.refs.form.getValues().phoneNum,
+    //   phone: this.refs.form.getValues().phoneNum,
     //   timeOfOperation: timeStamp,
-    //   code:onThis.refs.form.getValues().veriCode,
-    // },function(resData) {
+    //   code:this.refs.form.getValues().veriCode,
+    // },(resData) => {
     //     if (resData) {
     //       if (!resData.correct) {
     //         AlertIOS.alert('注册失败', '验证码错误');
     //       }else{
-    //         onThis._signupSuccess()
-    //         AsyncStorage.setItem('loginState',"1")
-    //         AsyncStorage.setItem('isFirstTime',"1")
-    //         AsyncStorage.setItem('uid',resData.uid)
+    //         this.signupSuccess();
     //       }
     //     }else{
     //       AlertIOS.alert('注册失败', '服务器无响应');
     //     }
     // })
-  },
-  _signupSuccess: function () {
-    // to delete
-    // AsyncStorage.setItem('loginState',"1")
-    // end of to delete
-    var newState = {
+  }
+
+  _signupSuccess() {
+    const newState = {
       onSignup: false,
-      showModal: true
-    }
+      showModal: true,
+    };
     this.setState(newState);
     StatusBarIOS.setStyle(0);
-    // this.props.callbackSignup(newState);
-  },
-  _launchLogin: function () {
-    var newState = {
-      onSignup: false
-    }
+  }
+
+  _launchLogin() {
+    const newState = {
+      onSignup: false,
+    };
+
     this.setState(newState);
     this.props.callbackSignup(newState);
-  },
-  _closeModal: function() {
+  }
+
+  _closeModal() {
     StatusBarIOS.setStyle(1);
     this.setState({
       showModal:false
     })
-  },
-  _submit: function() {
+  }
+
+  _submit() {
     if(this.refs.info._saveChanges()){
-      this._closeModal()
+      this.closeModal()
       this._launchLogin()
     }
-  },
-  _getPhoneText: function () {
+  }
+
+  _getPhoneText() {
     /**
      * reqData = {
      *   phone: this.refs.form.getValues().phoneNum,
@@ -138,31 +126,30 @@ var Signup = React.createClass({
      * }
      */
     
-    var onThis = this;
-    var d = new Date();
-    var timeStamp = d.getTime();
+    let d = new Date();
+    let timeStamp = d.getTime();
     if (this.state.timeStamp == 0 || timeStamp - this.state.timeStamp > 60000) {
       this.setState({
-         timeStamp: timeStamp
-      })
+         timeStamp: timeStamp,
+      });
       Util.post("http://dnafw.com/iosapp:8100/send_validate_code/",{ 
-        phone: onThis.refs.form.getValues().phoneNum,
-        timeOfOperation: timeStamp
-      },function(resData) {
+        phone: this.refs.form.getValues().phoneNum,
+        timeOfOperation: timeStamp,
+      },(resData) => {
           if (resData) {
             if (resData.error=="true") {
               AlertIOS.alert('获取验证码失败', resData.message=='0'?'发送失败':'手机号已被注册');
-              onThis.setState({
-                 timeStamp: 0
-              })
+              this.setState({
+                 timeStamp: 0,
+              });
             }else{
               AlertIOS.alert('获取验证码成功', '已发送到你的手机，有效时间30分钟');
             }
           }else{
             AlertIOS.alert('获取验证码失败', '服务器无响应');
-            onThis.setState({
-               timeStamp: 0
-            })
+            this.setState({
+               timeStamp: 0,
+            });
           }
       })
     //  delete the following
@@ -171,8 +158,9 @@ var Signup = React.createClass({
       AlertIOS.alert("获取验证码失败", "一分钟只可获取一次")
     }
     
-  },
-  render: function(){
+  }
+
+  render() {
     return (
       <View style={{alignItems:"center"}}>
         <View style={{flex: 1}}>
@@ -184,12 +172,12 @@ var Signup = React.createClass({
               <TextInput type="TextInput" name="veriCode" placeholderTextColor="#777" style={styles.input} placeholder="验证码" keyboardType="number-pad"/>
             </View>
           </Form>
-          <TouchableHighlight underlayColor="#fff" style={styles.btn_text} onPress={this._getPhoneText}>
+          <TouchableHighlight underlayColor="#fff" style={styles.btn_text} onPress={() => this._getPhoneText()}>
             <Text style={{color:'#777',fontSize:10}}>获取验证码</Text>
           </TouchableHighlight>
         </View>
         <View style={styles.inputRow}>
-          <TouchableHighlight underlayColor="#48aeb4" style={styles.btn_pm} onPress={this._signup}>
+          <TouchableHighlight underlayColor="#48aeb4" style={styles.btn_pm} onPress={() => this._signup()}>
             <Text style={{color:'#fff'}}>注册</Text>
           </TouchableHighlight>
         </View>
@@ -199,7 +187,7 @@ var Signup = React.createClass({
           <View style={styles.btn_dec}></View>
         </View>
         <View style={styles.inputRow}>
-          <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this._launchLogin}>
+          <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={() => this._launchLogin()}>
             <Text style={{color:'#777'}}>登陆</Text>
           </TouchableHighlight>
         </View>
@@ -209,9 +197,9 @@ var Signup = React.createClass({
           visible={this.state.showModal}>
           <View style={styles.modalContainer}>
             <View style={styles.modalNav}>
-              <TouchableHighlight underlayColor="#fff" onPress={this._closeModal}><Text style={[styles.btnText,{width:80,textAlign:"left"}]}>取消</Text></TouchableHighlight>
+              <TouchableHighlight underlayColor="#fff" onPress={this.closeModal}><Text style={[styles.btnText,{width:80,textAlign:"left"}]}>取消</Text></TouchableHighlight>
               <Text style={styles.navTitle}>提交资料审核</Text>
-              <TouchableHighlight underlayColor="#fff" onPress={this._submit}><Text style={[styles.btnText,,{width:80,textAlign:"right"}]}>提交</Text></TouchableHighlight>
+              <TouchableHighlight underlayColor="#fff" onPress={() => this._submit()}><Text style={[styles.btnText,,{width:80,textAlign:"right"}]}>提交</Text></TouchableHighlight>
             </View>
             <View style={styles.modalContent}>
               <UserInfo ref="info" data={this.state.userData}/>
@@ -222,7 +210,7 @@ var Signup = React.createClass({
     );
   }
 
-});
+}
 
 
 var styles = StyleSheet.create({
@@ -336,10 +324,6 @@ var styles = StyleSheet.create({
     color:"#4285f4",
     fontSize:16,
     paddingTop:10,
-  }
+  },
 });
-
-
-module.exports = Signup;
-
 

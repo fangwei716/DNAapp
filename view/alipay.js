@@ -1,6 +1,4 @@
-import React, {
-  WebView
-} from 'react-native';
+import React, {Component,WebView} from 'react-native';
 
 /**
  * Alipay
@@ -8,21 +6,19 @@ import React, {
  * - link varies. Refer to the alipay API
  */
 
-var Alipay = React.createClass({
-  render: function () {
+export default class extends Component{
+  render() {
     return(
-           <WebView
-          automaticallyAdjustContentInsets={false}
-          url={"http://www.alipay.com"}
-          javaScriptEnabled={true}
-          domStorageEnabled={true}
-          decelerationRate="normal"
-          startInLoadingState={true}
-          style={{marginTop:60}}/>
-    )
+      <WebView
+        automaticallyAdjustContentInsets={false}
+        url={"http://www.alipay.com"}
+        javaScriptEnabled={true}
+        domStorageEnabled={true}
+        decelerationRate="normal"
+        startInLoadingState={true}
+        style={{marginTop:60}}
+      />
+    );
   }
-})
-
-module.exports = Alipay;
-
+}
 

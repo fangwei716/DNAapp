@@ -1,31 +1,36 @@
-var Util = require('./utils')
-var Icon = require('react-native-vector-icons/FontAwesome');
+import React, {AsyncStorage,Component,TouchableHighlight,StyleSheet,StatusBarIOS,TextInput,Text,Image,AlertIOS,View} from 'react-native';
+import Util from './utils';
+import Icon from 'react-native-vector-icons/FontAwesome';;
+import Form from 'react-native-form';
 
-import Form from 'react-native-form'
+export default class extends Component{
+  static defaultProps = {
+      isLogin: false,
+      onSignup: false,
+  };
 
-import React, {
-  AsyncStorage,
-  TouchableHighlight,
-  StyleSheet,
-  StatusBarIOS,
-  TextInput,
-  Text,
-  Image,
-  AlertIOS,
-  View
-} from 'react-native';
+  static propTypes = {
+    isLogin: React.PropTypes.bool.isRequired,
+    onSignup: React.PropTypes.bool.isRequired,
+    callbackLogin: React.PropTypes.func.isRequired,
+  };
 
+  constructor(props) {
+    super(props);
+    this.loginSuccess = this._loginSuccess.bind(this);
 
-var Login = React.createClass({
-  getInitialState: function () {
-    StatusBarIOS.setStyle(1);
-    return({
+    this.state = {
       isLogin: this.props.isLogin,
       onSignup: this.props.onSignup,
-    })
-  },
-  _login: function(){
-    this._loginSuccess()
+    };
+  }
+
+  componentDidMount() {
+    StatusBarIOS.setStyle(1);
+  }
+
+  _login(){
+    this.loginSuccess();
     /**
      * reqData = {
      *   username:,
@@ -39,8 +44,7 @@ var Login = React.createClass({
      *   loginState
      * }
      */
-    // var onThis =this;
-    // Util.post("http://dnafw.com:8100/iosapp/login/",this.refs.form.getValues(),function(resData) {
+    // Util.post("http://dnafw.com:8100/iosapp/login/",this.refs.form.getValues(), (resData) => {
     //     console.log(resData)
     //     if (resData) {
     //       if (resData.error=="true") {
@@ -49,37 +53,40 @@ var Login = React.createClass({
     //               AlertIOS.alert('登陆失败', '用户名不存在');
     //               break;
     //            case "3":
-    //               AlertIOS.alert('登陆失败', '用户名或密码不匹配')
+    //               AlertIOS.alert('登陆失败', '用户名或密码不匹配');
     //         }
     //       }else{
-    //         onThis._loginSuccess()
-    //         AsyncStorage.setItem('loginState',"1")
-    //         AsyncStorage.setItem('isFirstTime',resData.isFirstTime)
-    //         AsyncStorage.setItem('uid',resData.uid)
+    //         this.loginSuccess();
+    //         AsyncStorage.setItem('loginState',"1");
+    //         AsyncStorage.setItem('isFirstTime',resData.isFirstTime);
+    //         AsyncStorage.setItem('uid',resData.uid);
     //       }
     //     }else{
     //       AlertIOS.alert('登陆失败', '服务器无响应');
     //     }
     // })
-  },
-  _loginSuccess: function () {
+  }
+
+  _loginSuccess() {
     //delete when ready
     AsyncStorage.setItem('loginState',"1")
     // end of delete
-    var newState = {
+    const newState = {
       onSignup: false
     }
     this.setState(newState);
     this.props.callbackLogin(newState);
-  },
-  _launchSignup: function () {
-    var newState = {
+  }
+
+  _launchSignup() {
+    const newState = {
       onSignup: true
     }
     this.setState(newState);
     this.props.callbackLogin(newState);
-  },
-  render: function(){
+  }
+
+  render() {
     return (
       <View style={{alignItems:"center"}}>
         <Form ref="form">
@@ -93,7 +100,7 @@ var Login = React.createClass({
           </View>
         </Form>
         <View style={styles.inputRow}>
-          <TouchableHighlight underlayColor="#48aeb4" style={styles.btn_pm} onPress={this._login}>
+          <TouchableHighlight underlayColor="#48aeb4" style={styles.btn_pm} onPress={() => this._login()}>
             <Text style={{color:'#fff'}}>登录</Text>
           </TouchableHighlight>
         </View>
@@ -103,15 +110,15 @@ var Login = React.createClass({
           <View style={styles.btn_dec}></View>
         </View>
         <View style={styles.inputRow}>
-          <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this._launchSignup}>
+          <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={() => this._launchSignup()}>
             <Text style={{color:'#777'}}>注册</Text>
           </TouchableHighlight>
         </View>
       </View>
     );
-  },
+  }
 
-});
+}
 
 
 var styles = StyleSheet.create({
@@ -179,10 +186,5 @@ var styles = StyleSheet.create({
     fontSize: 10,
     color: "#fff",
     backgroundColor: "transparent"
-  }
+  },
 });
-
-
-module.exports = Login;
-
-

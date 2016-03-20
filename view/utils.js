@@ -1,24 +1,20 @@
+/**
+ * from react native tutorial
+ */
+import React,{PixelRatio} from 'react-native';
+import Dimensions from 'Dimensions';
 
-
-var React = require('react-native');
-var Dimensions = require('Dimensions');
-
-var {
-  PixelRatio
-} = React;
-
-var Util = {
-
+const Util = {
   //单位像素
   ratio: PixelRatio.get(),
   pixel: 1 / PixelRatio.get(),
   //屏幕尺寸
   size: {
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height
+    height: Dimensions.get('window').height,
   },
   //get 请求
-  get: function (url, callback) {
+  get(url, callback) {
     fetch(url)  
     .then((response) => {
       console.log(response)
@@ -32,7 +28,7 @@ var Util = {
     });
   },
   //post请求
-  post: function (url, data, callback) {
+  post(url, data, callback) {
     var fetchOptions = {
       method: 'POST',
       headers: {
@@ -54,9 +50,7 @@ var Util = {
       console.log(error);
     });
   },
-  //Key
-  key: 'HSHHSGSGGSTWSYWSYUSUWSHWBS-REACT-NATIVE'
-
+  key: 'HSHHSGSGGSTWSYWSYUSUWSHWBS-REACT-NATIVE',
 };
 
-module.exports = Util;
+export default Util;

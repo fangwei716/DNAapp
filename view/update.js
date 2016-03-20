@@ -1,69 +1,64 @@
-var Util = require('./utils');
-var Icon = require('react-native-vector-icons/FontAwesome');
+import React, {Component,TouchableHighlight,StyleSheet,NavigatorIOS,StatusBarIOS,Text,Image,ScrollView,RefreshControl,WebView,View} from 'react-native';
+import Util from './utils';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-import React, {
-  TouchableOpacity,
-  TouchableHighlight,
-  StyleSheet,
-  NavigatorIOS,
-  StatusBarIOS,
-  ListView,
-  TextInput,
-  Text,
-  Image,
-  ScrollView,
-  RefreshControl,
-  WebView,
-  SliderIOS,
-  View
-} from 'react-native';
+const updateData = [
+  {
+    title:"推广消息的标题1",
+    date: "2016-02-18",
+    link: "www.google.com",
+    key:0,
+    img: require('./img/chip.jpg'), //just pass the url
+  },{
+    title:"推广消息的标题2",
+    date: "2016-02-19",
+    link: "www.google.com",
+    key:1,
+    img: require('./img/forensics.jpg'),
+  },
+];
 
-var updateData = [{
-  title:"推广消息的标题1",
-  date: "2016-02-18",
-  link: "www.google.com",
-  key:0,
-  img: require('./img/chip.jpg') //just pass the url
-},{
-  title:"推广消息的标题2",
-  date: "2016-02-19",
-  link: "www.google.com",
-  key:1,
-  img: require('./img/forensics.jpg')
-}];
+class UpdateDetail extends Component{
+  static propTypes = {
+    data: React.PropTypes.object.isRequired,
+  };
 
-var UpdateDetail = React.createClass({
-  render: function () {
+  render() {
     return(
         <WebView
-        automaticallyAdjustContentInsets={false}
-        source={{uri: this.props.data.link}}
-        javaScriptEnabled={true}
-        domStorageEnabled={true}
-        decelerationRate="normal"
-        startInLoadingState={true}/>
-    )
+          automaticallyAdjustContentInsets={false}
+          source={{uri: this.props.data.link}}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          decelerationRate="normal"
+          startInLoadingState={true}
+        />
+    );
   }
-})
+}
 
-var UpdateListItems = React.createClass({
-  _onPress: function (data) {
+class UpdateListItems extends Component{
+  static propTypes = {
+    data: React.PropTypes.array.isRequired,
+  };
+
+  _onPress(data) {
      this.props.navigator.push({
       title: data.title,
       component:UpdateDetail,
       navigationBarHidden: false,
       passProps:{data:data}
     })
-  },
-  render:function () {
-    var onThis = this;
-    var items = this.props.data.map(function(elem) {
+  }
+
+  render() {
+    const items = this.props.data.map((elem) => {
       return(
         <View key={elem.key} style={styles.updateContainer}>
           <View style={styles.updateItemDate}>
             <Text style={{color:"#FFF",fontSize:12}}>{elem.date}</Text>
           </View>
-          <TouchableHighlight underlayColor="#eee" style={styles.updateItem} onPress={()=>onThis._onPress(elem)}>
+          <TouchableHighlight underlayColor="#eee" style={styles.updateItem} onPress={() => this._onPress(elem)}>
             <View>
               <Text style={{color:"#222",fontSize:15, paddingLeft:10}}>{elem.title}</Text>
               <View style={styles.updateImgContainer}>
@@ -74,76 +69,81 @@ var UpdateListItems = React.createClass({
             </View>
           </TouchableHighlight>
         </View>
-      )
+      );
     })
     return(
       <View style={{paddingBottom:20}}>
         {items}
       </View>
-    )
+    );
   }
-})
+}
 
-var UpdateList = React.createClass({
-  getInitialState: function (){
-    return {
+class UpdateList extends Component{
+  static propTypes = {
+    data: React.PropTypes.array.isRequired,
+  };
+
+  constructor(props){
+    super(props);
+    this.state = {
       isRefreshing: false,
       loaded: 0,
       rowData: this.props.data,
       refreshTitle: "下拉更新"
     };
-  },
-  _onRefresh:function () {
-    var data = this.state.rowData;
+  }
+
+  _onRefresh() {
+    const data = this.state.rowData;
     this.setState({
       isRefreshing: true,
       refreshTitle: "正在更新"
     });
     Util.get("http://dnafw.com:8100/iosapp/promote",function(resData) {
-        if (resData) {
-          data.concat(resData.update);
+      if (resData) {
+        data.concat(resData.update);
+        this.setState({
+          loaded: 1,
+          isRefreshing: false,
+          rowData: data,
+          refreshTitle: "更新完毕"
+        });
+        setTimeout(() => {
           this.setState({
-            loaded: 1,
-            isRefreshing: false,
-            rowData: data,
-            refreshTitle: "更新完毕"
+            refreshTitle: "下拉更新"
           });
-          setTimeout(() => {
-            this.setState({
-              refreshTitle: "下拉更新"
-            });
-          }, 500);
-        }else{
-          this.setState({
-            loaded: 1,
-            isRefreshing: false,
-            refreshTitle: "更新失败"
-          });
-        }
+        }, 500);
+      }else{
+        this.setState({
+          loaded: 1,
+          isRefreshing: false,
+          refreshTitle: "更新失败"
+        });
+      }
     })
+  }
 
-  },
-  render:function () {
+  render() {
     return(
       <ScrollView showsVerticalScrollIndicator={false} 
       refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
             title={this.state.refreshTitle}
-            onRefresh={this._onRefresh}
-            tintColor="#ddd"/>}>
+            onRefresh={() => this._onRefresh()}
+            tintColor="#ddd"
+          />
+      }>
         <UpdateListItems navigator={this.props.navigator} data={this.state.rowData}></UpdateListItems>
       </ScrollView>
-    )
+    );
   }
-})
+}
 
-var Update = React.createClass({
-  getInitialState: function () {
+export default class extends Component{
+  componentDidMount() {
     StatusBarIOS.setStyle(0);
-    return null;
-  },
-  componentDidMount: function() {
     // Util.get("http://dnafw.com:8100/iosapp/promote",function(resData) {
     //     if (resData.update) {
     //       updateData.concat(resData.update);
@@ -151,26 +151,27 @@ var Update = React.createClass({
     //       console.log("error")
     //     }
     // })
-  },
-  render: function(){
-    return (
-      <NavigatorIOS
-      ref='nav'
-      style={styles.container}
-      initialRoute={{
-        title:"推广动态",
-        component: UpdateList,
-        passProps: {data: updateData},
-        shadowHidden: true
-      }}
-      itemWrapperStyle={styles.itemWrapper}
-      tintColor="#777"/>
-    );
   }
 
-});
+  render(){
+    return (
+      <NavigatorIOS
+        ref='nav'
+        style={styles.container}
+        initialRoute={{
+          title:"推广动态",
+          component: UpdateList,
+          passProps: {data: updateData},
+          shadowHidden: true
+        }}
+        itemWrapperStyle={styles.itemWrapper}
+        tintColor="#777"
+      />
+    );
+  }
+}
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container:{
     flex:1,
   },
@@ -216,7 +217,3 @@ var styles = StyleSheet.create({
     borderBottomWidth:Util.pixel,
   }
 });
-
-module.exports = Update;
-
- 

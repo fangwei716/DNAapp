@@ -1,25 +1,9 @@
-var Util = require('./utils');
-var Icon = require('react-native-vector-icons/FontAwesome');
-var ItemOrder = require('./itemOrder');
-var Alipay = require('./alipay');
 
-import React, {
-  AsyncStorage,
-  TouchableOpacity,
-  TouchableHighlight,
-  StyleSheet,
-  NavigatorIOS,
-  StatusBarIOS,
-  ListView,
-  TextInput,
-  Text,
-  Image,
-  ScrollView,
-  RefreshControl,
-  WebView,
-  SliderIOS,
-  View
-} from 'react-native';
+import React, {AsyncStorage,Component,TouchableOpacity,TouchableHighlight,StyleSheet,NavigatorIOS,StatusBarIOS,ListView,TextInput,Text,Image,ScrollView,RefreshControl,WebView,SliderIOS,View,} from 'react-native';
+import Util from './utils';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import ItemOrder from './itemOrder';
+import Alipay from './alipay';
 
 /**
  * orderData
@@ -39,7 +23,7 @@ import React, {
 // })
 
 //to delete
-var orderData = [{
+const orderData = [{
   type:0,
   date: "2016-02-18",
   item: "DNA家谱",
@@ -68,7 +52,7 @@ var orderData = [{
       sample: "XXX", 
       additional_info: "XXX",
     }
-  ]
+  ],
 },{
   type:1,
   date: "2016-02-15",
@@ -98,7 +82,7 @@ var orderData = [{
       sample: "XXX", 
       additional_info: "XXX",
     }
-  ]
+  ],
 },{
   type:2,
   date: "2016-02-13",
@@ -128,7 +112,7 @@ var orderData = [{
       sample: "XXX", 
       additional_info: "XXX",
     }
-  ]
+  ],
 },{
   type:3,
   date: "2016-02-03",
@@ -158,7 +142,7 @@ var orderData = [{
       sample: "XXX", 
       additional_info: "XXX",
     }
-  ]
+  ],
 },{
   type:4,
   date: "2016-01-05",
@@ -188,7 +172,7 @@ var orderData = [{
       sample: "XXX", 
       additional_info: "XXX",
     }
-  ]
+  ],
 },{
   type:4,
   date: "2016-01-05",
@@ -218,7 +202,7 @@ var orderData = [{
       sample: "XXX", 
       additional_info: "XXX",
     }
-  ]
+  ],
 },{
   type:5,
   date: "2016-01-05",
@@ -248,7 +232,7 @@ var orderData = [{
       sample: "XXX", 
       additional_info: "XXX",
     }
-  ]
+  ],
 },{
   type:5,
   date: "2016-01-05",
@@ -278,7 +262,7 @@ var orderData = [{
       sample: "XXX", 
       additional_info: "XXX",
     }
-  ]
+  ],
 }];
 
 /**
@@ -291,42 +275,49 @@ var orderData = [{
  *     - @type:3 Trackig
  */
 
-var Service = React.createClass({
-  render: function () {
+class Service extends Component{
+  render() {
     return(
       <WebView
-          automaticallyAdjustContentInsets={false}
-          source={{uri: "http://m.dnafw.com/service"}}
-          javaScriptEnabled={true}
-          domStorageEnabled={true}
-          decelerationRate="normal"
-          startInLoadingState={true}/>
-    )
+        automaticallyAdjustContentInsets={false}
+        source={{uri: "http://m.dnafw.com/service"}}
+        javaScriptEnabled={true}
+        domStorageEnabled={true}
+        decelerationRate="normal"
+        startInLoadingState={true}
+      />
+    );
   }
-})
+}
 
-
-var Tracking = React.createClass({
-  render: function () {
+class Tracking extends Component{
+  render() {
     return(
       <WebView
-          automaticallyAdjustContentInsets={false}
-          source={{uri: "http://m.dnafw.com/package"}}
-          javaScriptEnabled={true}
-          domStorageEnabled={true}
-          decelerationRate="normal"
-          startInLoadingState={true}/>
-    )
+        automaticallyAdjustContentInsets={false}
+        source={{uri: "http://m.dnafw.com/package"}}
+        javaScriptEnabled={true}
+        domStorageEnabled={true}
+        decelerationRate="normal"
+        startInLoadingState={true}
+      />
+    );
   }
-})
+}
 
-var OrderDetail = React.createClass({
-  getInitialState: function () {
-    return({
-      rating: 0
-    })
-  },
-  _action: function (data) {
+class OrderDetail extends Component{
+  static propTypes = {
+    data: React.PropTypes.object.isRequired,
+  };
+
+  constructor() {
+    super();
+    this.state = {
+      rating: 0,
+    };
+  }
+
+  _action = (data) => {
     switch(data.type){
       case 0:
         this.props.navigator.push({
@@ -361,8 +352,9 @@ var OrderDetail = React.createClass({
         })
         return null;
     }
-  },
-  _renderAction: function (data) {
+  };
+
+  _renderAction = (data) => {
     switch(data.type){
       case 0:
         return(
@@ -438,10 +430,11 @@ var OrderDetail = React.createClass({
       case 5:
         return null;
     }
-  },
-  render: function () {
-    var data = this.props.data;
-    var identifiers = data.identifier.map(function(elem, index) {
+  };
+
+  render() {
+    const data = this.props.data;
+    const identifiers = data.identifier.map(function(elem, index) {
       return(
         <View key={elem.name}>
           <Text></Text>
@@ -479,10 +472,14 @@ var OrderDetail = React.createClass({
       </View>
     )
   }
-})
+}
 
-var OrderListItems =  React.createClass({
-  _renderOrderDetail: function (data) {
+class OrderListItems extends Component{
+  static propTypes = {
+    data: React.PropTypes.array.isRequired,
+  };
+
+  _renderOrderDetail = (data) => {
     this.props.navigator.push({
       title: "订单详情",
       tintColor:data.bg,
@@ -490,13 +487,13 @@ var OrderListItems =  React.createClass({
       navigationBarHidden: false,
       passProps:{data:data}
     })
-  },
-  render: function () {
-    var data = this.props.data;
-    var item = this;
-    var items = data.map(function(rowData, index) {
+  };
+
+  render() {
+    const data = this.props.data;
+    const items = data.map((rowData, index) => {
       return(
-        <TouchableHighlight key={rowData.key} style={styles.orderListTouch} underlayColor="rgba(0,0,0,0.3)" onPress={()=>item._renderOrderDetail(rowData)}>
+        <TouchableHighlight key={rowData.key} style={styles.orderListTouch} underlayColor="rgba(0,0,0,0.3)" onPress={()=>this._renderOrderDetail(rowData)}>
           <View style={styles.orderList}>
             <View style={[styles.orderStatus,{backgroundColor:rowData.bg}]}>
               <Text style={{color:"#fff"}}>订单状态：{rowData.status}</Text>
@@ -516,20 +513,25 @@ var OrderListItems =  React.createClass({
         {items}
       </View>
     );
-
   }
-})
+}
 
-var OrderList = React.createClass({
-  getInitialState: function (){
-    return {
+class OrderList extends Component{
+  static propTypes = {
+    data: React.PropTypes.array.isRequired,
+  };
+
+  constructor(props){
+    super(props);
+    this.state = {
       isRefreshing: false,
       loaded: 0,
       rowData: this.props.data,
       refreshTitle: "下拉更新"
     };
-  },
-  _onRefresh:function () {
+  }
+
+  _onRefresh() {
     this.setState({
       isRefreshing: true,
       refreshTitle: "正在更新"
@@ -548,10 +550,10 @@ var OrderList = React.createClass({
           refreshTitle: "下拉更新"
         });
       }, 1000);
-
     }, 1000);
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       <ScrollView 
       style={styles.orderListContainer}
@@ -559,40 +561,40 @@ var OrderList = React.createClass({
           <RefreshControl
             refreshing={this.state.isRefreshing}
             title={this.state.refreshTitle}
-            onRefresh={this._onRefresh}
-            tintColor="#ddd"/>}>
+            onRefresh={() => this._onRefresh()}
+            tintColor="#ddd"
+          />
+      }>
         <OrderListItems navigator={this.props.navigator} data={this.state.rowData}></OrderListItems>
       </ScrollView>
     );
   }
+}
 
-});
-
-var Order = React.createClass({
-  getInitialState: function () {
+export default class extends Component{
+  componentDidMount() {
     StatusBarIOS.setStyle(0);
-    return null;
-  },
-  render: function(){
-    return (
-      <NavigatorIOS
-      ref='nav'
-      style={styles.container}
-      initialRoute={{
-        title:"全部订单",
-        component: OrderList,
-        passProps: {data: orderData},
-        shadowHidden: true
-      }}
-      itemWrapperStyle={styles.itemWrapper}
-      tintColor="#777"/>
-    );
   }
 
-});
+  render() {
+    return (
+      <NavigatorIOS
+        ref='nav'
+        style={styles.container}
+        initialRoute={{
+          title:"全部订单",
+          component: OrderList,
+          passProps: {data: orderData},
+          shadowHidden: true
+        }}
+        itemWrapperStyle={styles.itemWrapper}
+        tintColor="#777"
+      />
+    );
+  }
+}
 
-
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container:{
     flex:1,
   },
@@ -677,7 +679,3 @@ var styles = StyleSheet.create({
     paddingBottom:5,
   },
 });
-
-module.exports = Order;
-
-

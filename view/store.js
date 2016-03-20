@@ -1,23 +1,8 @@
-var Util = require('./utils');
-var Icon = require('react-native-vector-icons/FontAwesome');
-const { BlurView, VibrancyView } = require('react-native-blur');
-var ItemOrder = require('./itemOrder')
-
-import React, {
-  NavigatorIOS,
-  TouchableHighlight,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  StatusBarIOS,
-  SegmentedControlIOS,
-  RefreshControl,
-  Text,
-  Image,
-  ScrollView,
-  View
-} from 'react-native';
-
+import React, {Component,NavigatorIOS,TouchableHighlight,TouchableOpacity,StyleSheet,TextInput,StatusBarIOS,SegmentedControlIOS,RefreshControl,Text,Image,ScrollView,View} from 'react-native';
+import Util from './utils';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { BlurView, VibrancyView } from 'react-native-blur';
+import ItemOrder from './itemOrder';
 
 /**
  * Store
@@ -33,28 +18,107 @@ import React, {
  * to those pics. Find your own pics and replace with current ones.)
  */
 
-var ItemDetail = React.createClass({
-  getInitialState: function () {
-     return {
+/**
+ * storeItemData
+ * @static 
+ * List of all services. 
+ * 
+ * Data Flow
+ * sotreItemData -> Store -> StoreItems 
+ * StoreItems -> sotreItemData{key} -> ItemOrder        
+ */
+
+const storeItemData=[{
+  title:"DNA档案",
+  star: 5,
+  key: "djsfhkfjdhskf",
+  img: "store1",
+  price: 1200,
+  type:"司法类／非司法类",
+  deliver:"免运费",
+  tag:"特价优惠",
+  lines: 4,
+  orderItem: "0",
+  orderID:"",
+  relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"},{label: "爷爷",value:"ff"},{label:"奶奶",value:"mm"},{label: "外公",value:"f"},{label:"外婆",value:"m"}],
+  sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
+  fullIntro:"华大DNA服务提供的DNA档案是用DNA技术建立一个人的基因组图谱，主要用于银行、保险、交通行业、人身安全、人身担保、遗产继承、失踪、急救医学等目的。人身担保、遗产继承、失踪、急救医学等目的。",
+  intro:"华大DNA服务提供的DNA档案是用DNA技术建立一个人的基因组图谱，主要用于银行、保险、交通行业、人身安全、人身担保",
+  detailImg: require("./img/detail1.jpg"),
+  detailImgRatio: 3.52, //actual img height/width
+  reviews:[{key:1,user:"用户1***",date:"2016-02-13",review:"★★★★☆"},{key:2,user:"用户2***",date:"2016-01-12",review:"★★★★★"}],
+  sales:[{key:1,user:"用户1***",date:"2016-02-13",price:"¥1200"},{key:2,user:"用户2***",date:"2016-01-12",price:"¥1200"}],
+},{
+  title:"亲子鉴定",
+  star: 4,
+  key: "sgahdgaskhdaks",
+  img: "store3",
+  price: 1800,
+  type:"司法类／非司法类",
+  deliver:"免运费",
+  tag:"特价优惠",
+  lines:4,
+  orderItem: "1",
+  orderID:"",
+  relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"}],
+  sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
+  fullIntro: "亲子鉴定服务可以判定谁是孩子的亲生父亲或者生物学父亲，即鉴定父与子的血缘关系。华大DNA提供法医亲子鉴定、家庭亲子鉴定以及妊娠亲子鉴定三大服务，以满足客户的不同需求。",
+  intro:"亲子鉴定服务可以判定谁是孩子的亲生父亲或者生物学父亲，即鉴定父与子的血缘关系",
+  detailImg: require("./img/detail1.jpg"),
+  detailImgRatio: 3.52, //actual img height/width
+  reviews:[{key:1,user:"用户1***",date:"2016-02-13",review:"★★★★☆"},{key:2,user:"用户2***",date:"2016-01-12",review:"★★★★★"}],
+  sales:[{key:1,user:"用户1***",date:"2016-02-13",price:"¥1200"},{key:2,user:"用户2***",date:"2016-01-12",price:"¥1200"}],
+},{
+  title:"DNA家谱",
+  star: 4,
+  key:"dsjfhlfuiurei",
+  img: "store2",
+  price: 3200,
+  type:"司法类／非司法类",
+  deliver:"免运费",
+  tag:"特价优惠",
+  lines: 4,
+  orderItem: "2",
+  orderID:"",
+  relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"}],
+  sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
+  fullIntro:"华大DNA服务提供源自同一父系或母系的成员之间的亲缘关系鉴定，例如曾祖父、祖父、与孙子、曾孙子之间，同胞兄弟之间，叔侄之间，外曾祖母，外祖母，与外孙女，之间的关系鉴定，绘制父系或母系家谱和遗传关系。",
+  intro:"华大DNA服务提供源自同一父系或母系的成员之间的亲缘关系鉴定，例如曾祖父、祖父、与孙子、曾孙子之间，同胞兄弟之间，叔侄之间",
+  detailImg: require("./img/detail1.jpg"),
+  detailImgRatio: 3.52, //actual img height/width
+  reviews:[{key:1,user:"用户1***",date:"2016-02-13",review:"★★★★☆"},{key:2,user:"用户2***",date:"2016-01-12",review:"★★★★★"}],
+  sales:[{key:1,user:"用户1***",date:"2016-02-13",price:"¥1200"},{key:2,user:"用户2***",date:"2016-01-12",price:"¥1200"}],
+}]
+
+class ItemDetail extends Component{
+  static propTypes = {
+    data: React.PropTypes.object.isRequired,
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
       selectedIndex: 0
     };
-  },
-  _onPress: function (data) {
+  }
+
+  _onPress = (data) => {
     this.props.navigator.push({
       title: "填写订单",
       component:ItemOrder,
       navigationBarHidden: false,
       passProps: { data: data },
     })
-  },
-   _onChange:function (event) {
+  };
+
+  _onChange = (event) => {
     this.setState({
       selectedIndex: event.nativeEvent.selectedSegmentIndex,
     });
-  },
-  _renderDetail:function () {
+  };
+
+  _renderDetail = () => {
     if (this.state.selectedIndex==0) {
-      // to be done
       return(
         <View style={{paddingTop:10, alignItems: 'center'}}>
           <Image source={this.props.data.detailImg} style={{height: (Util.size.width-40)*this.props.data.detailImgRatio, width: Util.size.width-40, resizeMode: Image.resizeMode.contain}}>
@@ -62,7 +126,7 @@ var ItemDetail = React.createClass({
         </View>
       )
     }else if(this.state.selectedIndex==1){
-      var reviews = this.props.data.reviews.map(function(elem) {
+      const reviews = this.props.data.reviews.map((elem) => {
         return(
           <View key={elem.key} style={styles.reviews}>
             <Text style={{flex:2,paddingLeft:10,alignItems:"center"}}>{elem.user}</Text>
@@ -75,9 +139,9 @@ var ItemDetail = React.createClass({
         <View style={{marginTop:10}}>
           {reviews}
         </View>
-      )
+      );
     }else{
-      var sales = this.props.data.sales.map(function(elem) {
+      const sales = this.props.data.sales.map((elem) => {
         return(
           <View key={elem.key} style={styles.reviews}>
             <Text style={{flex:2,paddingLeft:10,alignItems:"center"}}>{elem.user}</Text>
@@ -90,17 +154,18 @@ var ItemDetail = React.createClass({
         <View style={{marginTop:10}}>
           {sales}
         </View>
-      )
+      );
     }
-  },
-  render:function () {
-    var data = this.props.data,
-    star = '★'.repeat(data.star) + '☆'.repeat(5-data.star);
+  };
+
+  render() {
+    const {data} = this.props;
+    let star = '★'.repeat(data.star) + '☆'.repeat(5-data.star);
     return(
       <ScrollView showsVerticalScrollIndicator={false} style={styles.detailContainer}>
         <View style={styles.detailImg}>
           <View style={styles.bgImageWrapper}>
-            <Image source={data.img} style={styles.backgroundImage}>
+            <Image source={{uri:data.img}} style={styles.backgroundImage}>
               <VibrancyView blurType="light" style={styles.blur}>
                 <View style={{paddingTop: 70, paddingLeft: 30,}}>
                   <Text style={{fontSize:28}}>{data.title}</Text>
@@ -135,101 +200,34 @@ var ItemDetail = React.createClass({
       </ScrollView>
     )
   }
-})
+}
 
-/**
- * storeItemData
- * @static 
- * List of all services. 
- * 
- * Data Flow
- * sotreItemData -> Store -> StoreItems 
- * StoreItems -> sotreItemData{key} -> ItemOrder        
- */
 
-var storeItemData=[{
-  title:"DNA档案",
-  star: 5,
-  key: "djsfhkfjdhskf",
-  img: require("image!store1"),
-  price: 1200,
-  type:"司法类／非司法类",
-  deliver:"免运费",
-  tag:"特价优惠",
-  lines: 4,
-  orderItem: "0",
-  orderID:"",
-  relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"},{label: "爷爷",value:"ff"},{label:"奶奶",value:"mm"},{label: "外公",value:"f"},{label:"外婆",value:"m"}],
-  sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
-  fullIntro:"华大DNA服务提供的DNA档案是用DNA技术建立一个人的基因组图谱，主要用于银行、保险、交通行业、人身安全、人身担保、遗产继承、失踪、急救医学等目的。人身担保、遗产继承、失踪、急救医学等目的。",
-  intro:"华大DNA服务提供的DNA档案是用DNA技术建立一个人的基因组图谱，主要用于银行、保险、交通行业、人身安全、人身担保",
-  detailImg: require('./img/detail1.jpg'),
-  detailImgRatio: 3.52, //actual img height/width
-  reviews:[{key:1,user:"用户1***",date:"2016-02-13",review:"★★★★☆"},{key:2,user:"用户2***",date:"2016-01-12",review:"★★★★★"}],
-  sales:[{key:1,user:"用户1***",date:"2016-02-13",price:"¥1200"},{key:2,user:"用户2***",date:"2016-01-12",price:"¥1200"}],
-},{
-  title:"亲子鉴定",
-  star: 4,
-  key: "sgahdgaskhdaks",
-  img: require("image!store3"),
-  price: 1800,
-  type:"司法类／非司法类",
-  deliver:"免运费",
-  tag:"特价优惠",
-  lines:4,
-  orderItem: "1",
-  orderID:"",
-  relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"}],
-  sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
-  fullIntro: "亲子鉴定服务可以判定谁是孩子的亲生父亲或者生物学父亲，即鉴定父与子的血缘关系。华大DNA提供法医亲子鉴定、家庭亲子鉴定以及妊娠亲子鉴定三大服务，以满足客户的不同需求。",
-  intro:"亲子鉴定服务可以判定谁是孩子的亲生父亲或者生物学父亲，即鉴定父与子的血缘关系",
-  detailImg: require('./img/detail1.jpg'),
-  detailImgRatio: 3.52, //actual img height/width
-  reviews:[{key:1,user:"用户1***",date:"2016-02-13",review:"★★★★☆"},{key:2,user:"用户2***",date:"2016-01-12",review:"★★★★★"}],
-  sales:[{key:1,user:"用户1***",date:"2016-02-13",price:"¥1200"},{key:2,user:"用户2***",date:"2016-01-12",price:"¥1200"}],
-},{
-  title:"DNA家谱",
-  star: 4,
-  key:"dsjfhlfuiurei",
-  img: require("image!store2"),
-  price: 3200,
-  type:"司法类／非司法类",
-  deliver:"免运费",
-  tag:"特价优惠",
-  lines: 4,
-  orderItem: "2",
-  orderID:"",
-  relation:[{label: "父亲",value:"f"},{label:"母亲",value:"m"}],
-  sample:[{label: "血液",value:"f"},{label:"。。。",value:"m"}],
-  fullIntro:"华大DNA服务提供源自同一父系或母系的成员之间的亲缘关系鉴定，例如曾祖父、祖父、与孙子、曾孙子之间，同胞兄弟之间，叔侄之间，外曾祖母，外祖母，与外孙女，之间的关系鉴定，绘制父系或母系家谱和遗传关系。",
-  intro:"华大DNA服务提供源自同一父系或母系的成员之间的亲缘关系鉴定，例如曾祖父、祖父、与孙子、曾孙子之间，同胞兄弟之间，叔侄之间",
-  detailImg: require('./img/detail1.jpg'),
-  detailImgRatio: 3.52, //actual img height/width
-  reviews:[{key:1,user:"用户1***",date:"2016-02-13",review:"★★★★☆"},{key:2,user:"用户2***",date:"2016-01-12",review:"★★★★★"}],
-  sales:[{key:1,user:"用户1***",date:"2016-02-13",price:"¥1200"},{key:2,user:"用户2***",date:"2016-01-12",price:"¥1200"}],
-}]
+class StoreItemList extends Component{
+  static propTypes = {
+    data: React.PropTypes.array.isRequired,
+  };
 
-var StoreItemList = React.createClass({
-  _onPress: function (index) {
-    var data = this.props.data[index];
+  _onPress = (index) => {
+    const data = this.props.data[index];
     this.props.navigator.push({
       title: data.title,
       component:ItemDetail,
       navigationBarHidden: false,
       passProps: { data: data },
     })
-  },
-  render: function () {
-    var data = this.props.data, 
-        star = '',
-        item = this;
-    var StoreItems = data.map(function(elem,index) {
+  };
+
+  render() {
+    const data = this.props.data;
+    let star = '';
+    const StoreItems = data.map((elem,index) => {
       star = '★'.repeat(elem.star) + '☆'.repeat(5-elem.star)
       return (
-        <TouchableHighlight style={{marginBottom: 5}}  key={elem.key} onPress={()=>item._onPress(index)}>
+        <TouchableHighlight style={{marginBottom: 5}}  key={elem.key} onPress={()=>this._onPress(index)}>
           <View style={styles.storeItemContainer}>
             <View style={styles.bgImageWrapper}>
-              <Image style={styles.backgroundImage} source={elem.img}></Image>
+              <Image style={styles.backgroundImage} source={{uri:elem.img}}></Image>
             </View>
             <View style={styles.itemDrop}>
               <View style={styles.itemText1}>
@@ -250,21 +248,23 @@ var StoreItemList = React.createClass({
       <View style={{flex:1}}>
         {StoreItems}
       </View>
-    )
+    );
   }
 
-})
+}
 
-var StoreView = React.createClass({
-  getInitialState: function (){
-    return {
+class StoreView extends Component{
+  constructor(){
+    super();
+    this.state = {
       isRefreshing: false,
       loaded: 0,
       rowData: storeItemData,
       refreshTitle: "下拉更新"
     };
-  },
-  _onRefresh:function () {
+  }
+
+  _onRefresh() {
     this.setState({
       isRefreshing: true,
       refreshTitle: "正在更新"
@@ -285,29 +285,30 @@ var StoreView = React.createClass({
       }, 1000);
 
     }, 1000);
-  },
-  render: function () {
+  }
+
+  render() {
     return(
       <ScrollView showsVerticalScrollIndicator={false} style={styles.storeContainer}
       refreshControl={
           <RefreshControl
             refreshing={this.state.isRefreshing}
             title={this.state.refreshTitle}
-            onRefresh={this._onRefresh}
+            onRefresh={() => this._onRefresh()}
             tintColor="#ddd"/>}>
         <StoreItemList navigator={this.props.navigator} data={this.state.rowData}></StoreItemList>
       </ScrollView>
     )
   }
 
-})
+}
 
-var Store = React.createClass({
-  getInitialState: function () {
+export default class extends Component{
+  componentDidMount() {
     StatusBarIOS.setStyle(0);
-    return null;
-  },
-  render: function(){
+  }
+
+  render(){
     return (
       <NavigatorIOS
       ref='nav'
@@ -321,8 +322,7 @@ var Store = React.createClass({
       tintColor="#777"/>
     );
   }
-
-});
+}
 
 /**
  * responsive
@@ -330,8 +330,8 @@ var Store = React.createClass({
  * @iphone5/5s ratio=2
  * 
  */
-var responsive = {
-}
+let responsive = {};
+
 if (Util.ratio === 2 ) {
   responsive = {
     noblurT: 180,
@@ -468,10 +468,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: Util.pixel,
     borderBottomColor:"#bbb",
     paddingLeft:10
-  }
+  },
 });
-
-
-module.exports = Store;
 
 
