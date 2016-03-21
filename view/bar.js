@@ -1,3 +1,4 @@
+'use strict';
 import React, {Component,TabBarIOS,StatusBarIOS,Text,View} from 'react-native';
 import Util from './utils';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -19,6 +20,7 @@ export default class extends Component{
   };
 
   static propTypes = {
+    uid: React.PropTypes.string.isRequired,
     isFirstTime: React.PropTypes.string.isRequired,
   };
 
@@ -27,6 +29,7 @@ export default class extends Component{
     this.state = {
       selectedTab: this.props.isFirstTime==="1"? '我的帐户':'华大商城',
       isFirstTime: this.props.isFirstTime==="1"? true: false,
+      uid: this.props.uid,
     };
   }
 
@@ -76,7 +79,7 @@ export default class extends Component{
         selectedIconName="ios-person"
         onPress={ () => this._changeTab('我的帐户') }
         selected={ this.state.selectedTab === '我的帐户'} >
-          <User isFirstTime={this.state.isFirstTime} callbackLogout={this.props.callbackLogout}/>
+          <User uid={this.state.uid} isFirstTime={this.state.isFirstTime} callbackLogout={this.props.callbackLogout}/>
         </Icon.TabBarItem>
       </TabBarIOS>
     );

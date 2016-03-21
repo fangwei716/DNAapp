@@ -1,6 +1,7 @@
 /**
  * from react native tutorial
  */
+'use strict';
 import React,{PixelRatio} from 'react-native';
 import Dimensions from 'Dimensions';
 
@@ -29,6 +30,7 @@ const Util = {
   },
   //post请求
   post(url, data, callback) {
+    console.log(data);
     var fetchOptions = {
       method: 'POST',
       headers: {

@@ -1,3 +1,4 @@
+'use strict';
 import React, {AsyncStorage,Component,TouchableHighlight,StyleSheet,StatusBarIOS,TextInput,Text,Image,AlertIOS,View} from 'react-native';
 import Util from './utils';
 import Icon from 'react-native-vector-icons/FontAwesome';;
@@ -30,7 +31,7 @@ export default class extends Component{
   }
 
   _login(){
-    this.loginSuccess();
+    // this.loginSuccess();
     /**
      * reqData = {
      *   username:,
@@ -44,35 +45,36 @@ export default class extends Component{
      *   loginState
      * }
      */
-    // Util.post("http://dnafw.com:8100/iosapp/login/",this.refs.form.getValues(), (resData) => {
-    //     console.log(resData)
-    //     if (resData) {
-    //       if (resData.error=="true") {
-    //         switch(resData.loginState){
-    //            case "2": 
-    //               AlertIOS.alert('登陆失败', '用户名不存在');
-    //               break;
-    //            case "3":
-    //               AlertIOS.alert('登陆失败', '用户名或密码不匹配');
-    //         }
-    //       }else{
-    //         this.loginSuccess();
-    //         AsyncStorage.setItem('loginState',"1");
-    //         AsyncStorage.setItem('isFirstTime',resData.isFirstTime);
-    //         AsyncStorage.setItem('uid',resData.uid);
-    //       }
-    //     }else{
-    //       AlertIOS.alert('登陆失败', '服务器无响应');
-    //     }
-    // })
+    Util.post("http://dnafw.com:8100/iosapp/login/", {
+        username: this.refs.form.getValues().username.trim(),
+        password: this.refs.form.getValues().password,
+      }, (resData) => {
+        console.log(resData)
+        if (resData) {
+          if (resData.error!=="false") {
+            switch(resData.loginState){                                                                  
+              case "2": 
+                AlertIOS.alert('登陆失败', '用户名不存在');
+                break;
+              case "3":
+                AlertIOS.alert('登陆失败', '用户名或密码不匹配');
+            }
+          }else{
+            this.loginSuccess();
+            AsyncStorage.setItem('loginState',"1");
+            AsyncStorage.setItem('isFirstTime',resData.isFirstTime);
+            AsyncStorage.setItem('uid',resData.uid);
+          }
+        }else{
+          AlertIOS.alert('登陆失败', '服务器无响应');
+        }
+    })
   }
 
   _loginSuccess() {
-    //delete when ready
-    AsyncStorage.setItem('loginState',"1")
-    // end of delete
+    // for now, isFirstTime must be 0 to login
     const newState = {
-      onSignup: false
+      onSignup: false,
     }
     this.setState(newState);
     this.props.callbackLogin(newState);

@@ -68,12 +68,6 @@ import Video from 'react-native-video';
 class DNA extends Component{
   constructor() {
     super();
-    StatusBarIOS.setStyle(1);
-    // to delete; for test purpose only
-    AsyncStorage.setItem('uid','aifhioewhfjkdsfhkshgafyeiwfhdsjf');
-    // "0" not first time, "1" first time
-    AsyncStorage.setItem('isFirstTime','0');
-    // end of test
     
     //to check is logined
     // Util.get("http://dnafw.com:8100/iosapp/checkLogin?uid="+AsyncStorage.getItem('uid'),function(resData) {
@@ -94,6 +88,7 @@ class DNA extends Component{
   }
 
   componentWillMount() {
+    StatusBarIOS.setStyle(1);
     this._renderPage();
   }
 
@@ -125,6 +120,7 @@ class DNA extends Component{
       let lsView = null;
       if (this.state.isLogin) {
         content= <Bar
+          uid={this.state.uid}
           isFirstTime={this.state.isFirstTime}
           callbackLogout={this._onStateChange}
         />

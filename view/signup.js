@@ -1,3 +1,4 @@
+'use strict';
 import React, {AsyncStorage,Component,TouchableHighlight,StyleSheet,TextInput,Text,Modal,Image,AlertIOS,StatusBarIOS,View} from 'react-native';
 import Util from './utils';
 import {UserInfo} from './user';
@@ -45,11 +46,12 @@ export default class extends Component{
       isLogin: this.props.isLogin,
       onSignup: this.props.onSignup,
       timeStamp: 0,
+      phone: "",
     };
   }
 
   _signup(){
-    this.signupSuccess();
+    // this.signupSuccess();
     
     /**
      * reqData = {
@@ -63,29 +65,30 @@ export default class extends Component{
      * }
      */
 
-    // var d = new Date();
-    // var timeStamp = d.getTime();
-    // Util.post("http://dnafw.com:8100/iosapp/verify_validate_code/",{
-    //   phone: this.refs.form.getValues().phoneNum,
-    //   timeOfOperation: timeStamp,
-    //   code:this.refs.form.getValues().veriCode,
-    // },(resData) => {
-    //     if (resData) {
-    //       if (!resData.correct) {
-    //         AlertIOS.alert('注册失败', '验证码错误');
-    //       }else{
-    //         this.signupSuccess();
-    //       }
-    //     }else{
-    //       AlertIOS.alert('注册失败', '服务器无响应');
-    //     }
-    // })
+    var d = new Date();
+    var timeStamp = d.getTime();
+    Util.post("http://dnafw.com:8100/iosapp/verify_validate_code/",{
+      phone: this.refs.form.getValues().phoneNum,
+      timeOfOperation: timeStamp,
+      code:this.refs.form.getValues().veriCode,
+    },(resData) => {
+        if (resData) {
+          if (resData.correct==="false") {
+            AlertIOS.alert('注册失败', '验证码错误');
+          }else{
+            this.signupSuccess();
+          }
+        }else{
+          AlertIOS.alert('注册失败', '服务器无响应');
+        }
+    })
   }
 
   _signupSuccess() {
     const newState = {
       onSignup: false,
       showModal: true,
+      phone: this.refs.form.getValues().phoneNum,
     };
     this.setState(newState);
     StatusBarIOS.setStyle(0);
@@ -132,12 +135,12 @@ export default class extends Component{
       this.setState({
          timeStamp: timeStamp,
       });
-      Util.post("http://dnafw.com/iosapp:8100/send_validate_code/",{ 
+      Util.post("http://dnafw.com:8100/iosapp/send_validate_code/",{ 
         phone: this.refs.form.getValues().phoneNum,
         timeOfOperation: timeStamp,
       },(resData) => {
           if (resData) {
-            if (resData.error=="true") {
+            if (resData.error!=="false") {
               AlertIOS.alert('获取验证码失败', resData.message=='0'?'发送失败':'手机号已被注册');
               this.setState({
                  timeStamp: 0,
@@ -152,12 +155,10 @@ export default class extends Component{
             });
           }
       })
-    //  delete the following
-    //   AlertIOS.alert("手机号无效", this.refs.form.getValues().phoneNum)
+      
     } else {
       AlertIOS.alert("获取验证码失败", "一分钟只可获取一次")
     }
-    
   }
 
   render() {
@@ -202,7 +203,7 @@ export default class extends Component{
               <TouchableHighlight underlayColor="#fff" onPress={() => this._submit()}><Text style={[styles.btnText,,{width:80,textAlign:"right"}]}>提交</Text></TouchableHighlight>
             </View>
             <View style={styles.modalContent}>
-              <UserInfo ref="info" data={this.state.userData}/>
+              <UserInfo ref="info" data={this.state.userData} phone={this.state.phone}/>
             </View>
           </View>
         </Modal>

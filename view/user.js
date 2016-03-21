@@ -1,3 +1,4 @@
+'use strict';
 import React, {Component,AsyncStorage,AlertIOS,NavigatorIOS,TouchableHighlight,TouchableOpacity,StyleSheet,TextInput,ListView,WebView,ScrollView,StatusBarIOS,Text,Image,View} from 'react-native';
 import Util from './utils';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -34,29 +35,34 @@ export class UserInfo extends Component{
   }
 
   _saveChanges() {
-    AlertIOS.alert('提交成功', '请耐心等待审核');
-    return true
+    // AlertIOS.alert('提交成功', '请耐心等待审核');
+    // return true
     // SSH post: this.refs.form.getValues()
-    // var onThis = this;
-    // Util.post("http://dnafw.com:8100/iosapp/update_info/",{
-    //    info: this.refs.form.getValues(),
-    //    uid: AsyncStorage.getItem("uid"),
-    //    // images are sent as jpeg base64
-    //    idFront: this.state.idFrontSourceData,
-    //    idBack: this.state.idBackSourceData,
-    // },function(resData) {
-    //     if (resData) {
-    //       if (resData.error) {
-    //         AlertIOS.alert('提交失败', '某某资料错误');
-    //         return false
-    //       }else{
-    //         return true
-    //       }
-    //     }else{
-    //       AlertIOS.alert('提交失败', '服务器无响应');
-    //       return false
-    //     }
-    // })
+    const info = this.refs.form.getValues();
+    Util.post("http://dnafw.com:8100/iosapp/register/",{
+       name: info.name,
+       password: info.password,
+       id_number: info.id_number,
+       address: info.address,
+       gender: "男",
+       alipay_number: "12333",
+       phone: this.props.phone,
+       // images are sent as jpeg base64
+       id_card_1: this.state.idFrontSourceData,
+       id_card_2: this.state.idBackSourceData,
+    }, (resData) => {
+        if (resData) {
+          if (resData.message==="0") {
+            AlertIOS.alert('提交失败', '某某资料错误');
+            return false
+          }else{
+            return true
+          }
+        }else{
+          AlertIOS.alert('提交失败', '服务器无响应');
+          return false
+        }
+    })
   }
 
   _uploadId() {
@@ -163,10 +169,10 @@ export class UserInfo extends Component{
       oldPass = <View></View>
     }
 
-    if (!data.hasIdLinked) {
+    if (true) {
       idInput = <View style={styles.orderInputContainer}>
           <Text style={styles.orderInputText}>身份证号码：</Text>
-          <TextInput type="TextInput" name="idNum" keyboardType="number-pad" style={styles.orderInput} ref="id" returnKeyType = {"next"} onFocus={()=>this._inputFocused("id")} onSubmitEditing={(event) => {this._refFocus("address");}} />
+          <TextInput type="TextInput" name="id_number" keyboardType="number-pad" style={styles.orderInput} ref="id" returnKeyType = {"next"} onFocus={()=>this._inputFocused("id")} onSubmitEditing={(event) => {this._refFocus("address");}} />
         </View>
       idUpload = <View style={[styles.orderButtonContainer,{paddingBottom:30}]}>
           <TouchableHighlight underlayColor="#eee" style={[styles.btn_if,{backgroundColor:'#ddd'}]} onPress={() => this._uploadId()}>
@@ -191,7 +197,7 @@ export class UserInfo extends Component{
         <Form style={styles.orderContainer} ref="form">
           <View style={styles.orderInputContainer}>
             <Text style={styles.orderInputText}>用户名：</Text>
-            <TextInput defaultValue={data.username} type="TextInput" name="username" style={styles.orderInput} ref="username" returnKeyType = {"next"} onFocus={()=>this._inputFocused("username")}  onSubmitEditing={(event) => {this._refFocus("email");}} />
+            <TextInput defaultValue={data.username} type="TextInput" name="name" style={styles.orderInput} ref="username" returnKeyType = {"next"} onFocus={()=>this._inputFocused("username")}  onSubmitEditing={(event) => {this._refFocus("email");}} />
           </View>
           <View style={styles.orderInputContainer}>
             <Text style={styles.orderInputText}>邮箱：</Text>
@@ -199,7 +205,7 @@ export class UserInfo extends Component{
           </View>
           <View style={styles.orderInputContainer}>
             <Text style={styles.orderInputText}>新密码：</Text>
-            <TextInput  type="TextInput"  password={true} name="newPassword" style={styles.orderInput} ref="password" returnKeyType = {"next"} onFocus={()=>this._inputFocused("password")}  onSubmitEditing={(event) => {this._refFocus("id");}} />
+            <TextInput  type="TextInput"  password={true} name="password" style={styles.orderInput} ref="password" returnKeyType = {"next"} onFocus={()=>this._inputFocused("password")}  onSubmitEditing={(event) => {this._refFocus("id");}} />
           </View>
           {idInput}
           <View style={styles.orderInputContainer}>
@@ -252,19 +258,17 @@ class UserRefund extends Component{
       if (inputMoney>this.state.balance) {
         AlertIOS.alert("提现失败","你的钱包里没有足够的钱")
       }else{
-        AlertIOS.alert("提现成功","将在24小时内转到你的支付宝账户");
-        this.props.updateMoney(this.state.balance-inputMoney);
-        this.props.navigator.pop();
-        // Util.post("http://dnafw.com:8100/iosapp/withdraw_to_alipay",{
-        //   uid: this.state.uid,
-        //   money: inputMoney
-        // },function(resData) {
-        //    if (resData.message=="1") {
-        //       AlertIOS.alert("提现成功","将在24小时内转到你的支付宝账户");
-        //       this.props.updateMoney(resData.balance);
-        //       this.props.navigator.pop();
-        //    }
-        // })
+        Util.post("http://dnafw.com:8100/iosapp/withdraw_to_alipay/",{
+          uid: this.state.uid,
+          money: inputMoney
+        },(resData) => {
+           if (resData.message=="1") {
+              console.log(resData);
+              AlertIOS.alert("提现成功","将在24小时内转到你的支付宝账户");
+              this.props.updateMoney(resData.balance);
+              this.props.navigator.pop();
+           }
+        })
       }
   }
 
@@ -420,102 +424,102 @@ class UserIncome extends Component{
 
   constructor(props) {
     super(props);
-    uid = this.props.uid;
-    // var data, sectionData;
-    // Util.get("http://dnafw.com:8100/iosapp/balance_history/?uid="+uid,function(resData) {
-    //     if (resData.userData){
-    //         data = resData.data;
-    //         sectionData = resData.sectionData;
-    //     }
-    // })
-    //return resData{data:data,sectionData:sectionData}
-    const data = [[{
-        income:"+ ¥50",
-        day:"02-23",
-        week:"周二",
-        icon:'baby',
-        orderItem:"亲子鉴定",
-        orderId:"65438023"
-      },{
-        income:"- ¥320",
-        day:"02-22",
-        week:"周一",
-        icon:'refund',
-        orderItem:"提现到支付宝",
-        orderId:"f7d9437"
-      },{
-        income:"+ ¥70",
-        day:"02-14",
-        week:"周日",
-        icon:'file',
-        orderItem:"DNA档案",
-        orderId:"749327474"
-      },{
-        income:"+ ¥60",
-        day:"02-10",
-        week:"周三",
-        icon:'baby',
-        orderItem:"亲子鉴定",
-        orderId:"237957923"
-      },],[{
-        income:"+ ¥60",
-        day:"01-27",
-        week:"周三",
-        icon:'family',
-        orderItem:"DNA家谱",
-        orderId:"597927595"
-      },{
-        income:"+ ¥60",
-        day:"01-16",
-        week:"周六",
-        icon:'file',
-        orderItem:"DNA档案",
-        orderId:"598734987"
-      },{
-        income:"+ ¥60",
-        day:"01-15",
-        week:"周二",
-        icon:'baby',
-        orderItem:"亲子鉴定",
-        orderId:"597927595"
-      },{
-        income:"+ ¥60",
-        day:"01-11",
-        week:"周一",
-        icon:'file',
-        orderItem:"DNA档案",
-        orderId:"598734987"
-      },{
-        income:"+ ¥60",
-        day:"01-03",
-        week:"周日",
-        icon:'family',
-        orderItem:"DNA家谱",
-        orderId:"597927595"
-      },{
-        income:"+ ¥60",
-        day:"01-16",
-        week:"周六",
-        icon:'file',
-        orderItem:"DNA档案",
-        orderId:"598734987"
-      }],[{
-        income:"+ ¥60",
-        day:"12-25",
-        week:"周五",
-        icon:'file',
-        orderItem:"DNA档案",
-        orderId:"759473957"
-      },{
-        income:"+ ¥60",
-        day:"12-11",
-        week:"周五",
-        icon:'family',
-        orderItem:"DNA家谱",
-        orderId:"493275429"
-      },]];
-    const sectionData = ["本月","2016年1月","2015年12月"]
-    getSectionData = function(dataIncome, sectionID) {
+    const uid = this.props.uid;
+    var data, sectionData;
+    Util.get("http://dnafw.com:8100/iosapp/balance_history/?uid="+uid,function(resData) {
+      if (resData.data){
+        data = resData.data;
+        sectionData = resData.sectionData;
+      }
+    })
+    // return resData{data:data,sectionData:sectionData}
+    // const data = [[{
+    //     income:"+ ¥50",
+    //     day:"02-23",
+    //     week:"周二",
+    //     icon:'baby',
+    //     orderItem:"亲子鉴定",
+    //     orderId:"65438023"
+    //   },{
+    //     income:"- ¥320",
+    //     day:"02-22",
+    //     week:"周一",
+    //     icon:'refund',
+    //     orderItem:"提现到支付宝",
+    //     orderId:"f7d9437"
+    //   },{
+    //     income:"+ ¥70",
+    //     day:"02-14",
+    //     week:"周日",
+    //     icon:'file',
+    //     orderItem:"DNA档案",
+    //     orderId:"749327474"
+    //   },{
+    //     income:"+ ¥60",
+    //     day:"02-10",
+    //     week:"周三",
+    //     icon:'baby',
+    //     orderItem:"亲子鉴定",
+    //     orderId:"237957923"
+    //   },],[{
+    //     income:"+ ¥60",
+    //     day:"01-27",
+    //     week:"周三",
+    //     icon:'family',
+    //     orderItem:"DNA家谱",
+    //     orderId:"597927595"
+    //   },{
+    //     income:"+ ¥60",
+    //     day:"01-16",
+    //     week:"周六",
+    //     icon:'file',
+    //     orderItem:"DNA档案",
+    //     orderId:"598734987"
+    //   },{
+    //     income:"+ ¥60",
+    //     day:"01-15",
+    //     week:"周二",
+    //     icon:'baby',
+    //     orderItem:"亲子鉴定",
+    //     orderId:"597927595"
+    //   },{
+    //     income:"+ ¥60",
+    //     day:"01-11",
+    //     week:"周一",
+    //     icon:'file',
+    //     orderItem:"DNA档案",
+    //     orderId:"598734987"
+    //   },{
+    //     income:"+ ¥60",
+    //     day:"01-03",
+    //     week:"周日",
+    //     icon:'family',
+    //     orderItem:"DNA家谱",
+    //     orderId:"597927595"
+    //   },{
+    //     income:"+ ¥60",
+    //     day:"01-16",
+    //     week:"周六",
+    //     icon:'file',
+    //     orderItem:"DNA档案",
+    //     orderId:"598734987"
+    //   }],[{
+    //     income:"+ ¥60",
+    //     day:"12-25",
+    //     week:"周五",
+    //     icon:'file',
+    //     orderItem:"DNA档案",
+    //     orderId:"759473957"
+    //   },{
+    //     income:"+ ¥60",
+    //     day:"12-11",
+    //     week:"周五",
+    //     icon:'family',
+    //     orderItem:"DNA家谱",
+    //     orderId:"493275429"
+    //   },]];
+    // const sectionData = ["本月","2016年1月","2015年12月"]
+    const getSectionData = function(dataIncome, sectionID) {
       return dataIncome[sectionID];
     };
 
@@ -623,33 +627,29 @@ class UserShare extends Component{
 
 class UserView extends Component{
   static propTypes = {
+    uid: React.PropTypes.string.isRequired,
     isFirstTime: React.PropTypes.bool.isRequired,
     callbackLogout: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
-    // var userData, userBalance;
-    // Util.get("http://dnafw.com:8100/iosapp/user_info?uid="+AsyncStorage.getItem('uid'),function(resData) {
-    //     if (resData.userData){
-    //           userData=resData.userData;
-    //           userBalance=resData.userBalance;
-    //     }
-    // })
-    let userBalance = 120;
-    const userData = {
+    let userData, userBalance;
+    // AsyncStorage.getItem('uid').then((value) => {console.log(value)});
+
+    userBalance = 0;
+    userData = {
       uid:"",
       isNew: true,
-      username: "Wei Fang",
-      cellphone: 1212132421,
+      username: "",
+      cellphone: "",
       email:null,
       alipayLinked: false,
-      hasIdLinked: false,
       address:"",
       postcode:"",
-      img: require('./img/icon.jpg'), //{uri:"the img url"} should use default "?" avatar for first time user
+      img: "http://www.dnafw.com:8100/media/user/avatar/user-default.jpg", 
     };
-    
+
     this.state = {
       isFirstTime: this.props.isFirstTime,
       userData: userData,
@@ -657,10 +657,21 @@ class UserView extends Component{
     };
   }
 
+  componentWillMount() {
+    Util.get("http://dnafw.com:8100/iosapp/my_info?uid="+this.props.uid, (resData) => {
+      if (resData.error!=="true"){
+        console.log(resData);
+        this.setState({
+          userData: resData.userData,
+          balance: resData.userBalance,
+        })
+      } 
+    });
+  }
+
   _updateMoney = (amount) => {
-    console.log("success")
     this.setState({
-    balance_history:amount
+      balance:amount
     })
   };
 
@@ -677,7 +688,7 @@ class UserView extends Component{
       title: "收支明细",
       component:UserIncome,
       navigationBarHidden: false,
-      passProps:{uid:this.state.userData.uid}
+      passProps:{uid:this.props.uid}
     })
   }
 
@@ -748,9 +759,9 @@ class UserView extends Component{
         <View style={{marginBottom:35}}>
           <View style={styles.userHero}>
             <View style={styles.bgImageWrapper}>
-              <Image source={data.img} style={styles.backgroundImage}>
+              <Image source={{uri:data.img}} style={styles.backgroundImage}>
                 <BlurView blurType="light" style={styles.blur}>
-                  <Image source={data.img} style={styles.icon}>
+                  <Image source={{uri:data.img}} style={styles.icon}>
                   </Image>
                   <Text style={{fontSize:18,color:"#3a3a3a"}}>{data.username? data.username:"用户名未设置"}</Text>
                   <Text style={{fontSize:13,color:"#3a3a3a",marginTop:5}}>帐号：{data.cellphone}</Text>
@@ -815,6 +826,7 @@ class UserView extends Component{
 
 export default class extends Component{
   static propTypes = {
+    uid: React.PropTypes.string.isRequired, 
     isFirstTime: React.PropTypes.bool.isRequired, 
     callbackLogout: React.PropTypes.func.isRequired,
   };
@@ -823,6 +835,7 @@ export default class extends Component{
     super(props);
     this.state = {
       isFirstTime: this.props.isFirstTime,
+      uid: this.props.uid,
     };
   }
 
@@ -833,6 +846,7 @@ export default class extends Component{
   render(){
     const callback = this.props.callbackLogout;
     const isFirstTime = this.state.isFirstTime;
+    const uid = this.state.uid;
 
     return (
       <NavigatorIOS
@@ -844,6 +858,7 @@ export default class extends Component{
           passProps: {
             callbackLogout: callback,
             isFirstTime: isFirstTime,
+            uid: uid,
           },
           shadowHidden: true
         }}

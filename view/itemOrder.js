@@ -1,3 +1,4 @@
+'use strict';
 import React, {AsyncStorage,Component,ProgressViewIOS,TouchableHighlight,StyleSheet,TextInput,PickerIOS,ScrollView,Text,View} from 'react-native';
 import Util from './utils';
 import Icon from 'react-native-vector-icons/FontAwesome';
