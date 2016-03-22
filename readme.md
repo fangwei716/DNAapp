@@ -7,6 +7,8 @@ Require node.js & xcode
 
 2. `run DNA.xcodeproj`
 
+3. run on xcode ios simulator (for generic device, check v0.1 - release branch)
+
 ## Screenshots
 ![login](https://raw.githubusercontent.com/fangwei716/DNAapp/master/screenshot/login.gif)
 
