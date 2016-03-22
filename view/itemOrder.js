@@ -1,5 +1,5 @@
 'use strict';
-import React, {AsyncStorage,Component,ProgressViewIOS,TouchableHighlight,StyleSheet,TextInput,PickerIOS,ScrollView,Text,View} from 'react-native';
+import React, {AsyncStorage,Component,ProgressViewIOS,TouchableHighlight,StyleSheet,TextInput,AlertIOS,ScrollView,Text,View} from 'react-native';
 import Util from './utils';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Alipay from './alipay';
@@ -23,6 +23,11 @@ import Form from 'react-native-form';
  */
 
 export default class extends Component{
+  static propTypes = {
+    data: React.PropTypes.object.isRequired,
+    uid: React.PropTypes.string.isRequired,
+  };
+
   constructor(props) {
     super(props);
     styles.form1={
@@ -37,22 +42,6 @@ export default class extends Component{
       height:0,
       opacity:0
     }
-    // var ItemOrderData ={};
-    // Util.post("http://dnafw.com:8100/iosapp/init_order/",{
-    //   uid: AsyncStorage.getItem("uid"),
-    //   orderItem: this.props.data.orderItem,
-    //   orderID: this.props.data.orderID,
-    // },(resData) => {
-    //     if (resData.ItemOrderData) {
-    //       if (resData.error) {
-    //          console.log("error")
-    //       }else{
-    //           ItemOrderData = resData.ItemOrderData
-    //       }
-    //     }else{
-    //       AlertIOS.alert('创建订单失败', '服务器无响应');
-    //     }
-    // })
     const ItemOrderData ={
       orderID: "dsjhflsjdklcxsnkds", 
       price:1200, 
@@ -82,6 +71,24 @@ export default class extends Component{
       form2:{
       }
     };
+  }
+
+  componentWillMount() {
+    // let ItemOrderData ={};
+    // Util.post("http://dnafw.com:8100/iosapp/init_order/",{
+    //   uid: AsyncStorage.getItem("uid"),
+    //   orderItem: this.props.data.orderItem,
+    // },(resData) => {
+    //     if (resData.ItemOrderData) {
+    //       if (resData.error) {
+    //          console.log("error")
+    //       }else{
+    //           ItemOrderData = resData.ItemOrderData
+    //       }
+    //     }else{
+    //       AlertIOS.alert('创建订单失败', '服务器无响应');
+    //     }
+    // })
   }
 
   componentDidMount() {
@@ -152,36 +159,28 @@ export default class extends Component{
   };
 
   _pay(data) {
-    // to delete, for test only
-   this.props.navigator.push({
-      title: "支付宝",
-      component:Alipay,
-      navigationBarHidden: false,
-      passProps: { data: data },
-    });
-    // end of to delete
-    
-    // Util.post("http://dnafw.com:8100/iosapp/create_order/",{
-    //   uid: AsyncStorage.getItem("uid"),
-    //   form1:this.refs.form1.getValues(),
-    //   form2:this.refs.form2.getValues(),
-    //   orderId: this.state.orderID,
-    // },(resData) => {
-    //     if (resData) {
-    //       if (resData.error) {
-    //         AlertIOS.alert('订单信息有误', resData.errMsg);
-    //       }else{
-    //            this.props.navigator.push({
-    //             title: "支付宝",
-    //             component:Alipay,
-    //             navigationBarHidden: false,
-    //             passProps: { data: resData },
-    //           })
-    //       }
-    //     }else{
-    //       AlertIOS.alert('支付失败', '服务器无响应');
-    //     }
-    // })
+    Util.post("http://dnafw.com:8100/iosapp/create_order/",{
+      uid: this.props.uid,
+      form1:this.refs.form1.getValues(),
+      form2:this.refs.form2.getValues(),
+      orderId: this.state.orderID,
+      productName: "亲子鉴定",
+    },(resData) => {
+        if (resData) {
+          if (resData.message==="0") {
+            AlertIOS.alert('订单信息有误', resData.errMsg);
+          }else{
+               this.props.navigator.push({
+                title: "支付宝",
+                component:Alipay,
+                navigationBarHidden: false,
+                passProps: { data: resData },
+              })
+          }
+        }else{
+          AlertIOS.alert('支付失败', '服务器无响应');
+        }
+    })
   }
 
   _addTester() {

@@ -143,6 +143,10 @@ class UpdateList extends Component{
 }
 
 export default class extends Component{
+  static propTypes = {
+    uid: React.PropTypes.string.isRequired,
+  };
+
   componentDidMount() {
     StatusBarIOS.setStyle(0);
     // Util.get("http://dnafw.com:8100/iosapp/promote",function(resData) {
@@ -162,7 +166,7 @@ export default class extends Component{
         initialRoute={{
           title:"推广动态",
           component: UpdateList,
-          passProps: {data: updateData},
+          passProps: {data: updateData, uid:this.props.uid},
           shadowHidden: true
         }}
         itemWrapperStyle={styles.itemWrapper}

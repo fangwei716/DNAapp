@@ -104,12 +104,12 @@ class DNA extends Component{
       this.setState({
         uid: value,
       });
-
-      return AsyncStorage.getItem("isFirstTime");
-    }).then((value) => {
-      this.setState({
-        isFirstTime: value
-      });
+      
+    //   return AsyncStorage.getItem("isFirstTime");
+    // }).then((value) => {
+    //   this.setState({
+    //     isFirstTime: value
+    //   });
 
       return AsyncStorage.getItem("loginState");
     }).then((value) => {

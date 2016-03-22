@@ -94,6 +94,7 @@ const storeItemData=[{
 class ItemDetail extends Component{
   static propTypes = {
     data: React.PropTypes.object.isRequired,
+    uid: React.PropTypes.string.isRequired,
   };
 
   constructor(props) {
@@ -108,7 +109,7 @@ class ItemDetail extends Component{
       title: "填写订单",
       component:ItemOrder,
       navigationBarHidden: false,
-      passProps: { data: data },
+      passProps: { data: data, uid: this.props.uid},
     })
   };
 
@@ -169,15 +170,15 @@ class ItemDetail extends Component{
             <Image source={{uri:data.img}} style={styles.backgroundImage}>
               <VibrancyView blurType="light" style={styles.blur}>
                 <View style={{paddingTop: 70, paddingLeft: 30,}}>
-                  <Text style={{fontSize:28}}>{data.title}</Text>
-                  <Text style={{fontSize:15,marginTop:5}}>{star}</Text>
+                  <Text style={{color:"rgba(255,255,255,0.7)",fontSize:28}}>{data.title}</Text>
+                  <Text style={{color:"rgba(255,255,255,0.7)",fontSize:15,marginTop:5}}>{star}</Text>
                   <View style={styles.detailPrice}>
-                    <Text numberOfLines={data.lines} style={{fontSize:20}}>¥ {data.price}</Text>
+                    <Text numberOfLines={data.lines} style={{color:"rgba(255,255,255,0.7)",fontSize:20}}>¥ {data.price}</Text>
                   </View>
                   <View style={{flexWrap:"wrap",width:Util.size.width-60,flexDirection:"row",marginTop:10}}>
-                    <Icon size={15} style={{paddingRight:15}} name="dot-circle-o"> <Text>{data.type}</Text></Icon>
-                    <Icon size={15} style={{paddingRight:15}} name="shopping-bag"> <Text>{data.deliver}</Text></Icon>
-                    <Icon size={15} style={{paddingRight:15}} name="tags"> <Text>{data.tag}</Text></Icon>
+                    <Icon color="rgba(255,255,255,0.7)" size={15} style={{paddingRight:15}} name="dot-circle-o"> <Text>{data.type}</Text></Icon>
+                    <Icon color="rgba(255,255,255,0.7)" size={15} style={{paddingRight:15}} name="shopping-bag"> <Text>{data.deliver}</Text></Icon>
+                    <Icon color="rgba(255,255,255,0.7)" size={15} style={{paddingRight:15}} name="tags"> <Text>{data.tag}</Text></Icon>
                   </View>
                 </View>
               </VibrancyView>
@@ -207,6 +208,7 @@ class ItemDetail extends Component{
 class StoreItemList extends Component{
   static propTypes = {
     data: React.PropTypes.array.isRequired,
+    uid: React.PropTypes.string.isRequired,
   };
 
   _onPress = (index) => {
@@ -215,7 +217,7 @@ class StoreItemList extends Component{
       title: data.title,
       component:ItemDetail,
       navigationBarHidden: false,
-      passProps: { data: data },
+      passProps: { data: data, uid: this.props.uid },
     })
   };
 
@@ -255,49 +257,47 @@ class StoreItemList extends Component{
 }
 
 class StoreView extends Component{
+  static propTypes = {
+    uid: React.PropTypes.string.isRequired,
+  };
+
   constructor(){
     super();
     this.state = {
-      isRefreshing: false,
-      loaded: 0,
+      // isRefreshing: false,
+      // loaded: 0,
       rowData: storeItemData,
-      refreshTitle: "下拉更新"
+      // refreshTitle: "下拉更新",
     };
   }
 
-  _onRefresh() {
-    this.setState({
-      isRefreshing: true,
-      refreshTitle: "正在更新"
-    });
-    setTimeout(() => {
-      // get new data via SSH
-      this.setState({
-        // loaded: this.state.loaded,
-        isRefreshing: false,
-        rowData: storeItemData,
-        refreshTitle: "更新完毕"
-      });
-      // 1s after refresh
-      setTimeout(() => {
-        this.setState({
-          refreshTitle: "下拉更新"
-        });
-      }, 1000);
+  // _onRefresh() {
+  //   this.setState({
+  //     isRefreshing: true,
+  //     refreshTitle: "正在更新"
+  //   });
+  //   setTimeout(() => {
+  //     // get new data via SSH
+  //     this.setState({
+  //       // loaded: this.state.loaded,
+  //       isRefreshing: false,
+  //       rowData: storeItemData,
+  //       refreshTitle: "更新完毕"
+  //     });
+  //     // 1s after refresh
+  //     setTimeout(() => {
+  //       this.setState({
+  //         refreshTitle: "下拉更新"
+  //       });
+  //     }, 1000);
 
-    }, 1000);
-  }
+  //   }, 1000);
+  // }
 
   render() {
     return(
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.storeContainer}
-      refreshControl={
-          <RefreshControl
-            refreshing={this.state.isRefreshing}
-            title={this.state.refreshTitle}
-            onRefresh={() => this._onRefresh()}
-            tintColor="#ddd"/>}>
-        <StoreItemList navigator={this.props.navigator} data={this.state.rowData}></StoreItemList>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.storeContainer}>
+        <StoreItemList navigator={this.props.navigator} uid={this.props.uid} data={this.state.rowData}></StoreItemList>
       </ScrollView>
     )
   }
@@ -305,6 +305,10 @@ class StoreView extends Component{
 }
 
 export default class extends Component{
+  static propTypes = {
+    uid: React.PropTypes.string.isRequired,
+  };
+
   componentDidMount() {
     StatusBarIOS.setStyle(0);
   }
@@ -317,6 +321,7 @@ export default class extends Component{
       initialRoute={{
         title:"华大商城",
         component: StoreView,
+        passProps:{uid:this.props.uid},
         shadowHidden: true
       }}
       itemWrapperStyle={styles.itemWrapper}

@@ -74,3 +74,9 @@ restore form2 data
 upload avarta
 
 link alipay
+
+payment
+
+settings
+
+save order

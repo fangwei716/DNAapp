@@ -40,13 +40,9 @@ export class UserInfo extends Component{
     // SSH post: this.refs.form.getValues()
     const info = this.refs.form.getValues();
     Util.post("http://dnafw.com:8100/iosapp/register/",{
-       name: info.name,
-       password: info.password,
-       id_number: info.id_number,
-       address: info.address,
+       ...info,
        gender: "男",
        alipay_number: "12333",
-       phone: this.props.phone,
        // images are sent as jpeg base64
        id_card_1: this.state.idFrontSourceData,
        id_card_2: this.state.idBackSourceData,
@@ -425,14 +421,8 @@ class UserIncome extends Component{
   constructor(props) {
     super(props);
     const uid = this.props.uid;
-    var data, sectionData;
-    Util.get("http://dnafw.com:8100/iosapp/balance_history/?uid="+uid,function(resData) {
-      if (resData.data){
-        data = resData.data;
-        sectionData = resData.sectionData;
-      }
-    })
-    // return resData{data:data,sectionData:sectionData}
+    let data=[], sectiondata=[];
+    // return resData{data:data,sectiondata:sectiondata}
     // const data = [[{
     //     income:"+ ¥50",
     //     day:"02-23",
@@ -518,22 +508,46 @@ class UserIncome extends Component{
     //     orderItem:"DNA家谱",
     //     orderId:"493275429"
     //   },]];
-    // const sectionData = ["本月","2016年1月","2015年12月"]
-    const getSectionData = function(dataIncome, sectionID) {
+    // const sectiondata = ["本月","2016年1月","2015年12月"]
+    const getSectiondata = function(dataIncome, sectionID) {
       return dataIncome[sectionID];
     };
 
     this.state = {
-      dataSection: sectionData,
+      dataSection: sectiondata,
       dataSource: new ListView.DataSource({
-        getSectionData: getSectionData,
+        getSectiondata: getSectiondata,
         rowHasChanged: (r1, r2) => r1 !== r2,
         sectionHeaderHasChanged: (s1, s2) => s1 !== s2
       }).cloneWithRowsAndSections(data),
     };
   }
 
-  _renderSectionHeader = (sectionData, sectionID) => {
+  componentWillMount() {
+    const uid = this.props.uid;
+    const getSectiondata = function(dataIncome, sectionID) {
+      return dataIncome[sectionID];
+    };
+    Util.post("http://dnafw.com:8100/iosapp/balance_history/",{uid}, (resData) => {
+      if (resData.data){
+        // console.log(resData);
+        let data = resData.data;
+        let sectiondata = resData.sectiondata;
+
+        this.setState({
+          dataSection: sectiondata,
+          dataSource: new ListView.DataSource({
+            getSectiondata: getSectiondata,
+            rowHasChanged: (r1, r2) => r1 !== r2,
+            sectionHeaderHasChanged: (s1, s2) => s1 !== s2
+          }).cloneWithRowsAndSections(data),
+        });
+
+      }
+    })
+  }
+
+  _renderSectionHeader = (sectiondata, sectionID) => {
     return(
       <View style={styles.section}>
         <Text style={styles.sectionText}>{this.state.dataSection[sectionID]}</Text>
@@ -555,7 +569,7 @@ class UserIncome extends Component{
             </View>
             <View style={styles.incomeRowOrder}>
               <Text style={{color:"#333",fontSize:17,paddingBottom:3}}>{rowData.income}</Text>
-              <Text style={{color:"#555",fontSize:12}}>{rowData.orderItem+"："+rowData.orderId}</Text>
+              <Text style={{color:"#555",fontSize:11.5}}>{rowData.orderItem+"："+rowData.orderId}</Text>
             </View>
           </View>
         </View>
@@ -658,9 +672,8 @@ class UserView extends Component{
   }
 
   componentWillMount() {
-    Util.get("http://dnafw.com:8100/iosapp/my_info?uid="+this.props.uid, (resData) => {
+    Util.post("http://dnafw.com:8100/iosapp/my_info/", {uid:this.props.uid}, (resData) => {
       if (resData.error!=="true"){
-        console.log(resData);
         this.setState({
           userData: resData.userData,
           balance: resData.userBalance,

@@ -29,7 +29,6 @@ export default class extends Component{
     this.state = {
       selectedTab: this.props.isFirstTime==="1"? '我的帐户':'华大商城',
       isFirstTime: this.props.isFirstTime==="1"? true: false,
-      uid: this.props.uid,
     };
   }
 
@@ -55,7 +54,7 @@ export default class extends Component{
         selectedIconName="ios-home"
         onPress={ () => this._changeTab('华大商城') }
         selected={ this.state.selectedTab === '华大商城' }>
-          <Store/>
+          <Store uid={this.props.uid}/>
         </Icon.TabBarItem>
         <Icon.TabBarItem
         title="推广动态"
@@ -63,7 +62,7 @@ export default class extends Component{
         selectedIconName="ios-eye"
         onPress={ () => this._changeTab('推广动态') }
         selected={ this.state.selectedTab === '推广动态'}>
-          <Update/>
+          <Update uid={this.props.uid}/>
         </Icon.TabBarItem>
         <Icon.TabBarItem
         title="全部订单"
@@ -71,7 +70,7 @@ export default class extends Component{
         selectedIconName="ios-list"
         onPress={ () => this._changeTab('全部订单') }
         selected={ this.state.selectedTab === '全部订单'} >
-          <Order/>
+          <Order uid={this.props.uid}/>
         </Icon.TabBarItem>
         <Icon.TabBarItem
         title="我的帐户"
@@ -79,7 +78,7 @@ export default class extends Component{
         selectedIconName="ios-person"
         onPress={ () => this._changeTab('我的帐户') }
         selected={ this.state.selectedTab === '我的帐户'} >
-          <User uid={this.state.uid} isFirstTime={this.state.isFirstTime} callbackLogout={this.props.callbackLogout}/>
+          <User uid={this.props.uid} isFirstTime={this.state.isFirstTime} callbackLogout={this.props.callbackLogout}/>
         </Icon.TabBarItem>
       </TabBarIOS>
     );

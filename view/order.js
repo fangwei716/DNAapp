@@ -17,253 +17,249 @@ import Alipay from './alipay';
  * 5: 订单完成
  */
 
-// var orderData = {};
-// Util.get("http://dnafw.com:8100/iosapp/all_orders?uid="+AsyncStorage.getItem('uid'),function(resData) {
-//     if (resData.orderData) orderData = resData.orderData;
-// })
 
 //to delete
-const orderData = [{
-  type:0,
-  date: "2016-02-18",
-  item: "DNA家谱",
-  status: "未确认订单",
-  send: "无预计时间",
-  bg:"#6D6D6D",
-  icon:"pencil",
-  orderItem: "0",
-  key:-1,
-  order_number: 42375247038242389, 
-  created:"2016-12-13 23:23:57", 
-  pay_time: "未付款", 
-  product: "DNA家谱", 
-  pay_price: 0, 
-  status_num: 1, 
-  client: {
-    name: "XXX", 
-    cellphone: "XXX", 
-    email: "XXX", 
-    address: "XXX",
-  },
-  identifier: [
-    {
-      name: "XXX", 
-      relationship: "XXX", 
-      sample: "XXX", 
-      additional_info: "XXX",
-    }
-  ],
-},{
-  type:1,
-  date: "2016-02-15",
-  item: "DNA档案",
-  status: "等待付款",
-  send: "无预计时间",
-  bg:"#DE574F",
-  icon:"shopping-cart",
-  orderItem: "1",
-  key:0,
-  order_number: 42375247038242389, 
-  created:"2016-12-13 23:23:57", 
-  pay_time: "未付款", 
-  product: "DNA档案", 
-  pay_price: 0, 
-  status_num: 1, 
-  client: {
-    name: "XXX", 
-    cellphone: "XXX", 
-    email: "XXX", 
-    address: "XXX",
-  },
-  identifier: [
-    {
-      name: "XXX", 
-      relationship: "XXX", 
-      sample: "XXX", 
-      additional_info: "XXX",
-    }
-  ],
-},{
-  type:2,
-  date: "2016-02-13",
-  item: "DNA档案",
-  status: "正在处理订单",
-  send: "预计 2016-02-25",
-  bg:"#E9CA70",
-  icon:"hourglass-half",
-  orderItem: "1",
-  key:1,
-  order_number: 42375247038242389, 
-  created:"2016-12-13 23:23:57", 
-  pay_time: "2016-12-13 23:23:57", 
-  product: "DNA档案", 
-  pay_price: 1200, 
-  status_num: 1, 
-  client: {
-    name: "XXX", 
-    cellphone: "XXX", 
-    email: "XXX", 
-    address: "XXX",
-  },
-  identifier: [
-    {
-      name: "XXX", 
-      relationship: "XXX", 
-      sample: "XXX", 
-      additional_info: "XXX",
-    }
-  ],
-},{
-  type:3,
-  date: "2016-02-03",
-  item: "亲子鉴定",
-  status: "订单派送中",
-  send: "预计 2016-02-18",
-  bg:"#1a94c5",
-  icon:"car",
-  orderItem: "2",
-  key:2,
-  order_number: 42375247038242389, 
-  created:"2016-12-13 23:23:57", 
-  pay_time: "2016-12-13 23:23:57", 
-  product: "亲子鉴定", 
-  pay_price: 1200, 
-  status_num: 1, 
-  client: {
-    name: "XXX", 
-    cellphone: "XXX", 
-    email: "XXX", 
-    address: "XXX",
-  },
-  identifier: [
-    {
-      name: "XXX", 
-      relationship: "XXX", 
-      sample: "XXX", 
-      additional_info: "XXX",
-    }
-  ],
-},{
-  type:4,
-  date: "2016-01-05",
-  item: "DNA家谱",
-  status: "订单已签收, 待评价",
-  send: "已于2016-01-15送达",
-  bg:"#39979d",
-  icon:"star-half-o",
-  orderItem: "0",
-  key:3,
-  order_number: 42375247038242389, 
-  created:"2016-12-13 23:23:57", 
-  pay_time: "2016-12-13 23:23:57", 
-  product: "DNA家谱", 
-  pay_price: 1200, 
-  status_num: 1, 
-  client: {
-    name: "XXX", 
-    cellphone: "XXX", 
-    email: "XXX", 
-    address: "XXX",
-  },
-  identifier: [
-    {
-      name: "XXX", 
-      relationship: "XXX", 
-      sample: "XXX", 
-      additional_info: "XXX",
-    }
-  ],
-},{
-  type:4,
-  date: "2016-01-05",
-  item: "DNA家谱",
-  status: "订单已签收, 待评价",
-  send: "已于2016-01-15送达",
-  bg:"#39979d",
-  icon:"star-half-o",
-  orderItem: "0",
-  key:4,
-  order_number: 42375247038242389, 
-  created:"2016-12-13 23:23:57", 
-  pay_time: "2016-12-13 23:23:57", 
-  product: "DNA家谱", 
-  pay_price: 1200, 
-  status_num: 1, 
-  client: {
-    name: "XXX", 
-    cellphone: "XXX", 
-    email: "XXX", 
-    address: "XXX",
-  },
-  identifier: [
-    {
-      name: "XXX", 
-      relationship: "XXX", 
-      sample: "XXX", 
-      additional_info: "XXX",
-    }
-  ],
-},{
-  type:5,
-  date: "2016-01-05",
-  item: "DNA家谱",
-  status: "订单完成",
-  send: "已于2016-01-15送达",
-  bg:"#339b6d",
-  icon:"info-circle",
-  orderID:"",
-  key:5,
-  order_number: 42375247038242389, 
-  created:"2016-12-13 23:23:57", 
-  pay_time: "2016-12-13 23:23:57", 
-  product: "DNA家谱", 
-  pay_price: 1200, 
-  status_num: 1, 
-  client: {
-    name: "XXX", 
-    cellphone: "XXX", 
-    email: "XXX", 
-    address: "XXX",
-  },
-  identifier: [
-    {
-      name: "XXX", 
-      relationship: "XXX", 
-      sample: "XXX", 
-      additional_info: "XXX",
-    }
-  ],
-},{
-  type:5,
-  date: "2016-01-05",
-  item: "DNA家谱",
-  status: "订单完成",
-  send: "已于2016-01-15送达",
-  bg:"#339b6d",
-  icon:"info-circle",
-  orderItem: "0",
-  key:6,
-  order_number: 42375247038242389, 
-  created:"2016-12-13 23:23:57", 
-  pay_time: "2016-12-13 23:23:57", 
-  product: "DNA家谱", 
-  pay_price: 1200, 
-  status_num: 1, 
-  client: {
-    name: "XXX", 
-    cellphone: "XXX", 
-    email: "XXX", 
-    address: "XXX",
-  },
-  identifier: [
-    {
-      name: "XXX", 
-      relationship: "XXX", 
-      sample: "XXX", 
-      additional_info: "XXX",
-    }
-  ],
-}];
+// const orderData = [{
+//   type:0,
+//   date: "2016-02-18",
+//   item: "DNA家谱",
+//   status: "未确认订单",
+//   send: "无预计时间",
+//   bg:"#6D6D6D",
+//   icon:"pencil",
+//   orderItem: "0",
+//   key:-1,
+//   order_number: 42375247038242389, 
+//   created:"2016-12-13 23:23:57", 
+//   pay_time: "未付款", 
+//   product: "DNA家谱", 
+//   pay_price: 0, 
+//   status_num: 1, 
+//   client: {
+//     name: "XXX", 
+//     cellphone: "XXX", 
+//     email: "XXX", 
+//     address: "XXX",
+//   },
+//   identifier: [
+//     {
+//       name: "XXX", 
+//       relationship: "XXX", 
+//       sample: "XXX", 
+//       additional_info: "XXX",
+//     }
+//   ],
+// },{
+//   type:1,
+//   date: "2016-02-15",
+//   item: "DNA档案",
+//   status: "等待付款",
+//   send: "无预计时间",
+//   bg:"#DE574F",
+//   icon:"shopping-cart",
+//   orderItem: "1",
+//   key:0,
+//   order_number: 42375247038242389, 
+//   created:"2016-12-13 23:23:57", 
+//   pay_time: "未付款", 
+//   product: "DNA档案", 
+//   pay_price: 0, 
+//   status_num: 1, 
+//   client: {
+//     name: "XXX", 
+//     cellphone: "XXX", 
+//     email: "XXX", 
+//     address: "XXX",
+//   },
+//   identifier: [
+//     {
+//       name: "XXX", 
+//       relationship: "XXX", 
+//       sample: "XXX", 
+//       additional_info: "XXX",
+//     }
+//   ],
+// },{
+//   type:2,
+//   date: "2016-02-13",
+//   item: "DNA档案",
+//   status: "正在处理订单",
+//   send: "预计 2016-02-25",
+//   bg:"#E9CA70",
+//   icon:"hourglass-half",
+//   orderItem: "1",
+//   key:1,
+//   order_number: 42375247038242389, 
+//   created:"2016-12-13 23:23:57", 
+//   pay_time: "2016-12-13 23:23:57", 
+//   product: "DNA档案", 
+//   pay_price: 1200, 
+//   status_num: 1, 
+//   client: {
+//     name: "XXX", 
+//     cellphone: "XXX", 
+//     email: "XXX", 
+//     address: "XXX",
+//   },
+//   identifier: [
+//     {
+//       name: "XXX", 
+//       relationship: "XXX", 
+//       sample: "XXX", 
+//       additional_info: "XXX",
+//     }
+//   ],
+// },{
+//   type:3,
+//   date: "2016-02-03",
+//   item: "亲子鉴定",
+//   status: "订单派送中",
+//   send: "预计 2016-02-18",
+//   bg:"#1a94c5",
+//   icon:"car",
+//   orderItem: "2",
+//   key:2,
+//   order_number: 42375247038242389, 
+//   created:"2016-12-13 23:23:57", 
+//   pay_time: "2016-12-13 23:23:57", 
+//   product: "亲子鉴定", 
+//   pay_price: 1200, 
+//   status_num: 1, 
+//   client: {
+//     name: "XXX", 
+//     cellphone: "XXX", 
+//     email: "XXX", 
+//     address: "XXX",
+//   },
+//   identifier: [
+//     {
+//       name: "XXX", 
+//       relationship: "XXX", 
+//       sample: "XXX", 
+//       additional_info: "XXX",
+//     }
+//   ],
+// },{
+//   type:4,
+//   date: "2016-01-05",
+//   item: "DNA家谱",
+//   status: "订单已签收, 待评价",
+//   send: "已于2016-01-15送达",
+//   bg:"#39979d",
+//   icon:"star-half-o",
+//   orderItem: "0",
+//   key:3,
+//   order_number: 42375247038242389, 
+//   created:"2016-12-13 23:23:57", 
+//   pay_time: "2016-12-13 23:23:57", 
+//   product: "DNA家谱", 
+//   pay_price: 1200, 
+//   status_num: 1, 
+//   client: {
+//     name: "XXX", 
+//     cellphone: "XXX", 
+//     email: "XXX", 
+//     address: "XXX",
+//   },
+//   identifier: [
+//     {
+//       name: "XXX", 
+//       relationship: "XXX", 
+//       sample: "XXX", 
+//       additional_info: "XXX",
+//     }
+//   ],
+// },{
+//   type:4,
+//   date: "2016-01-05",
+//   item: "DNA家谱",
+//   status: "订单已签收, 待评价",
+//   send: "已于2016-01-15送达",
+//   bg:"#39979d",
+//   icon:"star-half-o",
+//   orderItem: "0",
+//   key:4,
+//   order_number: 42375247038242389, 
+//   created:"2016-12-13 23:23:57", 
+//   pay_time: "2016-12-13 23:23:57", 
+//   product: "DNA家谱", 
+//   pay_price: 1200, 
+//   status_num: 1, 
+//   client: {
+//     name: "XXX", 
+//     cellphone: "XXX", 
+//     email: "XXX", 
+//     address: "XXX",
+//   },
+//   identifier: [
+//     {
+//       name: "XXX", 
+//       relationship: "XXX", 
+//       sample: "XXX", 
+//       additional_info: "XXX",
+//     }
+//   ],
+// },{
+//   type:5,
+//   date: "2016-01-05",
+//   item: "DNA家谱",
+//   status: "订单完成",
+//   send: "已于2016-01-15送达",
+//   bg:"#339b6d",
+//   icon:"info-circle",
+//   orderID:"",
+//   key:5,
+//   order_number: 42375247038242389, 
+//   created:"2016-12-13 23:23:57", 
+//   pay_time: "2016-12-13 23:23:57", 
+//   product: "DNA家谱", 
+//   pay_price: 1200, 
+//   status_num: 1, 
+//   client: {
+//     name: "XXX", 
+//     cellphone: "XXX", 
+//     email: "XXX", 
+//     address: "XXX",
+//   },
+//   identifier: [
+//     {
+//       name: "XXX", 
+//       relationship: "XXX", 
+//       sample: "XXX", 
+//       additional_info: "XXX",
+//     }
+//   ],
+// },{
+//   type:5,
+//   date: "2016-01-05",
+//   item: "DNA家谱",
+//   status: "订单完成",
+//   send: "已于2016-01-15送达",
+//   bg:"#339b6d",
+//   icon:"info-circle",
+//   orderItem: "0",
+//   key:6,
+//   order_number: 42375247038242389, 
+//   created:"2016-12-13 23:23:57", 
+//   pay_time: "2016-12-13 23:23:57", 
+//   product: "DNA家谱", 
+//   pay_price: 1200, 
+//   status_num: 1, 
+//   client: {
+//     name: "XXX", 
+//     cellphone: "XXX", 
+//     email: "XXX", 
+//     address: "XXX",
+//   },
+//   identifier: [
+//     {
+//       name: "XXX", 
+//       relationship: "XXX", 
+//       sample: "XXX", 
+//       additional_info: "XXX",
+//     }
+//   ],
+// }];
 
 /**
  * Order
@@ -434,7 +430,7 @@ class OrderDetail extends Component{
 
   render() {
     const data = this.props.data;
-    const identifiers = data.identifier.map(function(elem, index) {
+    const identifiers = data.identifiers.map(function(elem, index) {
       return(
         <View key={elem.name}>
           <Text></Text>
@@ -456,7 +452,7 @@ class OrderDetail extends Component{
             <Text style={{fontSize:16}} >详情：</Text>
           </View>
           <ScrollView style={styles.detailList} contentInset={{top:0}} automaticallyAdjustContentInsets={false}>
-            <Text style={styles.detailListReg}><Text style={styles.detailListEm}>订单项目：</Text>{data.product}</Text>
+            <Text style={styles.detailListReg}><Text style={styles.detailListEm}>订单项目：</Text>{data.item}</Text>
             <Text style={styles.detailListReg}><Text style={styles.detailListEm}>订单编号：</Text>{data.order_number}</Text>
             <Text style={styles.detailListReg}><Text style={styles.detailListEm}>创建时间：</Text>{data.created}</Text>
             <Text style={styles.detailListReg}><Text style={styles.detailListEm}>付款时间：</Text>{data.pay_time}</Text>
@@ -493,7 +489,7 @@ class OrderListItems extends Component{
     const data = this.props.data;
     const items = data.map((rowData, index) => {
       return(
-        <TouchableHighlight key={rowData.key} style={styles.orderListTouch} underlayColor="rgba(0,0,0,0.3)" onPress={()=>this._renderOrderDetail(rowData)}>
+        <TouchableHighlight key={rowData.order_number} style={styles.orderListTouch} underlayColor="rgba(0,0,0,0.3)" onPress={()=>this._renderOrderDetail(rowData)}>
           <View style={styles.orderList}>
             <View style={[styles.orderStatus,{backgroundColor:rowData.bg}]}>
               <Text style={{color:"#fff"}}>订单状态：{rowData.status}</Text>
@@ -518,7 +514,7 @@ class OrderListItems extends Component{
 
 class OrderList extends Component{
   static propTypes = {
-    data: React.PropTypes.array.isRequired,
+    uid: React.PropTypes.string.isRequired,
   };
 
   constructor(props){
@@ -526,9 +522,20 @@ class OrderList extends Component{
     this.state = {
       isRefreshing: false,
       loaded: 0,
-      rowData: this.props.data,
+      rowData: [],
       refreshTitle: "下拉更新"
     };
+  }
+
+  componentWillMount() {
+    Util.post("http://dnafw.com:8100/iosapp/all_orders/",{uid:this.props.uid},(resData) => {
+        if (resData.error!=="true") {
+          console.log(resData);
+          this.setState({
+            rowData: resData,
+          });
+        }
+    });
   }
 
   _onRefresh() {
@@ -536,21 +543,26 @@ class OrderList extends Component{
       isRefreshing: true,
       refreshTitle: "正在更新"
     });
-    setTimeout(() => {
-      // get new data via SSH
-      this.setState({
-        // loaded: this.state.loaded,
-        isRefreshing: false,
-        rowData: this.props.data,
-        refreshTitle: "更新完毕"
-      });
-      // 1s after refresh
-      setTimeout(() => {
-        this.setState({
-          refreshTitle: "下拉更新"
-        });
-      }, 1000);
-    }, 1000);
+
+    Util.post("http://dnafw.com:8100/iosapp/all_orders/",{uid:this.props.uid},(resData) => {
+        if (resData.error!=="true") {
+          this.setState({
+            isRefreshing: false,
+            rowData: resData,
+            refreshTitle: "更新完毕",
+          });
+        }else{
+          this.setState({
+            isRefreshing: false,
+            refreshTitle: "更新失败",
+          });
+        }
+        setTimeout(() => {
+          this.setState({
+            refreshTitle: "下拉更新"
+          });
+        }, 1000);
+    });
   }
 
   render() {
@@ -572,6 +584,10 @@ class OrderList extends Component{
 }
 
 export default class extends Component{
+  static propTypes = {
+    uid: React.PropTypes.string.isRequired,
+  };
+
   componentDidMount() {
     StatusBarIOS.setStyle(0);
   }
@@ -584,7 +600,7 @@ export default class extends Component{
         initialRoute={{
           title:"全部订单",
           component: OrderList,
-          passProps: {data: orderData},
+          passProps:{uid:this.props.uid},
           shadowHidden: true
         }}
         itemWrapperStyle={styles.itemWrapper}
