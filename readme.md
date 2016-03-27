@@ -69,16 +69,4 @@ iphone 5(s) - pass
 
 iphone4s - pass
 
-## to do
 
-restore form2 data
-
-upload avarta
-
-link alipay
-
-payment
-
-settings
-
-save order
