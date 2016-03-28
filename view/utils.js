@@ -16,7 +16,7 @@ const Util = {
   },
   //get 请求
   get(url, callback) {
-    fetch(url)  
+    fetch(url,{headers:{'Cache-Control': 'no-cache'}})  
     .then((response) => {
       console.log(response)
       return response.json() // respose a json object

@@ -210,7 +210,11 @@ export class UserInfo extends Component{
           </View>
           <View style={styles.orderInputContainer}>
             <Text style={styles.orderInputText}>邮编：</Text>
-            <TextInput defaultValue={data.postcode} type="TextInput" name="postcode" keyboardType="number-pad" style={styles.orderInput} ref="postcode" onFocus={()=>this._inputFocused("postcode")} />
+            <TextInput defaultValue={data.postcode} type="TextInput" name="postcode" keyboardType="number-pad" style={styles.orderInput} ref="postcode" onFocus={()=>this._inputFocused("postcode")}   onSubmitEditing={(event) => {this._refFocus("alipay");}}/>
+          </View>
+          <View style={styles.orderInputContainer}>
+            <Text style={styles.orderInputText}>支付宝帐户：</Text>
+            <TextInput defaultValue={data.postcode} type="TextInput" name="alipay" style={styles.orderInput} ref="alipay" onFocus={()=>this._inputFocused("alipay")} />
           </View>
         </Form>
         {idUpload}
@@ -362,17 +366,32 @@ class UserPurse extends Component{
 }
 
 class UserLink extends Component{
+  _onSubmitLink() {
+    const alipay = this.refs.linkForm.getValues().alipay;
+    if (alipay === this.refs.linkForm.getValues().realipay) {
+      //ssh
+    }else{
+      AlertIOS.alert("支付宝帐户不匹配");
+    }
+  }
+
   render() {
     return(
-      <WebView
-        automaticallyAdjustContentInsets={false}
-        url={"http://www.alipay.com"}
-        style={{marginTop:60}}
-        javaScriptEnabled={true}
-        domStorageEnabled={true}
-        decelerationRate="normal"
-        startInLoadingState={true}
-      />
+      <View style={{marginTop:70, alignItems:"center"}}>
+        <Form ref="linkForm">
+          <View style={styles.orderInputContainer}>
+            <Text style={styles.orderInputText}>支付宝帐户：</Text>
+            <TextInput type="TextInput" name="alipay" style={styles.orderInput}/>
+          </View>
+          <View style={styles.orderInputContainer}>
+            <Text style={styles.orderInputText}>确认支付宝帐户：</Text>
+            <TextInput type="TextInput" name="realipay" style={styles.orderInput}/>
+          </View>
+        </Form>
+        <TouchableHighlight underlayColor="#48aeb4" style={[styles.btn_if,{backgroundColor:'#1E868C',marginTop:20}]} onPress={() => this._onSubmitLink()}>
+          <Text style={{color:'#fff'}}>确认绑定</Text>
+        </TouchableHighlight>
+      </View>
     );
   }
 }
