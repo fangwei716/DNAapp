@@ -25,7 +25,6 @@
 		27B229A25F924EBF9912BF3B /* libRNBlur.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BFA5E9621EC450D978F6222 /* libRNBlur.a */; };
 		4D378A573372410DB7A02192 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C6E49B8E818C4DBD9E909EC3 /* FontAwesome.ttf */; };
 		593703CC1C8FD4DB004EE7B5 /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 593703C61C8FD4D4004EE7B5 /* libRCTVideo.a */; };
-		593703CE1C8FD518004EE7B5 /* in.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 593703CD1C8FD518004EE7B5 /* in.mp4 */; };
 		59630CD01C80C26600F47014 /* libActivityView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59630CCF1C80C24900F47014 /* libActivityView.a */; };
 		59630CD71C80C5A000F47014 /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59630CD61C80C59800F47014 /* libRNImagePicker.a */; };
 		59C625D81C6D3C5B0078E481 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59C625D71C6D3C520078E481 /* libRNVectorIcons.a */; };
@@ -176,7 +175,6 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		546EC4EE02F64C7497C08C44 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		593703B81C8FD4D4004EE7B5 /* RCTVideo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTVideo.xcodeproj; path = "../node_modules/react-native-video/RCTVideo.xcodeproj"; sourceTree = "<group>"; };
-		593703CD1C8FD518004EE7B5 /* in.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = in.mp4; path = ../view/img/in.mp4; sourceTree = "<group>"; };
 		59630CCA1C80C24900F47014 /* ActivityView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ActivityView.xcodeproj; path = "../node_modules/react-native-activity-view/ActivityView.xcodeproj"; sourceTree = "<group>"; };
 		59630CD11C80C59700F47014 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
 		59C625C71C6D3C520078E481 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
@@ -336,7 +334,6 @@
 				F943A49060634B1DBD8C2E85 /* MaterialIcons.ttf */,
 				04E6B9BEB8CD410BAB8EBC32 /* Octicons.ttf */,
 				546EC4EE02F64C7497C08C44 /* Zocial.ttf */,
-				593703CD1C8FD518004EE7B5 /* in.mp4 */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -716,7 +713,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				593703CE1C8FD518004EE7B5 /* in.mp4 in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				1D705DB219474412B0EC713D /* Entypo.ttf in Resources */,
 				84D529439BE04833BFAB19CB /* EvilIcons.ttf in Resources */,

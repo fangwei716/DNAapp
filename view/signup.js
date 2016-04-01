@@ -1,5 +1,5 @@
 'use strict';
-import React, {AsyncStorage,Component,TouchableHighlight,StyleSheet,TextInput,Text,Modal,Image,AlertIOS,StatusBarIOS,View} from 'react-native';
+import React, {ActivityIndicatorIOS,AsyncStorage,Component,TouchableHighlight,StyleSheet,TextInput,Text,Modal,Image,AlertIOS,StatusBarIOS,View} from 'react-native';
 import Util from './utils';
 import {UserInfo} from './user';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -43,6 +43,7 @@ export default class extends Component{
     this.state = {
       userData,
       showModal:false,
+      showSpiner: false,
       isLogin: this.props.isLogin,
       onSignup: this.props.onSignup,
       timeStamp: 0,
@@ -109,6 +110,12 @@ export default class extends Component{
       showModal:false
     })
   }
+
+  _showSpiner = (showSpiner) => {
+    this.setState({
+      showSpiner,
+    })
+  };
 
   _submit() {
     if(this.refs.info._saveChanges()){
@@ -203,7 +210,13 @@ export default class extends Component{
               <TouchableHighlight underlayColor="#fff" onPress={() => this._submit()}><Text style={[styles.btnText,,{width:80,textAlign:"right"}]}>提交</Text></TouchableHighlight>
             </View>
             <View style={styles.modalContent}>
-              <UserInfo ref="info" data={this.state.userData} phone={this.state.phone}/>
+              <UserInfo ref="info" data={this.state.userData} phone={this.state.phone} showSpiner={this._showSpiner}/>
+              {this.state.showSpiner?
+                <View style={styles.showSpiner}>
+                  <ActivityIndicatorIOS color="#000000" />
+                </View>:
+                <View></View>
+              }
             </View>
           </View>
         </Modal>
@@ -300,7 +313,7 @@ var styles = StyleSheet.create({
   modalNav:{
     position:"absolute",
     height:60,
-    width:375,
+    width:Util.size.width,
     backgroundColor:"#fff",
     flexDirection:"row",
     justifyContent:"space-between",
@@ -311,7 +324,7 @@ var styles = StyleSheet.create({
   modalContent:{
     alignItems:"center",
     justifyContent:"center",
-    width:355,
+    width:Util.size.width-20,
     height:Util.size.height-60,
     marginTop:60
   },
@@ -325,6 +338,16 @@ var styles = StyleSheet.create({
     color:"#4285f4",
     fontSize:16,
     paddingTop:10,
+  },
+  showSpiner:{
+    position:"absolute",
+    height: Util.size.height,
+    width:Util.size.width,
+    alignItems:"center",
+    justifyContent:"center",
+    top:0,
+    left:0,
+    backgroundColor:"rgba(0,0,0,0.2)"
   },
 });
 

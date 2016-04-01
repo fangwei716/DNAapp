@@ -25,7 +25,10 @@ const Util = {
       callback(responseData);
     })
     .catch((error) => {
-      console.log(error);
+      //if (resData.error !== "true") {} else {AlertIOS.alert('服务器无响应', '请稍后再试');}
+      callback({
+        error: "true",
+      });
     });
   },
   //post请求
@@ -49,7 +52,11 @@ const Util = {
       callback(responseData);
     })
     .catch((error) => {
-      console.log(error);
+      //if (resData.error !== "true") {} else {AlertIOS.alert('服务器无响应', '请稍后再试');}
+      //consistant with server error msg
+      callback({
+        error: "true",
+      });
     });
   },
   key: 'HSHHSGSGGSTWSYWSYUSUWSHWBS-REACT-NATIVE',

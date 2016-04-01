@@ -325,10 +325,10 @@ class OrderDetail extends Component{
         return null;
       case 1:
         this.props.navigator.push({
-          title: "支付宝",
+          title: "支付宝付款",
           component:Alipay,
           navigationBarHidden: false,
-          passProps: { data: data },
+          passProps: {order_number: this.props.data.order_number},
         })
         return null;
       case 2:

@@ -35,30 +35,46 @@ export class UserInfo extends Component{
   }
 
   _saveChanges() {
-    // AlertIOS.alert('提交成功', '请耐心等待审核');
     // return true
     // SSH post: this.refs.form.getValues()
     const info = this.refs.form.getValues();
-    Util.post("http://dnafw.com:8100/iosapp/register/",{
-       ...info,
-       gender: "男",
-       alipay_number: "12333",
-       // images are sent as jpeg base64
-       id_card_1: this.state.idFrontSourceData,
-       id_card_2: this.state.idBackSourceData,
-    }, (resData) => {
-        if (resData) {
-          if (resData.message==="0") {
-            AlertIOS.alert('提交失败', '某某资料错误');
-            return false
+    let valid = true;
+    for (var key in info) {
+      if (info[key]==="") {
+        valid = false;
+      }
+    }
+    if (!this.state.idFrontSourceData || !this.state.idBackSourceData) {
+      valid = false;
+    }
+
+    if (valid) {
+      this.props.showSpiner(true);
+      Util.post("http://dnafw.com:8100/iosapp/register/",{
+         ...info,
+         phone: this.props.phone,
+         // images are sent as jpeg base64
+         id_card_1: this.state.idFrontSourceData,
+         id_card_2: this.state.idBackSourceData,
+      }, (resData) => {
+          this.props.showSpiner(false);
+
+          if (resData.error !== "true") {
+            if (resData.message==="0") {
+              AlertIOS.alert('提交失败', "请检查你所填的资料");
+              return false
+            }else{
+              AlertIOS.alert('提交成功', "请等待审核");
+              return true
+            }
           }else{
-            return true
+            AlertIOS.alert('服务器无响应', '请稍后再试');
+            return false
           }
-        }else{
-          AlertIOS.alert('提交失败', '服务器无响应');
-          return false
-        }
-    })
+      })
+    }else{
+      AlertIOS.alert('提交失败', '所有资料均为必填');
+    }
   }
 
   _uploadId() {
@@ -188,37 +204,37 @@ export class UserInfo extends Component{
     }
 
     return(
-      <ScrollView  ref='scrollView' showsVerticalScrollIndicator={false}>
-        <Text style={{paddingLeft:30,paddingTop:20,color:"#888"}}>需要提交资料审核后完成注册，资料审核成功后将有邮件通知你。审核需要24小时。</Text>
-        <Form style={styles.orderContainer} ref="form">
-          <View style={styles.orderInputContainer}>
-            <Text style={styles.orderInputText}>用户名：</Text>
-            <TextInput defaultValue={data.username} type="TextInput" name="name" style={styles.orderInput} ref="username" returnKeyType = {"next"} onFocus={()=>this._inputFocused("username")}  onSubmitEditing={(event) => {this._refFocus("email");}} />
-          </View>
-          <View style={styles.orderInputContainer}>
-            <Text style={styles.orderInputText}>邮箱：</Text>
-            <TextInput defaultValue={data.email} type="TextInput" name="email" style={styles.orderInput} ref="email" returnKeyType = {"next"} onFocus={()=>this._inputFocused("email")}  onSubmitEditing={(event) => {this._refFocus("password");}} />
-          </View>
-          <View style={styles.orderInputContainer}>
-            <Text style={styles.orderInputText}>新密码：</Text>
-            <TextInput  type="TextInput"  password={true} name="password" style={styles.orderInput} ref="password" returnKeyType = {"next"} onFocus={()=>this._inputFocused("password")}  onSubmitEditing={(event) => {this._refFocus("id");}} />
-          </View>
-          {idInput}
-          <View style={styles.orderInputContainer}>
-            <Text style={styles.orderInputText}>地址：</Text>
-            <TextInput defaultValue={data.address} type="TextInput" name="address" style={styles.orderInput} ref="address" returnKeyType = {"next"} onFocus={()=>this._inputFocused("address")}  onSubmitEditing={(event) => {this._refFocus("postcode");}} />
-          </View>
-          <View style={styles.orderInputContainer}>
-            <Text style={styles.orderInputText}>邮编：</Text>
-            <TextInput defaultValue={data.postcode} type="TextInput" name="postcode" keyboardType="number-pad" style={styles.orderInput} ref="postcode" onFocus={()=>this._inputFocused("postcode")}   onSubmitEditing={(event) => {this._refFocus("alipay");}}/>
-          </View>
-          <View style={styles.orderInputContainer}>
-            <Text style={styles.orderInputText}>支付宝帐户：</Text>
-            <TextInput defaultValue={data.postcode} type="TextInput" name="alipay" style={styles.orderInput} ref="alipay" onFocus={()=>this._inputFocused("alipay")} />
-          </View>
-        </Form>
-        {idUpload}
-      </ScrollView>
+        <ScrollView  ref='scrollView' showsVerticalScrollIndicator={false}>
+          <Text style={{paddingLeft:30,paddingTop:20,color:"#888"}}>需要提交资料审核后完成注册，资料审核成功后将有邮件通知你。审核需要24小时。</Text>
+          <Form style={styles.orderContainer} ref="form">
+            <View style={styles.orderInputContainer}>
+              <Text style={styles.orderInputText}>用户名：</Text>
+              <TextInput defaultValue={data.username} type="TextInput" name="name" style={styles.orderInput} ref="username" returnKeyType = {"next"} onFocus={()=>this._inputFocused("username")}  onSubmitEditing={(event) => {this._refFocus("gender");}} />
+            </View>
+            <View style={styles.orderInputContainer}>
+              <Text style={styles.orderInputText}>性别：</Text>
+              <TextInput defaultValue={data.username} type="TextInput" name="gender" style={styles.orderInput} ref="gender" returnKeyType = {"next"} onFocus={()=>this._inputFocused("gender")}  onSubmitEditing={(event) => {this._refFocus("email");}} />
+            </View>
+            <View style={styles.orderInputContainer}>
+              <Text style={styles.orderInputText}>邮箱：</Text>
+              <TextInput defaultValue={data.email} type="TextInput" name="email" style={styles.orderInput} ref="email" returnKeyType = {"next"} onFocus={()=>this._inputFocused("email")}  onSubmitEditing={(event) => {this._refFocus("password");}} />
+            </View>
+            <View style={styles.orderInputContainer}>
+              <Text style={styles.orderInputText}>新密码：</Text>
+              <TextInput  type="TextInput"  password={true} name="password" style={styles.orderInput} ref="password" returnKeyType = {"next"} onFocus={()=>this._inputFocused("password")}  onSubmitEditing={(event) => {this._refFocus("id");}} />
+            </View>
+            {idInput}
+            <View style={styles.orderInputContainer}>
+              <Text style={styles.orderInputText}>地址：</Text>
+              <TextInput defaultValue={data.address} type="TextInput" name="address" style={styles.orderInput} ref="address" returnKeyType = {"next"} onFocus={()=>this._inputFocused("address")}  onSubmitEditing={(event) => {this._refFocus("alipay");}} />
+            </View>
+            <View style={styles.orderInputContainer}>
+              <Text style={styles.orderInputText}>支付宝帐户：</Text>
+              <TextInput defaultValue={data.postcode} type="TextInput" name="alipay_number" style={styles.orderInput} ref="alipay" onFocus={()=>this._inputFocused("alipay")} />
+            </View>
+          </Form>
+          {idUpload}
+        </ScrollView>
     );
   }
 }
@@ -334,7 +350,7 @@ class UserPurse extends Component{
       title: "关联支付宝",
       component:UserLink,
       navigationBarHidden: false,
-      passProps:{data:this.state.userData},
+      passProps:{uid:this.state.userData.uid},
     })
   }
 
@@ -369,7 +385,27 @@ class UserLink extends Component{
   _onSubmitLink() {
     const alipay = this.refs.linkForm.getValues().alipay;
     if (alipay === this.refs.linkForm.getValues().realipay) {
-      //ssh
+      Util.post("http://dnafw.com:8100/iosapp/bundle_alipay_account/",{
+        uid: this.props.uid,
+        alipay_account: alipay,
+      },(resData) => {
+        if (resData.error !== "true") {
+          switch(resData.message){
+            case "0":
+              AlertIOS.alert("修改绑定失败");
+              break;
+            case "1":
+              AlertIOS.alert("修改绑定成功");
+              this.props.navigator.pop();
+              break;
+            case "2":
+              AlertIOS.alert("支付宝帐户已被他人使用");
+              break;
+          }
+        }else{
+          AlertIOS.alert("服务器无响应","请稍后再试");
+        }
+      })
     }else{
       AlertIOS.alert("支付宝帐户不匹配");
     }

@@ -39,9 +39,8 @@
 import React, {AppRegistry,AsyncStorage,Component,StyleSheet,TextInput,TabBarIOS,StatusBarIOS,Image,Text,View} from 'react-native';
 import Login from './view/login';
 import Signup from './view/signup';
-import Bar from './view/bar'
-import Util from './view/utils'
-import Video from 'react-native-video';
+import Bar from './view/bar';
+import Util from './view/utils';
 
  /**
   * userData
@@ -139,10 +138,7 @@ class DNA extends Component{
           />
         }
         content = <View style={styles.container}>
-          <Video source={{uri: "in"}}
-            style={styles.bgImageWrapper}
-            rate={0.5}
-            resizeMode="cover" repeat={true} key="video1" />
+          <Image source={require('./view/img/DNA1.png')} style={styles.bgImageWrapper}/>
           <View>
             <Image style={styles.logo} source={{uri:'dna15'}}></Image>
             <Text style={styles.logoText}>华大DNA</Text>

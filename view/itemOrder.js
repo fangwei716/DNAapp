@@ -48,11 +48,10 @@ export default class extends Component{
       userID:"fiorujewlknmwenfmsd",
       currentStep:0,
       form1:{
-        name:"Wei Fang",
-        phoneNum: "1345555336",
-        email:"fangwei716@gmail.com",
-        postcode:"350110",
-        address:"somewhere"
+        name:"",
+        phoneNum: "",
+        email:"",
+        address:""
       },
       form2:{
 
@@ -152,6 +151,7 @@ export default class extends Component{
         }
         break;
     }
+    this.refs.scrollView.scrollTo(-20);
     this.setState({
       step: step,
       stepTitle: title,
@@ -164,21 +164,22 @@ export default class extends Component{
       form1:this.refs.form1.getValues(),
       form2:this.refs.form2.getValues(),
       orderId: this.state.orderID,
+      // should from create order
       productName: "亲子鉴定",
     },(resData) => {
-        if (resData) {
+      if (resData.error !== "true") {
           if (resData.message==="0") {
             AlertIOS.alert('订单信息有误', resData.errMsg);
           }else{
-               this.props.navigator.push({
-                title: "支付宝",
-                component:Alipay,
-                navigationBarHidden: false,
-                passProps: { data: resData },
-              })
+            this.props.navigator.push({
+              title: "支付宝付款",
+              component:Alipay,
+              navigationBarHidden: false,
+              passProps: {...resData},
+            })
           }
         }else{
-          AlertIOS.alert('支付失败', '服务器无响应');
+          AlertIOS.alert('服务器无响应', '请稍后再试');
         }
     })
   }
@@ -255,12 +256,8 @@ export default class extends Component{
                 <TextInput ref="SecondInput" onFocus={()=>this._inputFocused("SecondInput")} returnKeyType = {"next"} onSubmitEditing={(event) => {this.refs.ThirdInput.focus(); }} defaultValue={this.state.form1.phoneNum} type="TextInput" name="phoneNum"  keyboardType="phone-pad" style={styles.orderInput}/>
               </View>
               <View style={styles.orderInputContainer}>
-                <Text style={styles.orderInputText}>电子邮箱（选填）：</Text>
+                <Text style={styles.orderInputText}>电子邮箱：</Text>
                 <TextInput ref="ThirdInput" onFocus={()=>this._inputFocused("ThirdInput")} returnKeyType = {"next"} onSubmitEditing={(event) => {this.refs.FourthInput.focus(); }} defaultValue={this.state.form1.email}  type="TextInput" name="email" keyboardType="email-address" style={styles.orderInput}/>
-              </View>
-              <View style={styles.orderInputContainer}>
-                <Text style={styles.orderInputText}>邮编（选填）：</Text>
-                <TextInput ref="FourthInput" onFocus={()=>this._inputFocused("FourthInput")} returnKeyType = {"next"} onSubmitEditing={(event) => {this.refs.FifthInput.focus(); }} defaultValue={this.state.form1.postcode} type="TextInput" name="postcode"  keyboardType="number-pad" style={styles.orderInput}/>
               </View>
               <View style={styles.orderInputContainer}>
                 <Text style={styles.orderInputText}>地址：</Text>
@@ -292,7 +289,13 @@ export default class extends Component{
           </View>
           <View style={[styles.orderContainer,styles.form3]}>
             <ProgressViewIOS progressTintColor="#1E868C" style={styles.progressView} progress={this._getProgress(1)}/>
-            <Text style={{marginTop:20}}>订单详情。。。from SSH</Text>
+            <View style={{alignItems:"flex-start", width: Util.size.width-80}}>
+              <Text style={{marginTop:20,fontWeight:"500",marginBottom:5}}>订单详情 from init order</Text>
+              <Text style={styles.detailListReg}><Text style={styles.detailListEm}>订单项目：</Text></Text>
+              <Text style={styles.detailListReg}><Text style={styles.detailListEm}>订单编号：</Text></Text>
+              <Text style={styles.detailListReg}><Text style={styles.detailListEm}>创建时间：</Text></Text>
+              <Text style={styles.detailListReg}><Text style={styles.detailListEm}>应付款金额：</Text></Text>
+            </View>
             <View style={{flexDirection:"row", marginLeft:20, marginTop:20}}>
               <TouchableHighlight underlayColor="#eee" style={[styles.btn_pm_half,{backgroundColor:"#ddd"}]} onPress={()=>this._updateStep(1)}>
                 <Text style={{color:'#fff'}}>上一步</Text>
@@ -367,5 +370,13 @@ const styles = StyleSheet.create({
     width:0,
     height:0,
     opacity:0,
+  },
+  detailListEm:{
+    color: "#333",
+    paddingRight:10
+  },
+  detailListReg:{
+    color:"#555",
+    paddingBottom:5,
   },
 })
